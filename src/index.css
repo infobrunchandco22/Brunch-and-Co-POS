@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-surface: #131313;
+    --bg-surface-dim: #131313;
+    --bg-surface-bright: #393939;
+    --bg-surface-container-lowest: #0e0e0e;
+    --bg-surface-container-low: #1c1b1b;
+    --bg-surface-container: #201f1f;
+    --bg-surface-container-high: #2a2a2a;
+    --bg-surface-container-highest: #353534;
+    --color-on-surface: #e5e2e1;
+    --color-on-surface-variant: #d6c3b9;
+    --color-outline: #9f8d85;
+    --color-outline-variant: #52443d;
+    --color-primary: #fab895;
+    --color-on-primary: #4d260d;
+    --color-primary-container: #6e4025;
+    --color-on-primary-container: #eeae8b;
+    --color-secondary: #f4bb90;
+    --color-secondary-container: #653e1d;
+    --color-on-secondary-container: #e1aa80;
+    --color-tertiary: #d7c3ae;
+    --color-tertiary-container: #574939;
+    --color-error: #ffb4ab;
+    --color-error-container: #93000a;
+  }
+
+  body {
+    background-color: #131313;
+    color: #e5e2e1;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.font-display-metrics {
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.font-headline-lg, .font-headline-md {
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.font-label-caps {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.font-table-data, .font-body-md, .font-body-lg {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Scrollbars */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #353534;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #52443d;
+}
+
+/* Thermal receipt cut effect */
+.receipt-cut {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), 
+    95% 100%, 90% calc(100% - 12px), 85% 100%, 80% calc(100% - 12px),
+    75% 100%, 70% calc(100% - 12px), 65% 100%, 60% calc(100% - 12px),
+    55% 100%, 50% calc(100% - 12px), 45% 100%, 40% calc(100% - 12px),
+    35% 100%, 30% calc(100% - 12px), 25% 100%, 20% calc(100% - 12px),
+    15% 100%, 10% calc(100% - 12px), 5% 100%, 0 calc(100% - 12px));
+}
+

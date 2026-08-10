@@ -1,0 +1,6 @@
+{
+  "name": "Brunch&Co Admin",
+  "description": "Brunch&Co POS & Admin Dashboard for managing order lifecycles, menu, categories, banners, rewards, customers, and staff.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
