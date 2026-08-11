@@ -23,9 +23,6 @@ export const executeThermalPrint = ({
   paperSize: PaperSize;
   order: Order;
 }) => {
-  console.log(
-    `[ThermalPrintAdapter] Printing Order #${order.order_number} | Mode: ${mode.toUpperCase()} | Format: ${paperSize}`
-  );
   // Triggers native browser print dialog (easy to swap in physical hardware/ESC-POS SDK later)
   window.print();
 };

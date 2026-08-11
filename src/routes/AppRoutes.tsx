@@ -26,51 +26,38 @@ const LoadingScreen: React.FC = () => (
 );
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading, session } = useAuth();
-  console.log('[ProtectedRoute] render:', { loading, user: user?.full_name, role: user?.role, hasSession: !!session, pathname: window.location.pathname });
+  const { user, loading } = useAuth();
   if (loading) {
-    console.log('[ProtectedRoute] Decision: Rendering LoadingScreen');
     return <LoadingScreen />;
   }
   if (!user) {
-    console.log('[ProtectedRoute] Decision: Redirecting to /login');
     return <Navigate to="/login" replace />;
   }
-  console.log('[ProtectedRoute] Decision: Rendering Protected Children');
   return <ErrorBoundary>{children}</ErrorBoundary>;
 };
 
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, role, loading, session } = useAuth();
-  console.log('[AdminRoute] render:', { loading, user: user?.full_name, role, hasSession: !!session, pathname: window.location.pathname });
+  const { user, role, loading } = useAuth();
   if (loading) {
-    console.log('[AdminRoute] Decision: Rendering LoadingScreen');
     return <LoadingScreen />;
   }
   if (!user) {
-    console.log('[AdminRoute] Decision: Redirecting to /login');
     return <Navigate to="/login" replace />;
   }
   if (role !== 'admin') {
-    console.log('[AdminRoute] Decision: Not admin, Redirecting to /dashboard');
     return <Navigate to="/dashboard" replace />;
   }
-  console.log('[AdminRoute] Decision: Rendering Admin Children');
   return <ErrorBoundary>{children}</ErrorBoundary>;
 };
 
 const PublicOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading, session } = useAuth();
-  console.log('[PublicOnlyRoute] render:', { loading, user: user?.full_name, hasSession: !!session, pathname: window.location.pathname });
+  const { user, loading } = useAuth();
   if (loading) {
-    console.log('[PublicOnlyRoute] Decision: Rendering LoadingScreen');
     return <LoadingScreen />;
   }
   if (user) {
-    console.log('[PublicOnlyRoute] Decision: User logged in, Redirecting to /dashboard');
     return <Navigate to="/dashboard" replace />;
   }
-  console.log('[PublicOnlyRoute] Decision: Rendering Public Children');
   return <>{children}</>;
 };
 
