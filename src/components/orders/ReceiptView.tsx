@@ -143,8 +143,10 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
                 type="number"
                 min="0"
                 step="10"
-                value={deliveryFeeInput}
+                value={deliveryFeeInput === '0' ? '' : deliveryFeeInput}
                 onChange={(e) => setDeliveryFeeInput(e.target.value)}
+                onFocus={(e) => e.target.select()}
+                placeholder="0"
                 className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-8 pr-2 py-1.5 text-xs font-bold text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
               />
             </div>

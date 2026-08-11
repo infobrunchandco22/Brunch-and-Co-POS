@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Store, Printer, DollarSign, Check, Save } from 'lucide-react';
+import { Store, Printer, DollarSign, Check, Save, Loader2 } from 'lucide-react';
+import { useSettings } from '../hooks/useSettings';
 
 export const Settings: React.FC = () => {
+  const { settings, isLoading, saveSettings } = useSettings();
+
   // Store Settings State
   const [storeName, setStoreName] = useState('Brunch & Co');
   const [phone, setPhone] = useState('+92 (51) 234-5678');
@@ -17,8 +20,31 @@ export const Settings: React.FC = () => {
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (settings) {
+      setStoreName(settings.store_name ?? 'Brunch & Co');
+      setPhone(settings.phone ?? '+92 (51) 234-5678');
+      setAddress(settings.address ?? 'F-7 Markaz, Islamabad');
+      setDefaultDeliveryFee(settings.default_delivery_fee ?? 150);
+      setDefaultServiceCharge(settings.default_service_charge ?? 50);
+      setPaperWidth(settings.paper_width ?? '80mm');
+      setAutoPrintBill(settings.auto_print_bill ?? true);
+      setAutoPrintKot(settings.auto_print_kot ?? true);
+    }
+  }, [settings]);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    await saveSettings.mutateAsync({
+      store_name: storeName,
+      phone,
+      address,
+      default_delivery_fee: defaultDeliveryFee,
+      default_service_charge: defaultServiceCharge,
+      paper_width: paperWidth,
+      auto_print_bill: autoPrintBill,
+      auto_print_kot: autoPrintKot,
+    });
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2500);
   };
@@ -102,8 +128,10 @@ export const Settings: React.FC = () => {
                 <input
                   type="number"
                   min="0"
-                  value={defaultDeliveryFee}
-                  onChange={(e) => setDefaultDeliveryFee(Number(e.target.value))}
+                  value={defaultDeliveryFee === 0 ? '' : defaultDeliveryFee}
+                  onChange={(e) => setDefaultDeliveryFee(e.target.value === '' ? 0 : Number(e.target.value))}
+                  onFocus={(e) => e.target.select()}
+                  placeholder="0"
                   className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                 />
               </div>
@@ -113,8 +141,10 @@ export const Settings: React.FC = () => {
                 <input
                   type="number"
                   min="0"
-                  value={defaultServiceCharge}
-                  onChange={(e) => setDefaultServiceCharge(Number(e.target.value))}
+                  value={defaultServiceCharge === 0 ? '' : defaultServiceCharge}
+                  onChange={(e) => setDefaultServiceCharge(e.target.value === '' ? 0 : Number(e.target.value))}
+                  onFocus={(e) => e.target.select()}
+                  placeholder="0"
                   className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                 />
               </div>
@@ -205,10 +235,20 @@ export const Settings: React.FC = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-gradient-to-r from-[#6e4025] to-[#4d260d] hover:from-[#804b2b] hover:to-[#5c2d10] text-[#eeae8b] border border-[#fab895]/40 font-bold py-3 px-8 rounded-xl shadow-lg flex items-center space-x-2 transition-all cursor-pointer"
+              disabled={saveSettings.isPending}
+              className="bg-gradient-to-r from-[#6e4025] to-[#4d260d] hover:from-[#804b2b] hover:to-[#5c2d10] text-[#eeae8b] border border-[#fab895]/40 font-bold py-3 px-8 rounded-xl shadow-lg flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
             >
-              <Save className="w-4 h-4" />
-              <span>Save Configuration</span>
+              {saveSettings.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  <span>Save Configuration</span>
+                </>
+              )}
             </button>
           </div>
         </form>

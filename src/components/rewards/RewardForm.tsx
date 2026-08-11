@@ -173,6 +173,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   min="1"
                   value={reqValueVal || ''}
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
+                  onFocus={(e) => e.target.select()}
                   placeholder="e.g. 5"
                   className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                 />
@@ -187,6 +188,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   min="0"
                   value={reqValueVal || ''}
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
+                  onFocus={(e) => e.target.select()}
                   placeholder="e.g. 5000"
                   className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                 />
@@ -216,6 +218,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                     min="1"
                     value={reqValueVal || ''}
                     onChange={(e) => setReqValueVal(Number(e.target.value))}
+                    onFocus={(e) => e.target.select()}
                     placeholder="e.g. 3"
                     className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                   />
@@ -231,6 +234,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   min="0"
                   value={reqValueVal || ''}
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
+                  onFocus={(e) => e.target.select()}
                   placeholder="e.g. 1500"
                   className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
                 />

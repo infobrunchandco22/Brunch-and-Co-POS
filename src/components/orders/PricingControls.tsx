@@ -206,6 +206,7 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             max={discountType === 'percent' ? 100 : undefined}
             value={discountValue || ''}
             onChange={(e) => handleDiscountValueChange(Number(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
             placeholder="0"
             className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
           />
@@ -223,6 +224,7 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             min="0"
             value={deliveryFee || ''}
             onChange={(e) => onChangeDeliveryFee(Number(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
             placeholder="150"
             className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
           />
@@ -235,6 +237,7 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             min="0"
             value={serviceCharges || ''}
             onChange={(e) => onChangeServiceCharges(Number(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
             placeholder="50"
             className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
           />
@@ -325,11 +328,12 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
           <input
             type="number"
             min="0"
-            value={paidAmount === null || paidAmount === undefined ? '' : paidAmount}
+            value={paidAmount === null || paidAmount === undefined || paidAmount === 0 ? '' : paidAmount}
             onChange={(e) => {
               const val = e.target.value;
               onChangePaidAmount(val === '' ? null : Number(val));
             }}
+            onFocus={(e) => e.target.select()}
             placeholder={`Default: ${formatCurrency(total)} (Full)`}
             className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
           />

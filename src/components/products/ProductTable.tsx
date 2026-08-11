@@ -112,12 +112,13 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                       <input
                         type="number"
                         min="0"
-                        value={product.stock_quantity ?? 0}
+                        value={(product.stock_quantity ?? 0) === 0 ? '' : (product.stock_quantity ?? 0)}
                         onChange={(e) =>
                           onAdjustStock &&
                           onAdjustStock(product.id, Math.max(0, Number(e.target.value)))
                         }
                         onFocus={(e) => e.target.select()}
+                        placeholder="0"
                         className={`w-12 text-center bg-transparent text-xs font-bold focus:outline-none ${
                           (product.stock_quantity ?? 0) === 0
                             ? 'text-rose-400 font-extrabold'

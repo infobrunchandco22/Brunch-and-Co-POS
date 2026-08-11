@@ -127,6 +127,19 @@ export interface OrderItem {
   line_total: number;
 }
 
+export interface StoreSettings {
+  id?: string;
+  store_name: string;
+  phone: string;
+  address: string;
+  default_delivery_fee: number;
+  default_service_charge: number;
+  paper_width: '80mm' | '58mm';
+  auto_print_bill: boolean;
+  auto_print_kot: boolean;
+  updated_at?: string;
+}
+
 export interface Order {
   id: string;
   order_number: number;

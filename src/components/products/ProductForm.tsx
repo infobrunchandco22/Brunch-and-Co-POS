@@ -317,8 +317,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <label className="text-[#9f8d85] block mb-1">Sort Order</label>
               <input
                 type="number"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(Number(e.target.value))}
+                value={sortOrder === 0 ? '' : sortOrder}
+                onChange={(e) => setSortOrder(e.target.value === '' ? 0 : Number(e.target.value))}
+                onFocus={(e) => e.target.select()}
                 placeholder="0"
                 className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
               />
@@ -458,6 +459,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 min="0"
                 value={basePrice || ''}
                 onChange={(e) => handleBasePriceChange(Number(e.target.value) || 0)}
+                onFocus={(e) => e.target.select()}
+                placeholder="0"
                 className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2.5 py-1.5 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
               />
             </div>
@@ -467,9 +470,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <input
                 type="number"
                 min="0"
-                value={kitchenCost}
+                value={kitchenCost === 0 ? '' : kitchenCost}
                 onChange={(e) => handleKitchenCostChange(e.target.value !== '' ? Number(e.target.value) : '')}
-                placeholder="Cost price for margin calculation"
+                onFocus={(e) => e.target.select()}
+                placeholder="0"
                 className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2.5 py-1.5 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
               />
             </div>
@@ -603,7 +607,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         setVariants(updated);
                         if (idx === 0) setBasePrice(val);
                       }}
-                      placeholder="Price (Rs)"
+                      onFocus={(e) => e.target.select()}
+                      placeholder="0"
                       className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none"
                     />
                   </div>
@@ -619,7 +624,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         setVariants(updated);
                         if (idx === 0) setKitchenCost(val);
                       }}
-                      placeholder="Cost (Rs)"
+                      onFocus={(e) => e.target.select()}
+                      placeholder="0"
                       className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none"
                     />
                   </div>
