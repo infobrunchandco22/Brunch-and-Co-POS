@@ -105,10 +105,14 @@ export const CreateOrder: React.FC = () => {
         default_area: custData.area,
       },
       {
-        onSuccess: () => {
+        onSuccess: (newCust) => {
+          if (newCust) {
+            setSelectedCustomer(newCust);
+          }
           setDeliveryAddress(custData.address);
           setDeliveryArea(custData.area);
           setDeliveryPhone(custData.phone);
+          setGuestName(custData.full_name);
         },
       }
     );
@@ -119,6 +123,18 @@ export const CreateOrder: React.FC = () => {
   // Submit Order
   const handleSubmitOrder = async () => {
     if (cart.length === 0 || !isMetaValid) return;
+
+    // Resolve customer_id from selectedCustomer or fallback to phone match
+    let resolvedCustomerId = selectedCustomer?.id || null;
+    if (!resolvedCustomerId && deliveryPhone.trim()) {
+      const cleanPhone = deliveryPhone.trim().replace(/\s+/g, '');
+      const matched = customers.find(
+        (c) => c.phone && c.phone.trim().replace(/\s+/g, '') === cleanPhone
+      );
+      if (matched) {
+        resolvedCustomerId = matched.id;
+      }
+    }
 
     const items = cart.map((item, idx) => {
       const price = item.selectedVariant ? item.selectedVariant.price : item.product.base_price;
@@ -152,7 +168,7 @@ export const CreateOrder: React.FC = () => {
     }
 
     const newOrder = await createOrder.mutateAsync({
-      customer_id: selectedCustomer?.id || null,
+      customer_id: resolvedCustomerId,
       customer_name: selectedCustomer?.full_name || guestName || 'Walk-in Guest',
       guest_name: guestName || null,
       created_by_staff: selectedStaffId,
