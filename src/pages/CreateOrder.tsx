@@ -44,16 +44,18 @@ export const CreateOrder: React.FC = () => {
   // Completed Order Thermal Receipt State
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
 
-  // Cart operations
+  // Cart operations (Pure Immutable State Updates)
   const handleAddToCart = (product: Product, variant?: ProductVariant) => {
     setCart((prev) => {
       const existingIdx = prev.findIndex(
-        (item) => item.product.id === product.id && item.selectedVariant?.id === variant?.id
+        (item) =>
+          item.product.id === product.id &&
+          (variant ? item.selectedVariant?.id === variant.id : !item.selectedVariant)
       );
       if (existingIdx >= 0) {
-        const updated = [...prev];
-        updated[existingIdx].quantity += 1;
-        return updated;
+        return prev.map((item, idx) =>
+          idx === existingIdx ? { ...item, quantity: item.quantity + 1 } : item
+        );
       } else {
         return [...prev, { product, selectedVariant: variant, quantity: 1 }];
       }
@@ -65,11 +67,9 @@ export const CreateOrder: React.FC = () => {
       handleRemoveItem(index);
       return;
     }
-    setCart((prev) => {
-      const updated = [...prev];
-      updated[index].quantity = newQty;
-      return updated;
-    });
+    setCart((prev) =>
+      prev.map((item, idx) => (idx === index ? { ...item, quantity: newQty } : item))
+    );
   };
 
   const handleRemoveItem = (index: number) => {
@@ -77,11 +77,9 @@ export const CreateOrder: React.FC = () => {
   };
 
   const handleUpdateNotes = (index: number, notes: string) => {
-    setCart((prev) => {
-      const updated = [...prev];
-      updated[index].notes = notes;
-      return updated;
-    });
+    setCart((prev) =>
+      prev.map((item, idx) => (idx === index ? { ...item, notes } : item))
+    );
   };
 
   // Subtotal calculation
