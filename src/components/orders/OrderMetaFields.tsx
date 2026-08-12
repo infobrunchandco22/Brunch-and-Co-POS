@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Customer, Staff } from '../../types/database.types';
-import { User, MapPin, Phone, UserPlus, StickyNote, Building2 } from 'lucide-react';
+import { User, MapPin, Phone, UserPlus, StickyNote, Building2, Search, X } from 'lucide-react';
 
 interface OrderMetaFieldsProps {
   customers: Customer[];
@@ -48,6 +48,16 @@ export const OrderMetaFields: React.FC<OrderMetaFieldsProps> = ({
   const [newCustPhone, setNewCustPhone] = useState('');
   const [newCustAddress, setNewCustAddress] = useState('');
   const [newCustArea, setNewCustArea] = useState('F-7');
+  const [customerSearchQuery, setCustomerSearchQuery] = useState('');
+
+  const filteredCustomers = customers.filter((c) => {
+    if (!customerSearchQuery.trim()) return true;
+    const q = customerSearchQuery.toLowerCase();
+    return (
+      (c.full_name && c.full_name.toLowerCase().includes(q)) ||
+      (c.phone && c.phone.includes(q))
+    );
+  });
 
   const handleCustomerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const custId = e.target.value;
@@ -99,21 +109,52 @@ export const OrderMetaFields: React.FC<OrderMetaFieldsProps> = ({
       {/* Customer Profile & Guest Name Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">Customer Profile</label>
-          <div className="relative">
-            <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
-            <select
-              value={selectedCustomer?.id || ''}
-              onChange={handleCustomerSelect}
-              className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-9 pr-2 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
-            >
-              <option value="">Walk-in / Anonymous Guest</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.full_name} ({c.phone})
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-[10px] text-[#9f8d85] block">Customer Profile Search</label>
+            {selectedCustomer && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSelectCustomer(null);
+                  setCustomerSearchQuery('');
+                }}
+                className="text-[9px] text-[#fab895] hover:underline flex items-center space-x-0.5 cursor-pointer"
+              >
+                <X className="w-2.5 h-2.5" />
+                <span>Reset to Walk-in</span>
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="relative">
+              <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+              <input
+                type="text"
+                value={customerSearchQuery}
+                onChange={(e) => setCustomerSearchQuery(e.target.value)}
+                placeholder="Search name or phone..."
+                className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-8 pr-2 py-1 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              />
+            </div>
+
+            <div className="relative">
+              <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+              <select
+                value={selectedCustomer?.id || ''}
+                onChange={handleCustomerSelect}
+                className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-9 pr-2 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              >
+                <option value="">
+                  {selectedCustomer ? `Selected: ${selectedCustomer.full_name}` : 'Walk-in / Anonymous Guest'}
                 </option>
-              ))}
-            </select>
+                {filteredCustomers.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.full_name} ({c.phone || 'No phone'})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 

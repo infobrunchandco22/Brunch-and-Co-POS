@@ -129,10 +129,20 @@ export const RecentOrdersTable: React.FC<RecentOrdersTableProps> = ({
                     #{order.order_number}
                   </td>
                   <td className="py-3.5 px-4">
-                    <p className="font-semibold text-[#e5e2e1] truncate max-w-[140px]">
-                      {order.customer_name || 'Walk-in'}
+                    <p className="font-semibold text-[#e5e2e1] truncate max-w-[160px]">
+                      {order.customer_name || order.guest_name || 'Walk-in'}
                     </p>
-                    <p className="text-[10px] text-[#9f8d85]">{order.delivery_area || 'F-7'}</p>
+                    <p className="text-[10px] text-[#fab895] font-mono">
+                      {order.delivery_phone || 'No phone'}
+                    </p>
+                    <p className="text-[10px] text-[#9f8d85] truncate max-w-[180px]">
+                      {order.delivery_area ? `${order.delivery_area} • ` : ''}{order.delivery_address}
+                    </p>
+                    {order.notes && (
+                      <p className="text-[9px] text-amber-300 font-medium truncate max-w-[180px] bg-amber-950/50 px-1 py-0.5 rounded border border-amber-800/40 mt-0.5">
+                        Note: {order.notes}
+                      </p>
+                    )}
                   </td>
                   <td className="py-3.5 px-4 text-[#e5e2e1]">
                     {order.items.reduce((acc, item) => acc + item.quantity, 0)} items

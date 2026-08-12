@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { Staff } from '../types/database.types';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import {
   signInStaff as querySignInStaff,
   signOutStaff as querySignOutStaff,
@@ -33,6 +33,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const initAuth = async () => {
       try {
+        if (!isSupabaseConfigured) {
+          console.error('[Auth Init Warning] Supabase credentials missing or invalid. Defaulting to unauthenticated login requirement.');
+          if (isMounted) {
+            setStaffProfile(null);
+            setSession(null);
+          }
+          return;
+        }
+
         const { staffProfile: profile, session: currentSession } = await queryGetCurrentStaffProfile();
         if (isMounted) {
           setStaffProfile(profile);

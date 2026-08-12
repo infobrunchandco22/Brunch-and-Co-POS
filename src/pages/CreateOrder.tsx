@@ -200,7 +200,15 @@ export const CreateOrder: React.FC = () => {
               Create Order (POS Terminal)
             </h2>
             <p className="text-xs text-[#9f8d85]">
-              Counter & phone order desk with instant thermal receipt generation
+              Counter & phone order desk for <span className="text-[#e5e2e1] font-bold">NEW orders only</span>. Online website orders are automatically created and should be managed directly from the{' '}
+              <button
+                type="button"
+                onClick={() => navigate('/orders')}
+                className="text-[#fab895] hover:underline font-bold cursor-pointer inline-flex items-center space-x-0.5"
+              >
+                <span>Orders Directory</span>
+              </button>
+              .
             </p>
           </div>
         </div>

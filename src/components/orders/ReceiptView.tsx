@@ -244,16 +244,16 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Customer:</span>
-                <span className="font-semibold text-black">{currentOrder.customer_name || 'Walk-in'}</span>
+                <span className="font-semibold text-black">{currentOrder.customer_name || currentOrder.guest_name || 'Walk-in'}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Phone:</span>
-                <span>{currentOrder.delivery_phone}</span>
+                <span className="font-semibold text-black">{currentOrder.delivery_phone || 'N/A'}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Address:</span>
-                <span className="text-right truncate max-w-[140px] sm:max-w-[180px]">
-                  {currentOrder.delivery_address}
+                <span className="text-right font-semibold text-black truncate max-w-[140px] sm:max-w-[180px]">
+                  {currentOrder.delivery_address}{currentOrder.delivery_area ? ` (${currentOrder.delivery_area})` : ''}
                 </span>
               </div>
             </div>
