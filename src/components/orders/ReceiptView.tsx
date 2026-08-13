@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Order } from '../../types/database.types';
 import { formatCurrency, formatDate } from '../../lib/utils';
-import { ArrowLeft, Utensils, FileText, Layers, Truck, Check } from 'lucide-react';
+import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
 import { useStaff } from '../../hooks/useStaff';
 
@@ -81,18 +81,20 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
   const paddingClass = is58mm ? 'p-3' : 'p-4 sm:p-6';
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 min-h-screen bg-[#0e0e0e] text-[#131313]">
+    <div className="flex flex-col items-center p-2 sm:p-4 w-full text-[#131313]">
       {/* Control Bar (Hidden when printing) */}
       <div className="w-full max-w-md mb-4 space-y-3 print:hidden">
         <div className="flex items-center justify-between">
-          {onClose && (
+          {onClose ? (
             <button
               onClick={onClose}
-              className="flex items-center space-x-1 text-xs text-[#9f8d85] hover:text-[#e5e2e1] bg-[#1c1b1b] border border-[#353534] px-3 py-2 rounded-xl transition-colors cursor-pointer"
+              className="flex items-center space-x-1 text-xs font-bold text-[#fab895] hover:text-[#eeae8b] bg-[#131313] border border-[#fab895]/40 px-3 py-1.5 rounded-xl transition-colors cursor-pointer shadow"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to POS</span>
+              <X className="w-3.5 h-3.5" />
+              <span>Close Receipt</span>
             </button>
+          ) : (
+            <div></div>
           )}
 
           {/* Paper Size Selector */}

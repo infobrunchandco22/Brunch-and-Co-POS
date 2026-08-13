@@ -95,8 +95,8 @@ export const Orders: React.FC = () => {
 
       {/* Thermal Receipt Modal Viewer */}
       {selectedReceiptOrder && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="relative">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
+          <div className="relative w-full max-w-lg my-auto bg-[#1c1b1b] border border-[#353534] rounded-2xl p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
             <ReceiptView
               order={selectedReceiptOrder}
               onClose={() => setSelectedReceiptOrder(null)}
