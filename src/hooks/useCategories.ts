@@ -12,8 +12,8 @@ export const useCategories = () => {
   });
 
   const addCategory = useMutation({
-    mutationFn: async (name: string) => {
-      return createCategory({ name });
+    mutationFn: async (data: { name: string; image_url?: string | null }) => {
+      return createCategory(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });
@@ -21,8 +21,8 @@ export const useCategories = () => {
   });
 
   const updateCategory = useMutation({
-    mutationFn: async ({ id, name, is_active }: { id: string; name: string; is_active: boolean }) => {
-      return updateCategoryQuery(id, { name, is_active });
+    mutationFn: async ({ id, ...data }: { id: string; name?: string; is_active?: boolean; image_url?: string | null }) => {
+      return updateCategoryQuery(id, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] });

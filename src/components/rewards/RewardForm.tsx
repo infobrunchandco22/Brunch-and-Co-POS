@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Reward, RewardRequirementType, RewardType } from '../../types/database.types';
-import { X } from 'lucide-react';
+import { X, Upload, Loader2, Image as ImageIcon } from 'lucide-react';
 import { useProducts } from '../../hooks/useProducts';
+import { uploadRewardImage } from '../../lib/storage';
 
 interface RewardFormProps {
   reward?: Reward | null;
@@ -18,6 +19,9 @@ export const RewardForm: React.FC<RewardFormProps> = ({
   const [name, setName] = useState(reward?.name || '');
   const [description, setDescription] = useState(reward?.description || '');
   const [iconUrl, setIconUrl] = useState(reward?.icon_url || 'local_cafe');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
   const [reqType, setReqType] = useState<RewardRequirementType>(
     reward?.requirement_type || 'order_count'
   );
@@ -64,6 +68,28 @@ export const RewardForm: React.FC<RewardFormProps> = ({
       setRewardValVal(String(rewardValStr));
     }
   }, [reward]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select a valid image file.');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      setUploadError('');
+      const uploadedUrl = await uploadRewardImage(file);
+      setIconUrl(uploadedUrl);
+    } catch (err: any) {
+      console.error('Reward image upload error:', err);
+      setUploadError(err?.message || 'Failed to upload reward image.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +139,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#1c1b1b] border border-[#52443d] rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
+      <div className="bg-[#1c1b1b] border border-[#52443d] rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
         <div className="flex items-center justify-between border-b border-[#353534] pb-3">
           <h3 className="font-bold text-base text-[#e5e2e1]">
             {reward ? 'Edit Reward Campaign' : 'Create New Reward Campaign'}
@@ -134,7 +160,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Brunch Club Starter"
+              placeholder="e.g. Free T-Shirt, Coffee Voucher"
               className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
             />
           </div>
@@ -145,9 +171,65 @@ export const RewardForm: React.FC<RewardFormProps> = ({
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="e.g. Complete 5 orders to unlock a free coffee."
+              placeholder="e.g. Complete 2 orders to win a physical BR&CO T-shirt!"
               className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895] resize-none"
             />
+          </div>
+
+          {/* Reward Image Upload */}
+          <div>
+            <label className="text-[#9f8d85] block mb-1">Reward Product Photo (Revealed on Unlock)</label>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <label className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#201f1f] hover:bg-[#2a2a2a] border border-[#353534] rounded-xl text-xs font-semibold text-[#d6c3b9] cursor-pointer transition-colors shrink-0">
+                  {isUploading ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#fab895]" />
+                  ) : (
+                    <Upload className="w-3.5 h-3.5 text-[#fab895]" />
+                  )}
+                  <span>{isUploading ? 'Uploading...' : 'Choose File'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    disabled={isUploading}
+                    className="hidden"
+                  />
+                </label>
+
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    value={iconUrl}
+                    onChange={(e) => setIconUrl(e.target.value)}
+                    placeholder="https://... photo URL or icon name"
+                    className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  />
+                </div>
+              </div>
+
+              {uploadError && <p className="text-[10px] text-rose-400">{uploadError}</p>}
+
+              {/* Reward Image Preview */}
+              {iconUrl && (iconUrl.startsWith('http://') || iconUrl.startsWith('https://') || iconUrl.startsWith('/')) && (
+                <div className="relative h-24 w-full rounded-xl overflow-hidden bg-[#131313] border border-[#353534] flex items-center justify-center group p-2">
+                  <img
+                    src={iconUrl}
+                    alt="Reward Preview"
+                    className="w-full h-full object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setIconUrl('local_cafe')}
+                    className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-rose-950 text-white rounded-lg transition-colors cursor-pointer"
+                    title="Remove Photo"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="space-y-3 bg-[#131313] p-3 rounded-xl border border-[#2a2a2a]">

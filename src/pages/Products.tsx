@@ -150,7 +150,7 @@ export const Products: React.FC = () => {
       {showCategoryManager && (
         <CategoryManager
           categories={categories}
-          onAddCategory={(name) => addCategory.mutate(name)}
+          onAddCategory={(data) => addCategory.mutate(data)}
           onUpdateCategory={(params) => updateCategory.mutate(params)}
           onClose={() => setShowCategoryManager(false)}
         />

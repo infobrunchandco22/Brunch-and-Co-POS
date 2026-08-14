@@ -28,6 +28,7 @@ export async function createCategory(data: Partial<Category> & { name: string })
       name: data.name,
       sort_order: data.sort_order ?? 99,
       is_active: data.is_active ?? true,
+      image_url: data.image_url || null,
     })
     .select()
     .single();
@@ -48,6 +49,7 @@ export async function updateCategory(id: string, data: Partial<Category>): Promi
   if (data.name !== undefined) updatePayload.name = data.name;
   if (data.sort_order !== undefined) updatePayload.sort_order = data.sort_order;
   if (data.is_active !== undefined) updatePayload.is_active = data.is_active;
+  if (data.image_url !== undefined) updatePayload.image_url = data.image_url;
 
   const { data: updated, error } = await supabase
     .from('categories')

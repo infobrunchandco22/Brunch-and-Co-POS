@@ -24,6 +24,7 @@ export interface Category {
   name: string;
   sort_order: number;
   is_active: boolean;
+  image_url?: string | null;
 }
 
 export interface ProductVariant {
