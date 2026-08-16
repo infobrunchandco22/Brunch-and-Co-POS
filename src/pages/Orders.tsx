@@ -5,7 +5,8 @@ import { RecentOrdersTable } from '../components/dashboard/RecentOrdersTable';
 import { ReceiptView } from '../components/orders/ReceiptView';
 import { useOrders } from '../hooks/useOrders';
 import { Order, OrderStatus } from '../types/database.types';
-import { Search, Filter, Plus } from 'lucide-react';
+import { Search, Filter, Plus, Download } from 'lucide-react';
+import { exportOrdersToExcel } from '../lib/exportToExcel';
 
 const STATUS_TABS: { label: string; value: string }[] = [
   { label: 'All Orders', value: 'all' },
@@ -56,15 +57,26 @@ export const Orders: React.FC = () => {
             </p>
           </div>
 
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by Order #, phone, area..."
-              className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl pl-9 pr-4 py-2 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
-            />
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <button
+              onClick={() => exportOrdersToExcel(filteredOrders, activeTab)}
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#eeae8b] bg-[#6e4025]/40 hover:bg-[#6e4025] border border-[#fab895]/30 px-3.5 py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap"
+              title="Export visible orders to Excel (.xlsx)"
+            >
+              <Download className="w-3.5 h-3.5 text-[#fab895]" />
+              <span>Export to Excel</span>
+            </button>
+
+            <div className="relative flex-1 sm:w-72">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by Order #, phone, area..."
+                className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl pl-9 pr-4 py-2 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              />
+            </div>
           </div>
         </div>
 

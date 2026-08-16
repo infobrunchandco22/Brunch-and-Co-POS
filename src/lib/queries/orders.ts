@@ -171,9 +171,15 @@ export async function getOrderById(id: string): Promise<Order | null> {
  * Update order status by ID.
  */
 export async function updateOrderStatus(id: string, status: OrderStatus): Promise<Order> {
+  const updatePayload: Record<string, any> = { status };
+  if (status === 'delivered') {
+    updatePayload.delivered_at = new Date().toISOString();
+    updatePayload.payment_status = 'paid';
+  }
+
   const { data, error } = await supabase
     .from('orders')
-    .update({ status })
+    .update(updatePayload)
     .eq('id', id)
     .select('*, order_items(*)')
     .single();
