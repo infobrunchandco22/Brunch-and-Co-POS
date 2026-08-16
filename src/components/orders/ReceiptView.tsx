@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Order } from '../../types/database.types';
+import { Order, OrderStatus } from '../../types/database.types';
 import { formatCurrency, formatDate } from '../../lib/utils';
 import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
