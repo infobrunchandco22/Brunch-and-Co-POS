@@ -8,10 +8,26 @@ import { useStaff } from '../../hooks/useStaff';
 interface ReceiptViewProps {
   order: Order;
   onClose?: () => void;
+  onUpdateStatus?: (orderId: string, nextStatus: OrderStatus) => void;
 }
 
 type PrintMode = 'bill' | 'kot' | 'both';
 type PaperSize = '80mm' | '58mm';
+
+const getNextStatus = (current: OrderStatus): OrderStatus | null => {
+  switch (current) {
+    case 'pending':
+      return 'confirmed';
+    case 'confirmed':
+      return 'preparing';
+    case 'preparing':
+      return 'out_for_delivery';
+    case 'out_for_delivery':
+      return 'delivered';
+    default:
+      return null;
+  }
+};
 
 // Centralized Thermal Printer Adapter Function
 export const executeThermalPrint = ({
@@ -27,8 +43,8 @@ export const executeThermalPrint = ({
   window.print();
 };
 
-export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
-  const { updateDeliveryFee } = useOrders();
+export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpdateStatus }) => {
+  const { updateDeliveryFee, updateOrderStatus } = useOrders();
   const { staffList } = useStaff();
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
   const [paperSize, setPaperSize] = useState<PaperSize>('80mm');
@@ -42,6 +58,25 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
     setCurrentOrder(order);
     setDeliveryFeeInput(order.delivery_fee.toString());
   }, [order]);
+
+  const handleAdvanceStatus = () => {
+    const next = getNextStatus(currentOrder.status);
+    if (!next) return;
+
+    // Optimistic local update
+    const updated = {
+      ...currentOrder,
+      status: next,
+      payment_status: next === 'delivered' ? ('paid' as const) : currentOrder.payment_status,
+    };
+    setCurrentOrder(updated);
+
+    if (onUpdateStatus) {
+      onUpdateStatus(currentOrder.id, next);
+    } else {
+      updateOrderStatus.mutate({ orderId: currentOrder.id, status: next });
+    }
+  };
 
   const handleSaveDeliveryFee = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -80,21 +115,39 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
   const textSizeClass = is58mm ? 'text-[10px]' : 'text-[11px]';
   const paddingClass = is58mm ? 'p-3' : 'p-4 sm:p-6';
 
+  const nextStatus = getNextStatus(currentOrder.status);
+
   return (
     <div className="flex flex-col items-center p-2 sm:p-4 w-full text-[#131313]">
       {/* Control Bar (Hidden when printing) */}
       <div className="w-full max-w-md mb-4 space-y-3 print:hidden">
-        <div className="flex items-center justify-between">
+        {/* Top Header Row */}
+        <div className="flex items-center justify-between gap-2">
           {onClose ? (
             <button
               onClick={onClose}
               className="flex items-center space-x-1 text-xs font-bold text-[#fab895] hover:text-[#eeae8b] bg-[#131313] border border-[#fab895]/40 px-3 py-1.5 rounded-xl transition-colors cursor-pointer shadow"
             >
               <X className="w-3.5 h-3.5" />
-              <span>Close Receipt</span>
+              <span>Close</span>
             </button>
           ) : (
             <div></div>
+          )}
+
+          {/* Status Advance Button inside Modal */}
+          {nextStatus ? (
+            <button
+              onClick={handleAdvanceStatus}
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#eeae8b] bg-[#6e4025] hover:bg-[#804b2b] border border-[#fab895]/40 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-md"
+            >
+              <span>Advance to <span className="uppercase">{nextStatus.replace(/_/g, ' ')}</span></span>
+              <span>&rarr;</span>
+            </button>
+          ) : (
+            <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-3 py-1 rounded-xl">
+              Delivered ✓
+            </span>
           )}
 
           {/* Paper Size Selector */}
@@ -102,24 +155,24 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose }) => {
             <button
               type="button"
               onClick={() => setPaperSize('80mm')}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all cursor-pointer ${
                 paperSize === '80mm'
                   ? 'bg-[#6e4025] text-[#eeae8b] shadow'
                   : 'text-[#9f8d85] hover:text-[#e5e2e1]'
               }`}
             >
-              80mm Roll
+              80mm
             </button>
             <button
               type="button"
               onClick={() => setPaperSize('58mm')}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all cursor-pointer ${
                 paperSize === '58mm'
                   ? 'bg-[#6e4025] text-[#eeae8b] shadow'
                   : 'text-[#9f8d85] hover:text-[#e5e2e1]'
               }`}
             >
-              58mm Roll
+              58mm
             </button>
           </div>
         </div>

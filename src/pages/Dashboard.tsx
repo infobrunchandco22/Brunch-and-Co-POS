@@ -259,6 +259,7 @@ export const Dashboard: React.FC = () => {
             <ReceiptView
               order={selectedReceiptOrder}
               onClose={() => setSelectedReceiptOrder(null)}
+              onUpdateStatus={handleUpdateStatus}
             />
           </div>
         </div>

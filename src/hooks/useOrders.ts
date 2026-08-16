@@ -69,6 +69,12 @@ export const useOrders = (statusFilter?: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({ queryKey: ['customer-rewards'] });
+    },
+    onError: (err: any) => {
+      console.error('Error updating order status:', err);
+      alert(`Failed to update order status: ${err?.message || 'Unknown database error'}`);
     },
   });
 

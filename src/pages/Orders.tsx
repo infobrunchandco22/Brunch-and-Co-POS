@@ -112,6 +112,7 @@ export const Orders: React.FC = () => {
             <ReceiptView
               order={selectedReceiptOrder}
               onClose={() => setSelectedReceiptOrder(null)}
+              onUpdateStatus={handleUpdateStatus}
             />
           </div>
         </div>
