@@ -29,7 +29,7 @@ export const CreateOrder: React.FC = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [guestName, setGuestName] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [deliveryArea, setDeliveryArea] = useState('F-7');
+  const [deliveryArea, setDeliveryArea] = useState('Bahria Town Phase 7');
   const [deliveryPhone, setDeliveryPhone] = useState('');
   const [selectedStaffId, setSelectedStaffId] = useState(currentStaff?.id || '');
   const [orderNotes, setOrderNotes] = useState('');
@@ -196,7 +196,7 @@ export const CreateOrder: React.FC = () => {
     setSelectedCustomer(null);
     setGuestName('');
     setDeliveryAddress('');
-    setDeliveryArea('F-7');
+    setDeliveryArea('Bahria Town Phase 7');
     setDeliveryPhone('');
     setOrderNotes('');
     setDiscount(0);

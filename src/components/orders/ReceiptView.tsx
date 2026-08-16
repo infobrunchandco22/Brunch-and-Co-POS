@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Order, OrderStatus } from '../../types/database.types';
-import { formatCurrency, formatDate } from '../../lib/utils';
+import { formatCurrency, formatExactDateTime } from '../../lib/utils';
 import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
 import { useStaff } from '../../hooks/useStaff';
@@ -295,7 +295,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Date:</span>
-                <span>{formatDate(currentOrder.created_at)}</span>
+                <span>{formatExactDateTime(currentOrder.created_at)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Customer:</span>
@@ -419,7 +419,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-2 mb-3 space-y-1`}>
               <div className="flex justify-between font-bold">
                 <span>TIME:</span>
-                <span>{formatDate(currentOrder.created_at)}</span>
+                <span>{formatExactDateTime(currentOrder.created_at)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
                 <span>CUSTOMER:</span>

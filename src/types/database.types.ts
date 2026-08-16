@@ -126,6 +126,7 @@ export interface OrderItem {
   unit_price: number;
   quantity: number;
   line_total: number;
+  kitchen_cost_snapshot?: number | null;
 }
 
 export interface StoreSettings {
@@ -162,5 +163,8 @@ export interface Order {
   paid_amount: number;
   notes: string | null;
   created_at: string;
+  delivered_at?: string | null;
+  issue_notes?: string | null;
+  has_issue?: boolean;
   items: OrderItem[];
 }

@@ -4,6 +4,8 @@ import { Product } from '../../types/database.types';
 export interface DashboardStats {
   totalRevenue: number;
   revenueChangePct: number;
+  totalProfit: number;
+  profitChangePct: number;
   ordersCount: number;
   ordersCountChangePct: number;
   avgOrderValue: number;
@@ -18,6 +20,7 @@ export interface DashboardStats {
 /**
  * Aggregate dashboard stats:
  * - Revenue: sum of delivered orders' total ONLY
+ * - Profit: Revenue - sum(order_items.kitchen_cost_snapshot * quantity) for delivered orders
  * - Total Orders: count of all non-cancelled orders in period
  * - Avg Order Value: delivered revenue / delivered orders count
  * - Real date-bucketed chart data with 0 mock fallback
@@ -84,7 +87,7 @@ export async function getDashboardStats(
   // Fetch previous period orders for % comparison
   const { data: prevOrders } = await supabase
     .from('orders')
-    .select('id, total, status')
+    .select('id, total, status, order_items(*)')
     .neq('status', 'cancelled')
     .gte('created_at', prevPeriodStart)
     .lt('created_at', prevPeriodEnd);
@@ -92,12 +95,44 @@ export async function getDashboardStats(
   const orders = currentOrders || [];
   const prevList = prevOrders || [];
 
-  // Filter delivered orders for Revenue & AOV
+  // Filter delivered orders for Revenue, Profit & AOV
   const deliveredOrders = orders.filter((o) => o.status === 'delivered');
   const prevDeliveredOrders = prevList.filter((o) => o.status === 'delivered');
 
   const totalRevenue = deliveredOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
   const prevRevenue = prevDeliveredOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+
+  // Delivered cost for current period
+  const totalDeliveredCost = deliveredOrders.reduce((sum, o) => {
+    const orderCost = (o.order_items || []).reduce((itemSum: number, item: any) => {
+      if (
+        item.kitchen_cost_snapshot !== null &&
+        item.kitchen_cost_snapshot !== undefined &&
+        !isNaN(Number(item.kitchen_cost_snapshot))
+      ) {
+        return itemSum + Number(item.kitchen_cost_snapshot) * Number(item.quantity || 1);
+      }
+      return itemSum;
+    }, 0);
+    return sum + orderCost;
+  }, 0);
+
+  const prevDeliveredCost = prevDeliveredOrders.reduce((sum, o) => {
+    const orderCost = (o.order_items || []).reduce((itemSum: number, item: any) => {
+      if (
+        item.kitchen_cost_snapshot !== null &&
+        item.kitchen_cost_snapshot !== undefined &&
+        !isNaN(Number(item.kitchen_cost_snapshot))
+      ) {
+        return itemSum + Number(item.kitchen_cost_snapshot) * Number(item.quantity || 1);
+      }
+      return itemSum;
+    }, 0);
+    return sum + orderCost;
+  }, 0);
+
+  const totalProfit = Math.max(0, totalRevenue - totalDeliveredCost);
+  const prevProfit = Math.max(0, prevRevenue - prevDeliveredCost);
 
   const ordersCount = orders.length; // Total orders regardless of status
   const prevOrdersCount = prevList.length;
@@ -114,6 +149,7 @@ export async function getDashboardStats(
   };
 
   const revenueChangePct = calcPctChange(totalRevenue, prevRevenue);
+  const profitChangePct = calcPctChange(totalProfit, prevProfit);
   const ordersCountChangePct = calcPctChange(ordersCount, prevOrdersCount);
   const avgOrderValueChangePct = calcPctChange(avgOrderValue, prevAvgOrderValue);
 

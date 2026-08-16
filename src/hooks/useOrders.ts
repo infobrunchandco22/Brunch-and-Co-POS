@@ -8,10 +8,16 @@ import {
   getOrderById,
   updateOrderStatus as updateOrderStatusQuery,
   updateOrderDeliveryFee as updateOrderDeliveryFeeQuery,
+  updateOrderIssueNotes as updateOrderIssueNotesQuery,
 } from '../lib/queries/orders';
 
-export const useOrders = (statusFilter?: string) => {
+interface UseOrdersOptions {
+  enableRealtime?: boolean;
+}
+
+export const useOrders = (statusFilter?: string, options: UseOrdersOptions = {}) => {
   const queryClient = useQueryClient();
+  const enableRealtime = options.enableRealtime !== false;
 
   const query = useQuery({
     queryKey: ['orders', statusFilter],
@@ -20,8 +26,10 @@ export const useOrders = (statusFilter?: string) => {
     },
   });
 
-  // Realtime subscription pattern: subscribe to orders & order_items changes
+  // Realtime subscription pattern: subscribe to orders & order_items changes when enabled
   useEffect(() => {
+    if (!enableRealtime) return;
+
     const channelId = `orders-realtime-${Math.random().toString(36).substring(2, 9)}`;
     const channel = supabase
       .channel(channelId)
@@ -48,7 +56,7 @@ export const useOrders = (statusFilter?: string) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [enableRealtime, queryClient]);
 
   const createOrder = useMutation({
     mutationFn: async (newOrderData: Partial<Order> & { total: number }) => {
@@ -112,6 +120,24 @@ export const useOrders = (statusFilter?: string) => {
     },
   });
 
+  const updateOrderIssueNotes = useMutation({
+    mutationFn: async ({
+      orderId,
+      issueNotes,
+      hasIssue,
+    }: {
+      orderId: string;
+      issueNotes: string | null;
+      hasIssue: boolean;
+    }) => {
+      return updateOrderIssueNotesQuery(orderId, issueNotes, hasIssue);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+    },
+  });
+
   return {
     ...query,
     orders: query.data || [],
@@ -119,5 +145,6 @@ export const useOrders = (statusFilter?: string) => {
     updateOrderStatus,
     updatePaymentStatus,
     updateDeliveryFee,
+    updateOrderIssueNotes,
   };
 };

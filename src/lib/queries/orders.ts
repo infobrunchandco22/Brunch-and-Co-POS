@@ -22,6 +22,7 @@ function formatOrder(row: any): Order {
     unit_price: item.unit_price ?? 0,
     quantity: item.quantity ?? 1,
     line_total: item.line_total ?? ((item.unit_price ?? 0) * (item.quantity ?? 1)),
+    kitchen_cost_snapshot: item.kitchen_cost_snapshot ?? null,
   }));
 
   return {
@@ -45,6 +46,9 @@ function formatOrder(row: any): Order {
     paid_amount: row.paid_amount ?? 0,
     notes: row.notes || null,
     created_at: row.created_at || new Date().toISOString(),
+    delivered_at: row.delivered_at || null,
+    issue_notes: row.issue_notes || null,
+    has_issue: Boolean(row.has_issue),
     items,
   };
 }
@@ -65,7 +69,7 @@ export async function createOrder(
     guest_name: orderData.guest_name || null,
     customer_name_snapshot: orderData.customer_name || orderData.guest_name || 'Walk-in Guest',
     delivery_address: orderData.delivery_address || 'Counter Pickup',
-    delivery_area: orderData.delivery_area || 'F-7',
+    delivery_area: orderData.delivery_area || 'Bahria Town Phase 7',
     delivery_phone: orderData.delivery_phone || '+92 300 0000000',
     subtotal: orderData.subtotal ?? orderData.total,
     discount: orderData.discount ?? 0,
@@ -115,7 +119,9 @@ export async function getOrders(filters?: OrderFilters): Promise<Order[]> {
     .select('*, order_items(*)')
     .order('created_at', { ascending: false });
 
-  if (filters?.status && filters.status !== 'all') {
+  if (filters?.status === 'issues') {
+    query = query.eq('has_issue', true);
+  } else if (filters?.status && filters.status !== 'all') {
     query = query.eq('status', filters.status);
   }
 
@@ -136,17 +142,45 @@ export async function getOrders(filters?: OrderFilters): Promise<Order[]> {
   let formatted = (data || []).map(formatOrder);
 
   if (filters?.search) {
-    const q = filters.search.toLowerCase();
+    const q = filters.search.trim().toLowerCase();
     formatted = formatted.filter(
       (o) =>
         o.order_number.toString().includes(q) ||
         (o.customer_name && o.customer_name.toLowerCase().includes(q)) ||
+        (o.guest_name && o.guest_name.toLowerCase().includes(q)) ||
         (o.delivery_phone && o.delivery_phone.includes(q)) ||
+        (o.delivery_address && o.delivery_address.toLowerCase().includes(q)) ||
         (o.delivery_area && o.delivery_area.toLowerCase().includes(q))
     );
   }
 
   return formatted;
+}
+
+/**
+ * Update order issue notes and flag state.
+ */
+export async function updateOrderIssueNotes(
+  id: string,
+  issueNotes: string | null,
+  hasIssue: boolean
+): Promise<Order> {
+  const { data, error } = await supabase
+    .from('orders')
+    .update({
+      issue_notes: issueNotes,
+      has_issue: hasIssue,
+    })
+    .eq('id', id)
+    .select('*, order_items(*)')
+    .single();
+
+  if (error || !data) {
+    console.error(`Error updating issue notes for order ${id}:`, error);
+    throw error;
+  }
+
+  return formatOrder(data);
 }
 
 /**

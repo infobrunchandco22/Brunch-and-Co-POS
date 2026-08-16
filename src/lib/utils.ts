@@ -12,34 +12,36 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
- * Format date string for display (e.g., Oct 24, 14:32 or Today, 14:30)
+ * Format date string for display with exact date, year, and 12-hour AM/PM time
+ * e.g., "15 Aug 2026, 4:32 PM"
  */
-export function formatDate(dateString: string): string {
+export function formatExactDateTime(dateString?: string | null): string {
+  if (!dateString) return 'N/A';
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
 
-  const now = new Date();
-  const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
-
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const timeStr = `${hours}:${minutes}`;
-
-  if (isToday) {
-    return `Today, ${timeStr}`;
-  }
-
+  const day = date.getDate();
   const monthNames = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ];
   const month = monthNames[date.getMonth()];
-  const day = date.getDate();
+  const year = date.getFullYear();
 
-  return `${month} ${day}, ${timeStr}`;
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+}
+
+/**
+ * Format date string for display (e.g., Oct 24, 14:32 or Today, 14:30)
+ */
+export function formatDate(dateString: string): string {
+  return formatExactDateTime(dateString);
 }
 
 /**

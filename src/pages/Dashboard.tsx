@@ -3,12 +3,12 @@ import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { StatCard } from '../components/dashboard/StatCard';
 import { OrdersChart } from '../components/dashboard/OrdersChart';
 import { RecentOrdersTable } from '../components/dashboard/RecentOrdersTable';
-import { ReceiptView } from '../components/orders/ReceiptView';
+import { OrderDetailModal } from '../components/orders/OrderDetailModal';
 import { useDashboardStats } from '../hooks/useDashboardStats';
 import { useOrders } from '../hooks/useOrders';
 import { formatCurrency } from '../lib/utils';
 import { Order, OrderStatus } from '../types/database.types';
-import { DollarSign, ShoppingBag, TrendingUp, Bike, RefreshCw, Calendar, Download } from 'lucide-react';
+import { DollarSign, ShoppingBag, TrendingUp, Bike, RefreshCw, Calendar, Download, Coins } from 'lucide-react';
 import { exportOrdersToExcel } from '../lib/exportToExcel';
 
 export const Dashboard: React.FC = () => {
@@ -167,13 +167,20 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Stat Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <StatCard
             title="Total Revenue"
             value={formatCurrency(stats.totalRevenue)}
             changePct={stats.revenueChangePct}
             icon={DollarSign}
-            subtitle="Delivered orders only"
+            subtitle="Delivered orders"
+          />
+          <StatCard
+            title="Net Profit"
+            value={formatCurrency(stats.totalProfit)}
+            changePct={stats.profitChangePct}
+            icon={Coins}
+            subtitle="Revenue minus cost"
           />
           <StatCard
             title="Total Orders"
@@ -252,17 +259,13 @@ export const Dashboard: React.FC = () => {
         />
       </div>
 
-      {/* Thermal Receipt Modal Viewer */}
+      {/* Order Detail & Receipt Modal Viewer */}
       {selectedReceiptOrder && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="relative">
-            <ReceiptView
-              order={selectedReceiptOrder}
-              onClose={() => setSelectedReceiptOrder(null)}
-              onUpdateStatus={handleUpdateStatus}
-            />
-          </div>
-        </div>
+        <OrderDetailModal
+          order={selectedReceiptOrder}
+          onClose={() => setSelectedReceiptOrder(null)}
+          onUpdateStatus={handleUpdateStatus}
+        />
       )}
     </DashboardLayout>
   );

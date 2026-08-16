@@ -22,7 +22,7 @@ interface OrderMetaFieldsProps {
   onAddNewCustomer: (cust: { full_name: string; phone: string; address: string; area: string }) => void;
 }
 
-const AREAS = ['F-7', 'F-8', 'F-10', 'E-11', 'G-11', 'Blue Area', 'I-8', 'DHA Phase 2', 'Counter Pickup'];
+const AREAS = ['Bahria Town Phase 7', 'Bahria Town Phase 8', 'Counter Pickup'];
 
 export const OrderMetaFields: React.FC<OrderMetaFieldsProps> = ({
   customers,
@@ -47,7 +47,7 @@ export const OrderMetaFields: React.FC<OrderMetaFieldsProps> = ({
   const [newCustName, setNewCustName] = useState('');
   const [newCustPhone, setNewCustPhone] = useState('');
   const [newCustAddress, setNewCustAddress] = useState('');
-  const [newCustArea, setNewCustArea] = useState('F-7');
+  const [newCustArea, setNewCustArea] = useState('Bahria Town Phase 7');
   const [customerSearchQuery, setCustomerSearchQuery] = useState('');
 
   const filteredCustomers = customers.filter((c) => {
@@ -70,7 +70,7 @@ export const OrderMetaFields: React.FC<OrderMetaFieldsProps> = ({
       onSelectCustomer(found);
       onChangeGuestName(found.full_name);
       onChangeDeliveryAddress(found.default_address || '');
-      onChangeDeliveryArea(found.default_area || 'F-7');
+      onChangeDeliveryArea(found.default_area || 'Bahria Town Phase 7');
       onChangeDeliveryPhone(found.phone || '');
     }
   };

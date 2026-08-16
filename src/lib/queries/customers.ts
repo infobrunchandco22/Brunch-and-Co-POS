@@ -147,7 +147,7 @@ export async function createCustomer(data: Partial<Customer> & { full_name: stri
     phone: data.phone,
     email: data.email || null,
     default_address: data.default_address || null,
-    default_area: data.default_area || 'F-7',
+    default_area: data.default_area || 'Bahria Town Phase 7',
     total_orders: 0,
     total_spent: 0,
   };

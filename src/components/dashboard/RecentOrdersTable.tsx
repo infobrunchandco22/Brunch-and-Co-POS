@@ -126,7 +126,18 @@ export const RecentOrdersTable: React.FC<RecentOrdersTableProps> = ({
                   className="hover:bg-[#201f1f] transition-colors cursor-pointer"
                 >
                   <td className="py-3.5 px-4 font-mono font-bold text-[#e5e2e1]">
-                    #{order.order_number}
+                    <div className="flex items-center space-x-1.5">
+                      <span>#{order.order_number}</span>
+                      {order.has_issue && (
+                        <span
+                          className="inline-flex items-center space-x-0.5 bg-rose-950/80 text-rose-400 border border-rose-800/60 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase"
+                          title="Order flagged with issue"
+                        >
+                          <AlertCircle className="w-2.5 h-2.5" />
+                          <span>Issue</span>
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="py-3.5 px-4">
                     <p className="font-semibold text-[#e5e2e1] truncate max-w-[160px]">
@@ -141,6 +152,11 @@ export const RecentOrdersTable: React.FC<RecentOrdersTableProps> = ({
                     {order.notes && (
                       <p className="text-[9px] text-amber-300 font-medium truncate max-w-[180px] bg-amber-950/50 px-1 py-0.5 rounded border border-amber-800/40 mt-0.5">
                         Note: {order.notes}
+                      </p>
+                    )}
+                    {order.issue_notes && (
+                      <p className="text-[9px] text-rose-300 font-medium truncate max-w-[180px] bg-rose-950/50 px-1 py-0.5 rounded border border-rose-800/40 mt-0.5">
+                        Issue: {order.issue_notes}
                       </p>
                     )}
                   </td>
