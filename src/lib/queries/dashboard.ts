@@ -218,6 +218,8 @@ export async function getDashboardStats(
   return {
     totalRevenue,
     revenueChangePct,
+    totalProfit,
+    profitChangePct,
     ordersCount,
     ordersCountChangePct,
     avgOrderValue,
