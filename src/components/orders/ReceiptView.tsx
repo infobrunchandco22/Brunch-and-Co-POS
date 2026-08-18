@@ -315,27 +315,29 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
 
             {/* Items Table */}
             <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-3 mb-3`}>
-              <div className="flex justify-between font-bold border-b border-black pb-1 mb-2">
+              <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-center font-bold border-b border-black pb-1 mb-2">
                 <span>ITEM</span>
-                <span>QTY</span>
+                <span className="text-center">QTY</span>
                 <span className="text-right">TOTAL</span>
               </div>
 
               <div className="space-y-2">
                 {currentOrder.items.map((item) => (
                   <div key={item.id}>
-                    <div className="flex justify-between font-medium">
-                      <span className="truncate max-w-[130px] sm:max-w-[170px]">
-                        {item.product_name_snapshot}
+                    <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-start font-medium">
+                      <div className="min-w-0 pr-1">
+                        <p className="leading-tight break-words">{item.product_name_snapshot}</p>
+                        {item.variant_name && (
+                          <p className="text-[9px] text-gray-500">Size: {item.variant_name}</p>
+                        )}
+                      </div>
+                      <span className="text-center font-mono font-bold whitespace-nowrap">
+                        x{item.quantity}
                       </span>
-                      <span>x{item.quantity}</span>
-                      <span className="text-right font-semibold">
+                      <span className="text-right font-semibold whitespace-nowrap">
                         {formatCurrency(item.line_total)}
                       </span>
                     </div>
-                    {item.variant_name && (
-                      <p className="text-[9px] text-gray-500 pl-2">Size: {item.variant_name}</p>
-                    )}
                   </div>
                 ))}
               </div>

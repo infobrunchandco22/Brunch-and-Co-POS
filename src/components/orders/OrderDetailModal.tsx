@@ -125,8 +125,8 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto custom-scrollbar">
-      <div className="relative w-full max-w-4xl my-auto bg-[#181818] border border-[#353534] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto custom-scrollbar animate-fade-in">
+      <div className="relative w-full max-w-4xl my-auto bg-[#181818] border border-[#353534] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-modal-enter">
         {/* Modal Top Bar */}
         <div className="p-4 sm:p-5 border-b border-[#2e2e2e] bg-[#1c1b1b] flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center space-x-3">
