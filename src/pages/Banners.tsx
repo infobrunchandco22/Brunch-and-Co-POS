@@ -77,3 +77,5 @@ export const Banners: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default Banners;

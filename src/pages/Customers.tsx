@@ -58,3 +58,5 @@ export const Customers: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default Customers;

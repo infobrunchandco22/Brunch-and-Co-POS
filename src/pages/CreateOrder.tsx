@@ -313,3 +313,5 @@ export const CreateOrder: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default CreateOrder;

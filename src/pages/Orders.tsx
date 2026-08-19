@@ -142,3 +142,5 @@ export const Orders: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default Orders;

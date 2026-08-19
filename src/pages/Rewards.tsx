@@ -77,3 +77,5 @@ export const Rewards: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default Rewards;

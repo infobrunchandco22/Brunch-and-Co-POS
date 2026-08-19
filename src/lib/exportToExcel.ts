@@ -1,15 +1,17 @@
-import * as XLSX from 'xlsx';
 import { Order } from '../types/database.types';
 
 /**
  * Export a list of orders to an Excel (.xlsx) file client-side.
  * Includes detailed item breakdown, customer info, order status, and financial metrics.
+ * Uses dynamic import so xlsx is only loaded when export is triggered.
  */
-export function exportOrdersToExcel(orders: Order[], fileNameSuffix: string = 'Orders_Report') {
+export async function exportOrdersToExcel(orders: Order[], fileNameSuffix: string = 'Orders_Report') {
   if (!orders || orders.length === 0) {
     alert('No orders available to export for the selected date range.');
     return;
   }
+
+  const XLSX = await import('xlsx');
 
   const exportRows = orders.map((o) => {
     const itemsSummary = (o.items || [])

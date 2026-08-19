@@ -158,3 +158,5 @@ export const Products: React.FC = () => {
     </DashboardLayout>
   );
 };
+
+export default Products;
