@@ -191,7 +191,7 @@ export async function getDashboardStats(
 
   // Group delivered revenue & order volume over time
   const timeBuckets: Record<string, { orders: number; revenue: number }> = {};
-  
+
   // Sort orders chronologically
   const sortedOrders = [...orders].sort(
     (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
