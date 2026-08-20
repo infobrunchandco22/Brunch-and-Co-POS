@@ -5,8 +5,8 @@ import { uploadCategoryImage } from '../../lib/storage';
 
 interface CategoryManagerProps {
   categories: Category[];
-  onAddCategory: (data: { name: string; image_url?: string | null }) => void;
-  onUpdateCategory: (params: { id: string; name?: string; is_active?: boolean; image_url?: string | null }) => void;
+  onAddCategory: (data: { name: string; image_url?: string | null }) => Promise<any> | void;
+  onUpdateCategory: (params: { id: string; name?: string; is_active?: boolean; image_url?: string | null }) => Promise<any> | void;
   onClose: () => void;
 }
 
@@ -21,12 +21,15 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
   const [imageUrl, setImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   const handleStartEdit = (cat: Category) => {
     setEditingCategory(cat);
     setName(cat.name);
     setImageUrl(cat.image_url || '');
     setUploadError('');
+    setSaveError('');
   };
 
   const handleResetForm = () => {
@@ -34,6 +37,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
     setName('');
     setImageUrl('');
     setUploadError('');
+    setSaveError('');
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,24 +62,32 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    if (editingCategory) {
-      onUpdateCategory({
-        id: editingCategory.id,
-        name: name.trim(),
-        image_url: imageUrl.trim() || null,
-      });
-    } else {
-      onAddCategory({
-        name: name.trim(),
-        image_url: imageUrl.trim() || null,
-      });
+    try {
+      setIsSaving(true);
+      setSaveError('');
+      if (editingCategory) {
+        await onUpdateCategory({
+          id: editingCategory.id,
+          name: name.trim(),
+          image_url: imageUrl.trim() || null,
+        });
+      } else {
+        await onAddCategory({
+          name: name.trim(),
+          image_url: imageUrl.trim() || null,
+        });
+      }
+      handleResetForm();
+    } catch (err: any) {
+      console.error('Failed to save category:', err);
+      setSaveError(err?.message || 'Failed to save category. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
-
-    handleResetForm();
   };
 
   return (
@@ -181,14 +193,34 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
             </div>
           </div>
 
+          {saveError && (
+            <p className="text-[11px] text-rose-600 bg-rose-50 border border-rose-200 p-2 rounded-xl">
+              {saveError}
+            </p>
+          )}
+
           <div className="flex justify-end pt-1">
             <button
               type="submit"
-              disabled={isUploading || !name.trim()}
+              disabled={isUploading || isSaving || !name.trim()}
               className="bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer disabled:opacity-50 shadow-xs"
             >
-              {editingCategory ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-              <span>{editingCategory ? 'Update Category' : 'Save Category'}</span>
+              {isSaving ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : editingCategory ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Update Category</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Save Category</span>
+                </>
+              )}
             </button>
           </div>
         </form>

@@ -150,8 +150,12 @@ export const Products: React.FC = () => {
       {showCategoryManager && (
         <CategoryManager
           categories={categories}
-          onAddCategory={(data) => addCategory.mutate(data)}
-          onUpdateCategory={(params) => updateCategory.mutate(params)}
+          onAddCategory={async (data) => {
+            await addCategory.mutateAsync(data);
+          }}
+          onUpdateCategory={async (params) => {
+            await updateCategory.mutateAsync(params);
+          }}
           onClose={() => setShowCategoryManager(false)}
         />
       )}

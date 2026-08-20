@@ -22,23 +22,43 @@ export async function getCategories(): Promise<Category[]> {
  * Create a new category in Supabase.
  */
 export async function createCategory(data: Partial<Category> & { name: string }): Promise<Category> {
-  const { data: inserted, error } = await supabase
-    .from('categories')
-    .insert({
-      name: data.name,
-      sort_order: data.sort_order ?? 99,
-      is_active: data.is_active ?? true,
-      image_url: data.image_url || null,
-    })
-    .select()
-    .single();
+  const insertPayload: Record<string, any> = {
+    name: data.name,
+    sort_order: data.sort_order ?? 99,
+    is_active: data.is_active ?? true,
+  };
 
-  if (error) {
+  if (data.image_url) {
+    insertPayload.image_url = data.image_url;
+  }
+
+  try {
+    const { data: inserted, error } = await supabase
+      .from('categories')
+      .insert(insertPayload)
+      .select()
+      .single();
+
+    if (error) {
+      // If error is PGRST204 (image_url column not found in schema cache), retry without image_url
+      if (error.code === 'PGRST204' && insertPayload.image_url) {
+        delete insertPayload.image_url;
+        const retryRes = await supabase
+          .from('categories')
+          .insert(insertPayload)
+          .select()
+          .single();
+        if (retryRes.error) throw retryRes.error;
+        return retryRes.data as Category;
+      }
+      throw error;
+    }
+
+    return inserted as Category;
+  } catch (error) {
     console.error('Error creating category:', error);
     throw error;
   }
-
-  return inserted as Category;
 }
 
 /**
@@ -49,19 +69,37 @@ export async function updateCategory(id: string, data: Partial<Category>): Promi
   if (data.name !== undefined) updatePayload.name = data.name;
   if (data.sort_order !== undefined) updatePayload.sort_order = data.sort_order;
   if (data.is_active !== undefined) updatePayload.is_active = data.is_active;
-  if (data.image_url !== undefined) updatePayload.image_url = data.image_url;
+  if (data.image_url !== undefined && data.image_url !== null) {
+    updatePayload.image_url = data.image_url;
+  }
 
-  const { data: updated, error } = await supabase
-    .from('categories')
-    .update(updatePayload)
-    .eq('id', id)
-    .select()
-    .single();
+  try {
+    const { data: updated, error } = await supabase
+      .from('categories')
+      .update(updatePayload)
+      .eq('id', id)
+      .select()
+      .single();
 
-  if (error) {
+    if (error) {
+      // If error is PGRST204 (image_url column not found in schema cache), retry without image_url
+      if (error.code === 'PGRST204' && updatePayload.image_url !== undefined) {
+        delete updatePayload.image_url;
+        const retryRes = await supabase
+          .from('categories')
+          .update(updatePayload)
+          .eq('id', id)
+          .select()
+          .single();
+        if (retryRes.error) throw retryRes.error;
+        return retryRes.data as Category;
+      }
+      throw error;
+    }
+
+    return updated as Category;
+  } catch (error) {
     console.error(`Error updating category ${id}:`, error);
     throw error;
   }
-
-  return updated as Category;
 }
