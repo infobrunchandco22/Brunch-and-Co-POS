@@ -28,7 +28,7 @@ export async function createCategory(data: Partial<Category> & { name: string })
     is_active: data.is_active ?? true,
   };
 
-  if (data.image_url) {
+  if (data.image_url !== undefined) {
     insertPayload.image_url = data.image_url;
   }
 
@@ -41,7 +41,7 @@ export async function createCategory(data: Partial<Category> & { name: string })
 
     if (error) {
       // If error is PGRST204 (image_url column not found in schema cache), retry without image_url
-      if (error.code === 'PGRST204' && insertPayload.image_url) {
+      if (error.code === 'PGRST204' && insertPayload.image_url !== undefined) {
         delete insertPayload.image_url;
         const retryRes = await supabase
           .from('categories')
@@ -69,7 +69,7 @@ export async function updateCategory(id: string, data: Partial<Category>): Promi
   if (data.name !== undefined) updatePayload.name = data.name;
   if (data.sort_order !== undefined) updatePayload.sort_order = data.sort_order;
   if (data.is_active !== undefined) updatePayload.is_active = data.is_active;
-  if (data.image_url !== undefined && data.image_url !== null) {
+  if (data.image_url !== undefined) {
     updatePayload.image_url = data.image_url;
   }
 
