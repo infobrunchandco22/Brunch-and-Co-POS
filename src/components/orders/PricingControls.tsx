@@ -124,21 +124,21 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
   };
 
   return (
-    <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl p-4 shadow-lg space-y-4">
-      <h4 className="font-bold text-xs text-[#e5e2e1] uppercase font-label-caps border-b border-[#353534] pb-2">
+    <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-4 shadow-xs space-y-4">
+      <h4 className="font-bold text-xs text-[#000000] uppercase font-label-caps border-b border-[#000000]/10 pb-2">
         Totals & Payment Settlement
       </h4>
 
       {/* Staff & Notes Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-[#131313] p-2.5 rounded-xl border border-[#2a2a2a]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-[#F6F1EB] p-2.5 rounded-xl border border-[#000000]/10">
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">Created By Staff</label>
+          <label className="text-[10px] text-[#7a4900] block mb-1">Created By Staff</label>
           <div className="relative">
-            <User className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+            <User className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#7a4900]" />
             <select
               value={currentStaffId || (activeStaffList[0]?.id ?? '')}
               onChange={(e) => handleStaffChange(e.target.value)}
-              className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg pl-8 pr-2 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg pl-8 pr-2 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
             >
               {activeStaffList.length === 0 ? (
                 <option value="">No Staff Available</option>
@@ -154,15 +154,15 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
         </div>
 
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">Order Notes</label>
+          <label className="text-[10px] text-[#7a4900] block mb-1">Order Notes</label>
           <div className="relative">
-            <StickyNote className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+            <StickyNote className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#7a4900]" />
             <input
               type="text"
               value={currentNotes}
               onChange={(e) => handleNotesChange(e.target.value)}
               placeholder="Rider / Kitchen notes..."
-              className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg pl-8 pr-2 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg pl-8 pr-2 py-1.5 text-xs text-[#000000] placeholder-[#7a4900]/40 focus:outline-none focus:border-[#3d2500]"
             />
           </div>
         </div>
@@ -172,17 +172,17 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
       <div className="grid grid-cols-3 gap-2">
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="text-[10px] text-[#9f8d85] block">
+            <label className="text-[10px] text-[#7a4900] block">
               Discount {discountType === 'percent' ? '(%)' : '(Rs)'}
             </label>
-            <div className="flex items-center bg-[#131313] border border-[#353534] rounded-lg p-0.5 text-[9px] font-bold">
+            <div className="flex items-center bg-[#F6F1EB] border border-[#000000]/10 rounded-lg p-0.5 text-[9px] font-bold">
               <button
                 type="button"
                 onClick={() => handleToggleDiscountType('rs')}
                 className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
                   discountType === 'rs'
-                    ? 'bg-[#6e4025] text-[#eeae8b] border border-[#fab895]/40 shadow-sm'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-2xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 Rs
@@ -192,8 +192,8 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
                 onClick={() => handleToggleDiscountType('percent')}
                 className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
                   discountType === 'percent'
-                    ? 'bg-[#6e4025] text-[#eeae8b] border border-[#fab895]/40 shadow-sm'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-2xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 %
@@ -208,17 +208,17 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             onChange={(e) => handleDiscountValueChange(Number(e.target.value) || 0)}
             onFocus={(e) => e.target.select()}
             placeholder="0"
-            className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+            className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-2.5 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
           />
           {discountType === 'percent' && discountValue > 0 && (
-            <span className="text-[9px] text-[#eeae8b] mt-0.5 block font-medium">
+            <span className="text-[9px] text-[#3d2500] mt-0.5 block font-semibold">
               = {formatCurrency((subtotal * discountValue) / 100)} off
             </span>
           )}
         </div>
 
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">Delivery Fee</label>
+          <label className="text-[10px] text-[#7a4900] block mb-1">Delivery Fee</label>
           <input
             type="number"
             min="0"
@@ -226,12 +226,12 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             onChange={(e) => onChangeDeliveryFee(Number(e.target.value) || 0)}
             onFocus={(e) => e.target.select()}
             placeholder="150"
-            className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+            className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-2.5 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
           />
         </div>
 
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">Service Charges</label>
+          <label className="text-[10px] text-[#7a4900] block mb-1">Service Charges</label>
           <input
             type="number"
             min="0"
@@ -239,52 +239,52 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             onChange={(e) => onChangeServiceCharges(Number(e.target.value) || 0)}
             onFocus={(e) => e.target.select()}
             placeholder="50"
-            className="w-full bg-[#131313] border border-[#353534] rounded-xl px-2.5 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+            className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-2.5 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
           />
         </div>
       </div>
 
       {/* Summary Math Breakdown */}
-      <div className="bg-[#131313] border border-[#2a2a2a] rounded-xl p-3 space-y-1.5 text-xs">
-        <div className="flex justify-between text-[#9f8d85]">
+      <div className="bg-[#F6F1EB] border border-[#000000]/10 rounded-xl p-3 space-y-1.5 text-xs">
+        <div className="flex justify-between text-[#7a4900]">
           <span>Subtotal:</span>
-          <span className="font-semibold text-[#e5e2e1]">{formatCurrency(subtotal)}</span>
+          <span className="font-semibold text-[#000000]">{formatCurrency(subtotal)}</span>
         </div>
         {discount > 0 && (
-          <div className="flex justify-between text-rose-400">
+          <div className="flex justify-between text-rose-600">
             <span>Discount {discountType === 'percent' ? `(${discountValue}%)` : ''}:</span>
             <span>-{formatCurrency(discount)}</span>
           </div>
         )}
         {deliveryFee > 0 && (
-          <div className="flex justify-between text-[#d6c3b9]">
+          <div className="flex justify-between text-[#7a4900]">
             <span>Delivery Fee:</span>
             <span>+{formatCurrency(deliveryFee)}</span>
           </div>
         )}
         {serviceCharges > 0 && (
-          <div className="flex justify-between text-[#d6c3b9]">
+          <div className="flex justify-between text-[#7a4900]">
             <span>Service Charges:</span>
             <span>+{formatCurrency(serviceCharges)}</span>
           </div>
         )}
-        <div className="pt-2 border-t border-[#353534] flex justify-between items-baseline">
-          <span className="font-bold text-sm text-[#e5e2e1]">Grand Total:</span>
-          <span className="font-bold text-lg text-[#fab895]">{formatCurrency(total)}</span>
+        <div className="pt-2 border-t border-[#000000]/10 flex justify-between items-baseline">
+          <span className="font-bold text-sm text-[#000000]">Grand Total:</span>
+          <span className="font-bold text-lg text-[#3d2500]">{formatCurrency(total)}</span>
         </div>
       </div>
 
       {/* Payment Method Selector */}
       <div>
-        <label className="text-[10px] text-[#9f8d85] block mb-1">Payment Method</label>
+        <label className="text-[10px] text-[#7a4900] block mb-1">Payment Method</label>
         <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => onChangePaymentMethod('cash')}
             className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
               paymentMethod === 'cash'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50'
-                : 'bg-[#131313] text-[#9f8d85] border-[#353534] hover:text-[#e5e2e1]'
+                ? 'bg-[#3d2500] text-[#FFFDF7] border-[#3d2500] shadow-xs'
+                : 'bg-[#F6F1EB] text-[#7a4900] border-[#000000]/10 hover:text-[#000000]'
             }`}
           >
             <Banknote className="w-4 h-4 mb-1" />
@@ -296,8 +296,8 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             onClick={() => onChangePaymentMethod('card')}
             className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
               paymentMethod === 'card'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50'
-                : 'bg-[#131313] text-[#9f8d85] border-[#353534] hover:text-[#e5e2e1]'
+                ? 'bg-[#3d2500] text-[#FFFDF7] border-[#3d2500] shadow-xs'
+                : 'bg-[#F6F1EB] text-[#7a4900] border-[#000000]/10 hover:text-[#000000]'
             }`}
           >
             <CreditCard className="w-4 h-4 mb-1" />
@@ -309,8 +309,8 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             onClick={() => onChangePaymentMethod('online')}
             className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
               paymentMethod === 'online'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50'
-                : 'bg-[#131313] text-[#9f8d85] border-[#353534] hover:text-[#e5e2e1]'
+                ? 'bg-[#3d2500] text-[#FFFDF7] border-[#3d2500] shadow-xs'
+                : 'bg-[#F6F1EB] text-[#7a4900] border-[#000000]/10 hover:text-[#000000]'
             }`}
           >
             <Globe className="w-4 h-4 mb-1" />
@@ -320,9 +320,9 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
       </div>
 
       {/* Paid Amount / Settlement Input */}
-      <div className="grid grid-cols-2 gap-2 bg-[#131313] p-2.5 rounded-xl border border-[#2a2a2a]">
+      <div className="grid grid-cols-2 gap-2 bg-[#F6F1EB] p-2.5 rounded-xl border border-[#000000]/10">
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">
+          <label className="text-[10px] text-[#7a4900] block mb-1">
             Paid Amount (Rs)
           </label>
           <input
@@ -335,22 +335,22 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
             }}
             onFocus={(e) => e.target.select()}
             placeholder={`Default: ${formatCurrency(total)} (Full)`}
-            className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+            className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2 py-1 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
           />
         </div>
         <div>
-          <label className="text-[10px] text-[#9f8d85] block mb-1">
+          <label className="text-[10px] text-[#7a4900] block mb-1">
             {balanceDue > 0 ? 'Balance Due' : 'Change Due'}
           </label>
           <p
             className={`text-xs font-bold py-1 ${
-              balanceDue > 0 ? 'text-amber-400' : 'text-emerald-400'
+              balanceDue > 0 ? 'text-amber-800' : 'text-emerald-700'
             }`}
           >
             {balanceDue > 0 ? formatCurrency(balanceDue) : formatCurrency(changeDue)}
           </p>
         </div>
-        <p className="col-span-2 text-[9px] text-[#9f8d85]">
+        <p className="col-span-2 text-[9px] text-[#7a4900]">
           Leave blank for full payment. Enter 0 for Unpaid. Enter partial amount for Balance Due status.
         </p>
       </div>
@@ -359,7 +359,7 @@ export const PricingControls: React.FC<PricingControlsProps> = ({
       <button
         onClick={onSubmitOrder}
         disabled={isSubmitting || total <= 0 || !isMetaValid}
-        className="w-full bg-gradient-to-r from-[#6e4025] to-[#4d260d] hover:from-[#804b2b] hover:to-[#5c2d10] text-[#eeae8b] border border-[#fab895]/40 font-bold py-3 px-4 rounded-xl shadow-lg shadow-[#4d260d]/40 flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        className="w-full bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] font-bold py-3 px-4 rounded-xl shadow-md flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         <Printer className="w-4 h-4" />
         <span>

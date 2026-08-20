@@ -125,31 +125,31 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto custom-scrollbar animate-fade-in">
-      <div className="relative w-full max-w-4xl my-auto bg-[#181818] border border-[#353534] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-modal-enter">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto custom-scrollbar animate-fade-in">
+      <div className="relative w-full max-w-4xl my-auto bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-modal-enter">
         {/* Modal Top Bar */}
-        <div className="p-4 sm:p-5 border-b border-[#2e2e2e] bg-[#1c1b1b] flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 border-b border-[#000000]/10 bg-[#FFFDF7] flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center space-x-3">
             <div>
               <div className="flex items-center space-x-2">
-                <span className="font-mono font-bold text-lg text-[#e5e2e1]">
+                <span className="font-mono font-bold text-lg text-[#000000]">
                   Order #{currentOrder.order_number}
                 </span>
                 {getStatusBadge(currentOrder.status)}
                 {currentOrder.has_issue && (
-                  <span className="inline-flex items-center space-x-1 bg-rose-950/80 text-rose-300 border border-rose-700/60 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider animate-pulse">
-                    <AlertTriangle className="w-3 h-3 text-rose-400" />
+                  <span className="inline-flex items-center space-x-1 bg-rose-50 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider animate-pulse">
+                    <AlertTriangle className="w-3 h-3 text-rose-600" />
                     <span>Flagged Issue</span>
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-[#9f8d85] mt-0.5 flex items-center space-x-1">
-                <Clock className="w-3 h-3 text-[#fab895]" />
+              <p className="text-[11px] text-[#7a4900] mt-0.5 flex items-center space-x-1">
+                <Clock className="w-3 h-3 text-[#3d2500]" />
                 <span>Placed: {formatExactDateTime(currentOrder.created_at)}</span>
                 {currentOrder.delivered_at && (
                   <>
-                    <span className="text-[#574939]">•</span>
-                    <span className="text-emerald-400">
+                    <span className="text-[#7a4900]/40">•</span>
+                    <span className="text-emerald-700 font-medium">
                       Delivered: {formatExactDateTime(currentOrder.delivered_at)}
                     </span>
                   </>
@@ -160,14 +160,14 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 
           {/* Tab Switcher & Status Controls */}
           <div className="flex items-center space-x-2">
-            <div className="bg-[#131313] p-1 rounded-xl border border-[#353534] flex items-center space-x-1">
+            <div className="bg-[#F6F1EB] p-1 rounded-xl border border-[#000000]/10 flex items-center space-x-1">
               <button
                 type="button"
                 onClick={() => setActiveTab('details')}
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'details'
-                    ? 'bg-[#6e4025] text-[#eeae8b] shadow'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
@@ -178,8 +178,8 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 onClick={() => setActiveTab('receipt')}
                 className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === 'receipt'
-                    ? 'bg-[#6e4025] text-[#eeae8b] shadow'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 <Printer className="w-3.5 h-3.5" />
@@ -190,7 +190,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
             {nextStatus && (
               <button
                 onClick={handleAdvanceStatus}
-                className="bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1"
+                className="bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 shadow-xs"
               >
                 <span>Advance to <span className="uppercase">{nextStatus.replace(/_/g, ' ')}</span></span>
                 <span>&rarr;</span>
@@ -199,7 +199,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1.5 text-[#9f8d85] hover:text-[#e5e2e1] hover:bg-[#2a2a2a] rounded-xl transition-colors cursor-pointer"
+              className="p-1.5 text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-xl transition-colors cursor-pointer"
               title="Close modal"
             >
               <X className="w-5 h-5" />
@@ -214,72 +214,72 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               {/* Top Info Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Customer Details */}
-                <div className="bg-[#1c1b1b] border border-[#2e2e2e] rounded-xl p-4 space-y-2.5">
-                  <div className="flex items-center space-x-2 text-[#fab895] border-b border-[#2e2e2e] pb-2">
+                <div className="bg-[#FFFDF7] border border-[#000000]/10 rounded-xl p-4 space-y-2.5 shadow-2xs">
+                  <div className="flex items-center space-x-2 text-[#3d2500] border-b border-[#000000]/10 pb-2">
                     <User className="w-4 h-4" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#e5e2e1]">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#000000]">
                       Customer Profile
                     </h4>
                   </div>
                   <div className="space-y-1 text-xs">
-                    <p className="font-bold text-[#e5e2e1] text-sm">
+                    <p className="font-bold text-[#000000] text-sm">
                       {currentOrder.customer_name || currentOrder.guest_name || 'Walk-in Guest'}
                     </p>
-                    <p className="text-[#fab895] font-mono flex items-center space-x-1">
-                      <Phone className="w-3 h-3 text-[#9f8d85]" />
+                    <p className="text-[#3d2500] font-mono flex items-center space-x-1">
+                      <Phone className="w-3 h-3 text-[#7a4900]" />
                       <span>{currentOrder.delivery_phone || 'No phone provided'}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Delivery Location */}
-                <div className="bg-[#1c1b1b] border border-[#2e2e2e] rounded-xl p-4 space-y-2.5">
-                  <div className="flex items-center space-x-2 text-[#fab895] border-b border-[#2e2e2e] pb-2">
+                <div className="bg-[#FFFDF7] border border-[#000000]/10 rounded-xl p-4 space-y-2.5 shadow-2xs">
+                  <div className="flex items-center space-x-2 text-[#3d2500] border-b border-[#000000]/10 pb-2">
                     <MapPin className="w-4 h-4" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#e5e2e1]">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#000000]">
                       Delivery Address
                     </h4>
                   </div>
                   <div className="space-y-1 text-xs">
                     {currentOrder.delivery_area && (
-                      <span className="inline-block bg-[#2a2a2a] text-[#eeae8b] border border-[#353534] px-2 py-0.5 rounded text-[10px] font-bold">
+                      <span className="inline-block bg-[#F6F1EB] text-[#3d2500] border border-[#000000]/10 px-2 py-0.5 rounded text-[10px] font-bold">
                         Sector / Area: {currentOrder.delivery_area}
                       </span>
                     )}
-                    <p className="text-[#d6c3b9] leading-relaxed">
+                    <p className="text-[#7a4900] leading-relaxed">
                       {currentOrder.delivery_address || 'Counter Pickup'}
                     </p>
                   </div>
                 </div>
 
                 {/* Staff & Metadata (EAT) */}
-                <div className="bg-[#1c1b1b] border border-[#2e2e2e] rounded-xl p-4 space-y-2.5">
-                  <div className="flex items-center space-x-2 text-[#fab895] border-b border-[#2e2e2e] pb-2">
+                <div className="bg-[#FFFDF7] border border-[#000000]/10 rounded-xl p-4 space-y-2.5 shadow-2xs">
+                  <div className="flex items-center space-x-2 text-[#3d2500] border-b border-[#000000]/10 pb-2">
                     <ChefHat className="w-4 h-4" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#e5e2e1]">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#000000]">
                       Order Handling (EAT)
                     </h4>
                   </div>
                   <div className="space-y-1.5 text-xs">
                     <div>
-                      <span className="text-[10px] text-[#9f8d85] block font-semibold uppercase">
+                      <span className="text-[10px] text-[#7a4900] block font-semibold uppercase">
                         Employee At Time (EAT):
                       </span>
-                      <p className="font-bold text-[#e5e2e1] bg-[#131313] px-2 py-1 rounded-lg border border-[#2e2e2e] inline-block mt-0.5">
+                      <p className="font-bold text-[#000000] bg-[#F6F1EB] px-2 py-1 rounded-lg border border-[#000000]/10 inline-block mt-0.5">
                         {eatStaffName}
                       </p>
                     </div>
                     <div>
-                      <span className="text-[10px] text-[#9f8d85] block font-semibold uppercase">
+                      <span className="text-[10px] text-[#7a4900] block font-semibold uppercase">
                         Payment Settlement:
                       </span>
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mt-0.5 ${
                           currentOrder.payment_status === 'paid'
-                            ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                             : currentOrder.payment_status === 'partial'
-                            ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                            : 'bg-rose-950 text-rose-300 border border-rose-800'
+                            ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                            : 'bg-rose-50 text-rose-800 border border-rose-200'
                         }`}
                       >
                         {currentOrder.payment_status} ({currentOrder.payment_method})
@@ -291,29 +291,29 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
 
               {/* Checkout Customer Order Notes */}
               {currentOrder.notes && (
-                <div className="bg-amber-950/30 border border-amber-800/40 rounded-xl p-3 text-xs">
-                  <span className="font-bold text-amber-300 flex items-center space-x-1 mb-1">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs">
+                  <span className="font-bold text-amber-900 flex items-center space-x-1 mb-1">
                     <FileText className="w-3.5 h-3.5" />
                     <span>Customer Order Instructions (Checkout Notes):</span>
                   </span>
-                  <p className="text-amber-100 font-medium pl-4">{currentOrder.notes}</p>
+                  <p className="text-amber-800 font-medium pl-4">{currentOrder.notes}</p>
                 </div>
               )}
 
               {/* Order Items Table */}
-              <div className="bg-[#1c1b1b] border border-[#2e2e2e] rounded-xl overflow-hidden shadow">
-                <div className="p-3.5 bg-[#131313] border-b border-[#2e2e2e] flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#e5e2e1]">
+              <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-xl overflow-hidden shadow-xs">
+                <div className="p-3.5 bg-[#FFFDF7] border-b border-[#000000]/10 flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#000000]">
                     Ordered Items & Variants ({currentOrder.items.length})
                   </h4>
-                  <span className="text-[11px] text-[#9f8d85]">
+                  <span className="text-[11px] text-[#7a4900]">
                     Total Items Qty: {currentOrder.items.reduce((acc, i) => acc + i.quantity, 0)}
                   </span>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-[#d6c3b9]">
-                    <thead className="bg-[#181818] text-[#9f8d85] font-label-caps uppercase text-[10px] tracking-wider border-b border-[#2e2e2e]">
+                  <table className="w-full text-left text-xs text-[#000000]">
+                    <thead className="bg-[#F6F1EB] text-[#7a4900] font-label-caps uppercase text-[10px] tracking-wider border-b border-[#000000]/10">
                       <tr>
                         <th className="py-2.5 px-4">Item Description</th>
                         <th className="py-2.5 px-4">Variant / Option</th>
@@ -322,22 +322,22 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                         <th className="py-2.5 px-4 text-right">Line Total</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#262626]">
+                    <tbody className="divide-y divide-[#000000]/5">
                       {currentOrder.items.map((item, idx) => (
-                        <tr key={item.id || idx} className="hover:bg-[#201f1f]">
-                          <td className="py-3 px-4 font-semibold text-[#e5e2e1]">
+                        <tr key={item.id || idx} className="hover:bg-[#F6F1EB]/60">
+                          <td className="py-3 px-4 font-semibold text-[#000000]">
                             {item.product_name_snapshot}
                           </td>
-                          <td className="py-3 px-4 text-[#fab895]">
-                            {item.variant_name || <span className="text-[#6d6d6d]">Default</span>}
+                          <td className="py-3 px-4 text-[#3d2500] font-medium">
+                            {item.variant_name || <span className="text-[#7a4900]/50">Default</span>}
                           </td>
-                          <td className="py-3 px-4 text-center font-bold font-mono text-[#e5e2e1]">
+                          <td className="py-3 px-4 text-center font-bold font-mono text-[#000000]">
                             {item.quantity}
                           </td>
-                          <td className="py-3 px-4 text-right text-[#9f8d85]">
+                          <td className="py-3 px-4 text-right text-[#7a4900]">
                             {formatCurrency(item.unit_price)}
                           </td>
-                          <td className="py-3 px-4 text-right font-bold text-[#e5e2e1]">
+                          <td className="py-3 px-4 text-right font-bold text-[#000000]">
                             {formatCurrency(item.line_total)}
                           </td>
                         </tr>
@@ -347,48 +347,48 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                 </div>
 
                 {/* Financial Summary Footer */}
-                <div className="p-4 bg-[#141414] border-t border-[#2e2e2e] grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 bg-[#FFFDF7] border-t border-[#000000]/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1 text-xs">
-                    <p className="text-[#9f8d85] text-[11px]">
-                      Payment Method: <span className="text-[#e5e2e1] font-bold uppercase">{currentOrder.payment_method}</span>
+                    <p className="text-[#7a4900] text-[11px]">
+                      Payment Method: <span className="text-[#000000] font-bold uppercase">{currentOrder.payment_method}</span>
                     </p>
-                    <p className="text-[#9f8d85] text-[11px]">
-                      Payment Status: <span className="text-[#e5e2e1] font-bold uppercase">{currentOrder.payment_status}</span>
+                    <p className="text-[#7a4900] text-[11px]">
+                      Payment Status: <span className="text-[#000000] font-bold uppercase">{currentOrder.payment_status}</span>
                     </p>
                     {currentOrder.payment_status === 'partial' && (
-                      <p className="text-amber-400 font-bold text-xs mt-1">
+                      <p className="text-amber-700 font-bold text-xs mt-1">
                         Balance Due: {formatCurrency(currentOrder.total - currentOrder.paid_amount)}
                       </p>
                     )}
                     {currentOrder.payment_status === 'unpaid' && (
-                      <p className="text-rose-400 font-bold text-xs mt-1">
+                      <p className="text-rose-700 font-bold text-xs mt-1">
                         Balance Due: {formatCurrency(currentOrder.total)}
                       </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5 text-xs text-right sm:max-w-xs sm:ml-auto w-full">
-                    <div className="flex justify-between text-[#9f8d85]">
+                    <div className="flex justify-between text-[#7a4900]">
                       <span>Subtotal:</span>
-                      <span className="font-semibold text-[#e5e2e1]">{formatCurrency(currentOrder.subtotal)}</span>
+                      <span className="font-semibold text-[#000000]">{formatCurrency(currentOrder.subtotal)}</span>
                     </div>
                     {currentOrder.discount > 0 && (
-                      <div className="flex justify-between text-rose-400">
+                      <div className="flex justify-between text-rose-600">
                         <span>Discount:</span>
                         <span>-{formatCurrency(currentOrder.discount)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between text-[#9f8d85]">
+                    <div className="flex justify-between text-[#7a4900]">
                       <span>Delivery Fee:</span>
-                      <span className="font-semibold text-[#e5e2e1]">+{formatCurrency(currentOrder.delivery_fee)}</span>
+                      <span className="font-semibold text-[#000000]">+{formatCurrency(currentOrder.delivery_fee)}</span>
                     </div>
                     {currentOrder.service_charges > 0 && (
-                      <div className="flex justify-between text-[#9f8d85]">
+                      <div className="flex justify-between text-[#7a4900]">
                         <span>Service Charges:</span>
-                        <span className="font-semibold text-[#e5e2e1]">+{formatCurrency(currentOrder.service_charges)}</span>
+                        <span className="font-semibold text-[#000000]">+{formatCurrency(currentOrder.service_charges)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between text-sm font-bold text-[#fab895] pt-2 border-t border-[#2e2e2e]">
+                    <div className="flex justify-between text-sm font-bold text-[#3d2500] pt-2 border-t border-[#000000]/10">
                       <span>Grand Total:</span>
                       <span>{formatCurrency(currentOrder.total)}</span>
                     </div>
@@ -397,11 +397,11 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               </div>
 
               {/* Staff-Only Issue Notes & Flagging Panel */}
-              <div className="bg-[#1c1b1b] border border-amber-700/40 rounded-xl p-4 sm:p-5 shadow-lg space-y-3">
+              <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <AlertTriangle className="w-4 h-4 text-amber-400" />
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#e5e2e1]">
+                    <AlertTriangle className="w-4 h-4 text-amber-700" />
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#000000]">
                       Staff Internal Issue Notes & Complaint Flagging
                     </h4>
                   </div>
@@ -409,15 +409,15 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                     <button
                       type="button"
                       onClick={handleResolveIssue}
-                      className="text-[11px] font-bold text-emerald-400 bg-emerald-950/60 hover:bg-emerald-900/80 border border-emerald-700/60 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                      className="text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                     >
                       ✓ Mark Issue as Resolved
                     </button>
                   )}
                 </div>
 
-                <p className="text-[11px] text-[#9f8d85]">
-                  Record any complaints, missing items, delivery delays, or staff notes for this order. Saving a note will automatically flag this order in the <span className="text-[#fab895] font-semibold">"Order Issues"</span> tab.
+                <p className="text-[11px] text-[#7a4900]">
+                  Record any complaints, missing items, delivery delays, or staff notes for this order. Saving a note will automatically flag this order in the <span className="text-[#3d2500] font-semibold">"Order Issues"</span> tab.
                 </p>
 
                 <form onSubmit={handleSaveIssueNotes} className="space-y-3">
@@ -426,26 +426,26 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                     value={issueNotes}
                     onChange={(e) => setIssueNotes(e.target.value)}
                     placeholder="E.g., Customer called: missing side salad from bag. Kitchen re-dispatched rider at 4:45 PM..."
-                    className="w-full bg-[#131313] border border-[#353534] rounded-xl p-3 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895] placeholder-[#666]"
+                    className="w-full bg-[#FFFFFF] border border-amber-200 rounded-xl p-3 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500] placeholder-[#7a4900]/40"
                   />
 
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-[#9f8d85]">
+                    <span className="text-[10px] text-[#7a4900]">
                       Status:{' '}
                       {currentOrder.has_issue ? (
-                        <strong className="text-rose-400">Flagged in Order Issues</strong>
+                        <strong className="text-rose-600">Flagged in Order Issues</strong>
                       ) : (
-                        <strong className="text-emerald-400">Normal / Clear</strong>
+                        <strong className="text-emerald-700">Normal / Clear</strong>
                       )}
                     </span>
 
                     <button
                       type="submit"
                       disabled={updateOrderIssueNotes.isPending}
-                      className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs ${
                         isIssueSaved
-                          ? 'bg-emerald-900 text-emerald-200 border border-emerald-600'
-                          : 'bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 shadow'
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : 'bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7]'
                       }`}
                     >
                       {isIssueSaved ? (

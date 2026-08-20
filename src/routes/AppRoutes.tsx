@@ -18,18 +18,18 @@ const Settings = lazy(() => import('../pages/Settings'));
 const RouteLoadingFallback: React.FC = () => (
   <div className="min-h-[50vh] flex items-center justify-center p-8">
     <div className="flex flex-col items-center space-y-3">
-      <div className="w-8 h-8 border-2 border-[#fab895]/20 border-t-[#fab895] rounded-full animate-spin"></div>
-      <p className="text-[11px] font-mono text-[#9f8d85] uppercase tracking-wider">Loading...</p>
+      <div className="w-8 h-8 border-2 border-[#7a4900]/20 border-t-[#3d2500] rounded-full animate-spin"></div>
+      <p className="text-[11px] font-mono text-[#7a4900] uppercase tracking-wider">Loading...</p>
     </div>
   </div>
 );
 
 // Route Guards
 const LoadingScreen: React.FC = () => (
-  <div className="min-h-screen bg-[#0e0e0e] flex items-center justify-center">
+  <div className="min-h-screen bg-[#F6F1EB] flex items-center justify-center">
     <div className="flex flex-col items-center space-y-4">
-      <div className="w-10 h-10 border-4 border-[#fab895]/20 border-t-[#fab895] rounded-full animate-spin"></div>
-      <p className="text-xs text-[#9f8d85] font-medium tracking-wide">Loading Session...</p>
+      <div className="w-10 h-10 border-4 border-[#7a4900]/20 border-t-[#3d2500] rounded-full animate-spin"></div>
+      <p className="text-xs text-[#7a4900] font-medium tracking-wide">Loading Session...</p>
     </div>
   </div>
 );

@@ -58,10 +58,10 @@ export const Orders: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="font-headline-lg font-bold text-2xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-2xl text-[#000000] tracking-tight">
               Order Lifecycle Directory
             </h2>
-            <p className="text-xs text-[#9f8d85] mt-1">
+            <p className="text-xs text-[#7a4900] mt-1">
               Manual lifecycle dashboard • Click Refresh to pull incoming orders
             </p>
           </div>
@@ -71,39 +71,39 @@ export const Orders: React.FC = () => {
             <button
               onClick={() => refetch()}
               disabled={isFetching}
-              className="flex items-center space-x-1.5 text-xs font-bold text-[#e5e2e1] bg-[#1c1b1b] hover:bg-[#252424] border border-[#353534] hover:border-[#fab895]/40 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow"
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#000000] bg-[#FFFFFF] hover:bg-[#F6F1EB] border border-[#000000]/15 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-xs"
               title="Manually check and fetch latest orders"
             >
-              <RefreshCw className={`w-3.5 h-3.5 text-[#fab895] ${isFetching ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 text-[#3d2500] ${isFetching ? 'animate-spin' : ''}`} />
               <span>{isFetching ? 'Refreshing...' : 'Refresh'}</span>
             </button>
 
             {/* Export Excel Button */}
             <button
               onClick={() => exportOrdersToExcel(filteredOrders, activeTab)}
-              className="flex items-center space-x-1.5 text-xs font-bold text-[#eeae8b] bg-[#6e4025]/40 hover:bg-[#6e4025] border border-[#fab895]/30 px-3.5 py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#FFFDF7] bg-[#000000] hover:bg-[#3d2500] px-3.5 py-2 rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-xs"
               title="Export visible orders to Excel (.xlsx)"
             >
-              <Download className="w-3.5 h-3.5 text-[#fab895]" />
+              <Download className="w-3.5 h-3.5 text-[#FFFDF7]" />
               <span>Export</span>
             </button>
 
             {/* Partial Search Bar */}
             <div className="relative flex-1 sm:w-64">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7a4900]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search order #, name, phone..."
-                className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl pl-9 pr-4 py-2 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl pl-9 pr-4 py-2 text-xs text-[#000000] placeholder-[#7a4900]/40 focus:outline-none focus:border-[#3d2500]"
               />
             </div>
           </div>
         </div>
 
         {/* Status Tabs */}
-        <div className="flex items-center space-x-2 overflow-x-auto pb-2 custom-scrollbar border-b border-[#353534]">
+        <div className="flex items-center space-x-2 overflow-x-auto pb-2 custom-scrollbar border-b border-[#000000]/10">
           {STATUS_TABS.map((tab) => (
             <button
               key={tab.value}
@@ -111,11 +111,11 @@ export const Orders: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === tab.value
                   ? tab.isIssueTab
-                    ? 'bg-rose-950/80 text-rose-300 border border-rose-600/70 shadow'
-                    : 'bg-[#6e4025] text-[#eeae8b] border border-[#fab895]/30 shadow'
+                    ? 'bg-rose-700 text-white shadow-xs'
+                    : 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
                   : tab.isIssueTab
-                  ? 'bg-[#1c1b1b] text-rose-400 hover:text-rose-300 border border-rose-900/50'
-                  : 'bg-[#1c1b1b] text-[#9f8d85] hover:text-[#e5e2e1] border border-[#353534]'
+                  ? 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100'
+                  : 'bg-[#FFFFFF] text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB] border border-[#000000]/10'
               }`}
             >
               {tab.label}

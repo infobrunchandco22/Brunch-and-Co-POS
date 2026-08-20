@@ -118,7 +118,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
   const nextStatus = getNextStatus(currentOrder.status);
 
   return (
-    <div className="flex flex-col items-center p-2 sm:p-4 w-full text-[#131313]">
+    <div className="flex flex-col items-center p-2 sm:p-4 w-full text-[#000000]">
       {/* Control Bar (Hidden when printing) */}
       <div className="w-full max-w-md mb-4 space-y-3 print:hidden">
         {/* Top Header Row */}
@@ -126,7 +126,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
           {onClose ? (
             <button
               onClick={onClose}
-              className="flex items-center space-x-1 text-xs font-bold text-[#fab895] hover:text-[#eeae8b] bg-[#131313] border border-[#fab895]/40 px-3 py-1.5 rounded-xl transition-colors cursor-pointer shadow"
+              className="flex items-center space-x-1 text-xs font-bold text-[#7a4900] hover:text-[#000000] bg-[#FFFFFF] border border-[#000000]/15 px-3 py-1.5 rounded-xl transition-colors cursor-pointer shadow-xs"
             >
               <X className="w-3.5 h-3.5" />
               <span>Close</span>
@@ -139,26 +139,26 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
           {nextStatus ? (
             <button
               onClick={handleAdvanceStatus}
-              className="flex items-center space-x-1.5 text-xs font-bold text-[#eeae8b] bg-[#6e4025] hover:bg-[#804b2b] border border-[#fab895]/40 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-md"
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#FFFDF7] bg-[#000000] hover:bg-[#3d2500] px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs"
             >
               <span>Advance to <span className="uppercase">{nextStatus.replace(/_/g, ' ')}</span></span>
               <span>&rarr;</span>
             </button>
           ) : (
-            <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800 px-3 py-1 rounded-xl">
+            <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-xl">
               Delivered ✓
             </span>
           )}
 
           {/* Paper Size Selector */}
-          <div className="flex items-center bg-[#1c1b1b] border border-[#353534] p-1 rounded-xl space-x-1">
+          <div className="flex items-center bg-[#F6F1EB] border border-[#000000]/10 p-1 rounded-xl space-x-1">
             <button
               type="button"
               onClick={() => setPaperSize('80mm')}
               className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all cursor-pointer ${
                 paperSize === '80mm'
-                  ? 'bg-[#6e4025] text-[#eeae8b] shadow'
-                  : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000]'
               }`}
             >
               80mm
@@ -168,8 +168,8 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
               onClick={() => setPaperSize('58mm')}
               className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all cursor-pointer ${
                 paperSize === '58mm'
-                  ? 'bg-[#6e4025] text-[#eeae8b] shadow'
-                  : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000]'
               }`}
             >
               58mm
@@ -180,18 +180,18 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
         {/* Editable Delivery Fee Toolbar */}
         <form
           onSubmit={handleSaveDeliveryFee}
-          className="bg-[#1c1b1b] border border-[#353534] p-3 rounded-2xl flex items-center justify-between gap-3 shadow-lg"
+          className="bg-[#FFFFFF] border border-[#000000]/10 p-3 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
         >
           <div className="flex items-center space-x-2">
-            <Truck className="w-4 h-4 text-[#fab895]" />
+            <Truck className="w-4 h-4 text-[#3d2500]" />
             <div>
-              <p className="text-xs font-bold text-[#e5e2e1]">Delivery Fee</p>
-              <p className="text-[10px] text-[#9f8d85]">Adjusts order grand total</p>
+              <p className="text-xs font-bold text-[#000000]">Delivery Fee</p>
+              <p className="text-[10px] text-[#7a4900]">Adjusts order grand total</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <div className="relative w-28">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#9f8d85]">
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7a4900]">
                 Rs
               </span>
               <input
@@ -202,15 +202,15 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
                 onChange={(e) => setDeliveryFeeInput(e.target.value)}
                 onFocus={(e) => e.target.select()}
                 placeholder="0"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-8 pr-2 py-1.5 text-xs font-bold text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl pl-8 pr-2 py-1.5 text-xs font-bold text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
             <button
               type="submit"
               className={`flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isSaved
-                  ? 'bg-emerald-900/80 text-emerald-300 border border-emerald-700'
-                  : 'bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 shadow-md'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  : 'bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] shadow-xs'
               }`}
             >
               {isSaved ? (
@@ -231,11 +231,11 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             onClick={() => handleTriggerPrint('bill')}
             className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
               viewMode === 'bill'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50 shadow-md'
-                : 'bg-[#1c1b1b] text-[#e5e2e1] border-[#353534] hover:border-[#fab895]/30'
+                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
+                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
             }`}
           >
-            <FileText className="w-3.5 h-3.5 text-[#fab895]" />
+            <FileText className="w-3.5 h-3.5 text-[#3d2500]" />
             <span>Print Bill</span>
           </button>
 
@@ -243,11 +243,11 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             onClick={() => handleTriggerPrint('kot')}
             className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
               viewMode === 'kot'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50 shadow-md'
-                : 'bg-[#1c1b1b] text-[#e5e2e1] border-[#353534] hover:border-[#fab895]/30'
+                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
+                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
             }`}
           >
-            <Utensils className="w-3.5 h-3.5 text-[#fab895]" />
+            <Utensils className="w-3.5 h-3.5 text-[#3d2500]" />
             <span>Print KOT</span>
           </button>
 
@@ -255,11 +255,11 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             onClick={() => handleTriggerPrint('both')}
             className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
               viewMode === 'both'
-                ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50 shadow-md'
-                : 'bg-[#1c1b1b] text-[#e5e2e1] border-[#353534] hover:border-[#fab895]/30'
+                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
+                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-[#fab895]" />
+            <Layers className="w-3.5 h-3.5 text-[#3d2500]" />
             <span>Print Both</span>
           </button>
         </div>
@@ -270,13 +270,13 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
         {/* Render Customer Bill */}
         {(viewMode === 'bill' || viewMode === 'both') && (
           <div
-            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-2xl border border-gray-300 print:shadow-none print:border-none print:w-full ${
+            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-xl border border-gray-200 print:shadow-none print:border-none print:w-full ${
               viewMode === 'both' ? 'mb-6' : ''
             }`}
           >
             {/* Bill Header */}
             <div className="text-center border-b border-dashed border-gray-400 pb-3 mb-3">
-              <img src="/logo.svg" alt="BR&CO CAFE" className="w-12 h-12 mx-auto mb-1.5 object-contain" />
+              <img src="/logo.jpeg" alt="Brunch & Co" className="w-12 h-12 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs" />
               <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-bold tracking-tight`}>
                 BRUNCH & CO
               </h2>

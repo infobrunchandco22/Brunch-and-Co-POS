@@ -2,34 +2,34 @@
 
 @layer base {
   :root {
-    --bg-surface: #131313;
-    --bg-surface-dim: #131313;
-    --bg-surface-bright: #393939;
-    --bg-surface-container-lowest: #0e0e0e;
-    --bg-surface-container-low: #1c1b1b;
-    --bg-surface-container: #201f1f;
-    --bg-surface-container-high: #2a2a2a;
-    --bg-surface-container-highest: #353534;
-    --color-on-surface: #e5e2e1;
-    --color-on-surface-variant: #d6c3b9;
-    --color-outline: #9f8d85;
-    --color-outline-variant: #52443d;
-    --color-primary: #fab895;
-    --color-on-primary: #4d260d;
-    --color-primary-container: #6e4025;
-    --color-on-primary-container: #eeae8b;
-    --color-secondary: #f4bb90;
-    --color-secondary-container: #653e1d;
-    --color-on-secondary-container: #e1aa80;
-    --color-tertiary: #d7c3ae;
-    --color-tertiary-container: #574939;
-    --color-error: #ffb4ab;
-    --color-error-container: #93000a;
+    --bg-surface: #FFFDF7;
+    --bg-surface-dim: #F6F1EB;
+    --bg-surface-bright: #FFFFFF;
+    --bg-surface-container-lowest: #FFFFFF;
+    --bg-surface-container-low: #FFFDF7;
+    --bg-surface-container: #F6F1EB;
+    --bg-surface-container-high: #EDE6DC;
+    --bg-surface-container-highest: #E3D9CC;
+    --color-on-surface: #000000;
+    --color-on-surface-variant: #7a4900;
+    --color-outline: rgba(0, 0, 0, 0.15);
+    --color-outline-variant: rgba(122, 73, 0, 0.2);
+    --color-primary: #000000;
+    --color-on-primary: #F6F1EB;
+    --color-primary-container: #3d2500;
+    --color-on-primary-container: #FFFDF7;
+    --color-secondary: #7a4900;
+    --color-secondary-container: #F6F1EB;
+    --color-on-secondary-container: #3d2500;
+    --color-tertiary: #3d2500;
+    --color-tertiary-container: #E3D9CC;
+    --color-error: #b91c1c;
+    --color-error-container: #fee2e2;
   }
 
   body {
-    background-color: #131313;
-    color: #e5e2e1;
+    background-color: #F6F1EB;
+    color: #000000;
     font-family: 'Inter', sans-serif;
   }
 }
@@ -67,11 +67,11 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #353534;
+  background: rgba(122, 73, 0, 0.25);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #52443d;
+  background: rgba(122, 73, 0, 0.5);
 }
 
 /* Thermal receipt cut effect */

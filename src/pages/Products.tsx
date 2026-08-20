@@ -50,10 +50,10 @@ export const Products: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="font-headline-lg font-bold text-2xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-2xl text-[#000000] tracking-tight">
               Product & Menu Catalog
             </h2>
-            <p className="text-xs text-[#9f8d85] mt-1">
+            <p className="text-xs text-[#7a4900] mt-1">
               Manage items, prices, variants, stock toggles, and food categories
             </p>
           </div>
@@ -61,9 +61,9 @@ export const Products: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowCategoryManager(true)}
-              className="flex items-center space-x-1.5 text-xs font-semibold bg-[#1c1b1b] hover:bg-[#201f1f] text-[#d6c3b9] border border-[#353534] px-3.5 py-2 rounded-xl transition-colors cursor-pointer"
+              className="flex items-center space-x-1.5 text-xs font-semibold bg-[#FFFFFF] hover:bg-[#F6F1EB] text-[#000000] border border-[#000000]/15 px-3.5 py-2 rounded-xl transition-colors cursor-pointer shadow-xs"
             >
-              <Tag className="w-4 h-4 text-[#fab895]" />
+              <Tag className="w-4 h-4 text-[#3d2500]" />
               <span>Manage Categories</span>
             </button>
 
@@ -72,7 +72,7 @@ export const Products: React.FC = () => {
                 setEditingProduct(null);
                 setShowProductForm(true);
               }}
-              className="flex items-center space-x-1.5 text-xs font-bold bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 px-4 py-2 rounded-xl shadow-lg transition-all cursor-pointer"
+              className="flex items-center space-x-1.5 text-xs font-bold bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] px-4 py-2 rounded-xl shadow-xs transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Product</span>
@@ -81,14 +81,14 @@ export const Products: React.FC = () => {
         </div>
 
         {/* Filter Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#1c1b1b] p-3 rounded-2xl border border-[#353534]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FFFFFF] p-3 rounded-2xl border border-[#000000]/10 shadow-xs">
           <div className="flex items-center space-x-2 overflow-x-auto custom-scrollbar">
             <button
               onClick={() => setSelectedCatId('all')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCatId === 'all'
-                  ? 'bg-[#6e4025] text-[#eeae8b]'
-                  : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB]'
               }`}
             >
               All Categories
@@ -99,8 +99,8 @@ export const Products: React.FC = () => {
                 onClick={() => setSelectedCatId(cat.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   selectedCatId === cat.id
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB]'
                 }`}
               >
                 {cat.name}
@@ -109,13 +109,13 @@ export const Products: React.FC = () => {
           </div>
 
           <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7a4900]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full bg-[#131313] border border-[#353534] rounded-xl pl-9 pr-3 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl pl-9 pr-3 py-1.5 text-xs text-[#000000] placeholder-[#7a4900]/40 focus:outline-none focus:border-[#3d2500]"
             />
           </div>
         </div>

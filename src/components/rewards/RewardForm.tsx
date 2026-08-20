@@ -138,15 +138,15 @@ export const RewardForm: React.FC<RewardFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#1c1b1b] border border-[#52443d] rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
-        <div className="flex items-center justify-between border-b border-[#353534] pb-3">
-          <h3 className="font-bold text-base text-[#e5e2e1]">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+      <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div className="flex items-center justify-between border-b border-[#000000]/10 pb-3">
+          <h3 className="font-bold text-base text-[#000000]">
             {reward ? 'Edit Reward Campaign' : 'Create New Reward Campaign'}
           </h3>
           <button
             onClick={onClose}
-            className="text-[#9f8d85] hover:text-[#e5e2e1] transition-colors cursor-pointer"
+            className="text-[#7a4900] hover:text-[#000000] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -154,38 +154,38 @@ export const RewardForm: React.FC<RewardFormProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="text-[#9f8d85] block mb-1">Campaign Name *</label>
+            <label className="text-[#7a4900] block mb-1">Campaign Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Free T-Shirt, Coffee Voucher"
-              className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
             />
           </div>
 
           <div>
-            <label className="text-[#9f8d85] block mb-1">Description / Customer Instructions</label>
+            <label className="text-[#7a4900] block mb-1">Description / Customer Instructions</label>
             <textarea
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g. Complete 2 orders to win a physical BR&CO T-shirt!"
-              className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895] resize-none"
+              className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500] resize-none"
             />
           </div>
 
           {/* Reward Image Upload */}
           <div>
-            <label className="text-[#9f8d85] block mb-1">Reward Product Photo (Revealed on Unlock)</label>
+            <label className="text-[#7a4900] block mb-1">Reward Product Photo (Revealed on Unlock)</label>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <label className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#201f1f] hover:bg-[#2a2a2a] border border-[#353534] rounded-xl text-xs font-semibold text-[#d6c3b9] cursor-pointer transition-colors shrink-0">
+                <label className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#EDE6DC] border border-[#000000]/15 rounded-xl text-xs font-semibold text-[#000000] cursor-pointer transition-colors shrink-0">
                   {isUploading ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#fab895]" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#3d2500]" />
                   ) : (
-                    <Upload className="w-3.5 h-3.5 text-[#fab895]" />
+                    <Upload className="w-3.5 h-3.5 text-[#3d2500]" />
                   )}
                   <span>{isUploading ? 'Uploading...' : 'Choose File'}</span>
                   <input
@@ -203,16 +203,16 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                     value={iconUrl}
                     onChange={(e) => setIconUrl(e.target.value)}
                     placeholder="https://... photo URL or icon name"
-                    className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                    className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
                   />
                 </div>
               </div>
 
-              {uploadError && <p className="text-[10px] text-rose-400">{uploadError}</p>}
+              {uploadError && <p className="text-[10px] text-rose-600">{uploadError}</p>}
 
               {/* Reward Image Preview */}
               {iconUrl && (iconUrl.startsWith('http://') || iconUrl.startsWith('https://') || iconUrl.startsWith('/')) && (
-                <div className="relative h-24 w-full rounded-xl overflow-hidden bg-[#131313] border border-[#353534] flex items-center justify-center group p-2">
+                <div className="relative h-24 w-full rounded-xl overflow-hidden bg-[#FFFFFF] border border-[#000000]/15 flex items-center justify-center group p-2">
                   <img
                     src={iconUrl}
                     alt="Reward Preview"
@@ -222,7 +222,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   <button
                     type="button"
                     onClick={() => setIconUrl('local_cafe')}
-                    className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-rose-950 text-white rounded-lg transition-colors cursor-pointer"
+                    className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-rose-900 text-white rounded-lg transition-colors cursor-pointer"
                     title="Remove Photo"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -232,13 +232,13 @@ export const RewardForm: React.FC<RewardFormProps> = ({
             </div>
           </div>
 
-          <div className="space-y-3 bg-[#131313] p-3 rounded-xl border border-[#2a2a2a]">
+          <div className="space-y-3 bg-[#F6F1EB] p-3 rounded-xl border border-[#000000]/10">
             <div>
-              <label className="text-[#9f8d85] block mb-1">Requirement Type</label>
+              <label className="text-[#7a4900] block mb-1">Requirement Type</label>
               <select
                 value={reqType}
                 onChange={(e) => setReqType(e.target.value as RewardRequirementType)}
-                className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               >
                 <option value="order_count">Order Count Target</option>
                 <option value="total_spent">Total Lifetime Spent</option>
@@ -249,7 +249,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
 
             {reqType === 'order_count' && (
               <div>
-                <label className="text-[#9f8d85] block mb-1">Number of Orders</label>
+                <label className="text-[#7a4900] block mb-1">Number of Orders</label>
                 <input
                   type="number"
                   min="1"
@@ -257,14 +257,14 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
                   onFocus={(e) => e.target.select()}
                   placeholder="e.g. 5"
-                  className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
             )}
 
             {reqType === 'total_spent' && (
               <div>
-                <label className="text-[#9f8d85] block mb-1">Minimum Total Spent (Rs)</label>
+                <label className="text-[#7a4900] block mb-1">Minimum Total Spent (Rs)</label>
                 <input
                   type="number"
                   min="0"
@@ -272,7 +272,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
                   onFocus={(e) => e.target.select()}
                   placeholder="e.g. 5000"
-                  className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
             )}
@@ -280,11 +280,11 @@ export const RewardForm: React.FC<RewardFormProps> = ({
             {reqType === 'specific_product' && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[#9f8d85] block mb-1">Select Product</label>
+                  <label className="text-[#7a4900] block mb-1">Select Product</label>
                   <select
                     value={selectedProductId}
                     onChange={(e) => setSelectedProductId(e.target.value)}
-                    className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                    className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                   >
                     {products.map((p) => (
                       <option key={p.id} value={p.id}>
@@ -294,7 +294,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="text-[#9f8d85] block mb-1">Times Ordered</label>
+                  <label className="text-[#7a4900] block mb-1">Times Ordered</label>
                   <input
                     type="number"
                     min="1"
@@ -302,7 +302,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                     onChange={(e) => setReqValueVal(Number(e.target.value))}
                     onFocus={(e) => e.target.select()}
                     placeholder="e.g. 3"
-                    className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                    className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                   />
                 </div>
               </div>
@@ -310,7 +310,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
 
             {reqType === 'single_order_value' && (
               <div>
-                <label className="text-[#9f8d85] block mb-1">Minimum Order Value (Rs)</label>
+                <label className="text-[#7a4900] block mb-1">Minimum Order Value (Rs)</label>
                 <input
                   type="number"
                   min="0"
@@ -318,7 +318,7 @@ export const RewardForm: React.FC<RewardFormProps> = ({
                   onChange={(e) => setReqValueVal(Number(e.target.value))}
                   onFocus={(e) => e.target.select()}
                   placeholder="e.g. 1500"
-                  className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
             )}
@@ -326,11 +326,11 @@ export const RewardForm: React.FC<RewardFormProps> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[#9f8d85] block mb-1">Reward Type</label>
+              <label className="text-[#7a4900] block mb-1">Reward Type</label>
               <select
                 value={rewardType}
                 onChange={(e) => setRewardType(e.target.value as RewardType)}
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               >
                 <option value="free_item">Free Menu Item</option>
                 <option value="discount_percent">Percentage Discount (%)</option>
@@ -340,13 +340,13 @@ export const RewardForm: React.FC<RewardFormProps> = ({
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">Reward Outcome Detail</label>
+              <label className="text-[#7a4900] block mb-1">Reward Outcome Detail</label>
               <input
                 type="text"
                 value={rewardValVal}
                 onChange={(e) => setRewardValVal(e.target.value)}
                 placeholder="e.g. Free Iced Coffee or 15%"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
           </div>
@@ -357,24 +357,24 @@ export const RewardForm: React.FC<RewardFormProps> = ({
               id="isActiveRew"
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
-              className="rounded text-[#6e4025]"
+              className="rounded text-[#3d2500]"
             />
-            <label htmlFor="isActiveRew" className="text-[#e5e2e1] cursor-pointer">
+            <label htmlFor="isActiveRew" className="text-[#000000] cursor-pointer font-medium">
               Reward Active & Tracked in System
             </label>
           </div>
 
-          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#353534]">
+          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#000000]/10">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-[#131313] text-[#9f8d85] rounded-xl font-semibold hover:text-[#e5e2e1] cursor-pointer"
+              className="px-4 py-2 bg-[#F6F1EB] text-[#7a4900] rounded-xl font-semibold hover:text-[#000000] cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 rounded-xl font-bold transition-all cursor-pointer"
+              className="px-5 py-2 bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] rounded-xl font-bold transition-all cursor-pointer shadow-xs"
             >
               Save Reward
             </button>

@@ -55,17 +55,17 @@ export const Settings: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-headline-lg font-bold text-2xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-2xl text-[#000000] tracking-tight">
               Business & Hardware Settings
             </h2>
-            <p className="text-xs text-[#9f8d85] mt-1">
+            <p className="text-xs text-[#7a4900] mt-1">
               Configure store details, default charges, and thermal receipt hardware
             </p>
           </div>
 
           {savedSuccess && (
-            <div className="flex items-center space-x-1.5 bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1.5 rounded-xl text-xs font-bold animate-fade-in">
-              <Check className="w-4 h-4" />
+            <div className="flex items-center space-x-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold animate-fade-in shadow-xs">
+              <Check className="w-4 h-4 text-emerald-600" />
               <span>Settings Saved!</span>
             </div>
           )}
@@ -73,58 +73,58 @@ export const Settings: React.FC = () => {
 
         <form onSubmit={handleSave} className="space-y-6 text-xs">
           {/* Business Profile Section */}
-          <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="flex items-center space-x-2 border-b border-[#353534] pb-3">
-              <Store className="w-5 h-5 text-[#fab895]" />
-              <h3 className="font-bold text-sm text-[#e5e2e1]">Business Profile & Contact</h3>
+          <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-[#000000]/10 pb-3">
+              <Store className="w-5 h-5 text-[#3d2500]" />
+              <h3 className="font-bold text-sm text-[#000000]">Business Profile & Contact</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[#9f8d85] block mb-1">Kitchen / Business Name</label>
+                <label className="text-[#7a4900] block mb-1">Kitchen / Business Name</label>
                 <input
                   type="text"
                   required
                   value={storeName}
                   onChange={(e) => setStoreName(e.target.value)}
-                  className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
 
               <div>
-                <label className="text-[#9f8d85] block mb-1">Store Phone Number</label>
+                <label className="text-[#7a4900] block mb-1">Store Phone Number</label>
                 <input
                   type="text"
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="text-[#9f8d85] block mb-1">Kitchen Address / Location</label>
+                <label className="text-[#7a4900] block mb-1">Kitchen Address / Location</label>
                 <input
                   type="text"
                   required
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
             </div>
           </div>
 
           {/* Pricing & Fees Defaults */}
-          <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="flex items-center space-x-2 border-b border-[#353534] pb-3">
-              <DollarSign className="w-5 h-5 text-[#fab895]" />
-              <h3 className="font-bold text-sm text-[#e5e2e1]">Default Order Charges & Pricing</h3>
+          <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-[#000000]/10 pb-3">
+              <DollarSign className="w-5 h-5 text-[#3d2500]" />
+              <h3 className="font-bold text-sm text-[#000000]">Default Order Charges & Pricing</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-[#9f8d85] block mb-1">Default Delivery Fee (Rs)</label>
+                <label className="text-[#7a4900] block mb-1">Default Delivery Fee (Rs)</label>
                 <input
                   type="number"
                   min="0"
@@ -132,12 +132,12 @@ export const Settings: React.FC = () => {
                   onChange={(e) => setDefaultDeliveryFee(e.target.value === '' ? 0 : Number(e.target.value))}
                   onFocus={(e) => e.target.select()}
                   placeholder="0"
-                  className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
 
               <div>
-                <label className="text-[#9f8d85] block mb-1">Default Service Charge (Rs)</label>
+                <label className="text-[#7a4900] block mb-1">Default Service Charge (Rs)</label>
                 <input
                   type="number"
                   min="0"
@@ -145,28 +145,28 @@ export const Settings: React.FC = () => {
                   onChange={(e) => setDefaultServiceCharge(e.target.value === '' ? 0 : Number(e.target.value))}
                   onFocus={(e) => e.target.select()}
                   placeholder="0"
-                  className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
             </div>
           </div>
 
           {/* Thermal Receipt Printer Hardware Setup */}
-          <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl p-5 shadow-lg space-y-4">
-            <div className="flex items-center space-x-2 border-b border-[#353534] pb-3">
-              <Printer className="w-5 h-5 text-[#fab895]" />
-              <h3 className="font-bold text-sm text-[#e5e2e1]">Thermal Receipt Printer Setup</h3>
+          <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-[#000000]/10 pb-3">
+              <Printer className="w-5 h-5 text-[#3d2500]" />
+              <h3 className="font-bold text-sm text-[#000000]">Thermal Receipt Printer Setup</h3>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="text-[#9f8d85] block mb-2">Paper Roll Format</label>
+                <label className="text-[#7a4900] block mb-2 font-medium">Paper Roll Format</label>
                 <div className="flex space-x-3">
                   <label
                     className={`flex-1 p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                       paperWidth === '80mm'
-                        ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50'
-                        : 'bg-[#131313] text-[#9f8d85] border-[#353534]'
+                        ? 'bg-[#3d2500] text-[#FFFDF7] border-[#3d2500] shadow-xs'
+                        : 'bg-[#F6F1EB] text-[#7a4900] border-[#000000]/10 hover:border-[#000000]/20'
                     }`}
                   >
                     <div>
@@ -185,8 +185,8 @@ export const Settings: React.FC = () => {
                   <label
                     className={`flex-1 p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                       paperWidth === '58mm'
-                        ? 'bg-[#6e4025] text-[#eeae8b] border-[#fab895]/50'
-                        : 'bg-[#131313] text-[#9f8d85] border-[#353534]'
+                        ? 'bg-[#3d2500] text-[#FFFDF7] border-[#3d2500] shadow-xs'
+                        : 'bg-[#F6F1EB] text-[#7a4900] border-[#000000]/10 hover:border-[#000000]/20'
                     }`}
                   >
                     <div>
@@ -204,15 +204,15 @@ export const Settings: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-[#2a2a2a]">
+              <div className="space-y-2 pt-2 border-t border-[#000000]/10">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={autoPrintBill}
                     onChange={(e) => setAutoPrintBill(e.target.checked)}
-                    className="rounded text-[#6e4025]"
+                    className="rounded text-[#3d2500]"
                   />
-                  <span className="text-[#e5e2e1]">
+                  <span className="text-[#000000] font-medium">
                     Automatically open Print Dialog when completing order in POS
                   </span>
                 </label>
@@ -222,9 +222,9 @@ export const Settings: React.FC = () => {
                     type="checkbox"
                     checked={autoPrintKot}
                     onChange={(e) => setAutoPrintKot(e.target.checked)}
-                    className="rounded text-[#6e4025]"
+                    className="rounded text-[#3d2500]"
                   />
-                  <span className="text-[#e5e2e1]">
+                  <span className="text-[#000000] font-medium">
                     Print Kitchen Order Ticket (KOT) copy for chefs
                   </span>
                 </label>
@@ -236,7 +236,7 @@ export const Settings: React.FC = () => {
             <button
               type="submit"
               disabled={saveSettings.isPending}
-              className="bg-gradient-to-r from-[#6e4025] to-[#4d260d] hover:from-[#804b2b] hover:to-[#5c2d10] text-[#eeae8b] border border-[#fab895]/40 font-bold py-3 px-8 rounded-xl shadow-lg flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
+              className="bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] font-bold py-3 px-8 rounded-xl shadow-xs flex items-center space-x-2 transition-all cursor-pointer disabled:opacity-50"
             >
               {saveSettings.isPending ? (
                 <>

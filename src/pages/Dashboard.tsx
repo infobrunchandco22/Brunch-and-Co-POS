@@ -23,8 +23,8 @@ export const Dashboard: React.FC = () => {
   if (isLoading || !stats) {
     return (
       <DashboardLayout>
-        <div className="flex flex-col items-center justify-center h-96 text-[#9f8d85] text-xs">
-          <img src="/logo.svg" alt="BR&CO CAFE" className="w-12 h-12 animate-pulse mb-3 object-contain" />
+        <div className="flex flex-col items-center justify-center h-96 text-[#7a4900] text-xs">
+          <img src="/logo.jpeg" alt="Brunch & Co" className="w-12 h-12 animate-pulse mb-3 object-contain rounded-xl shadow-xs" />
           <span>Loading analytics & live orders...</span>
         </div>
       </DashboardLayout>
@@ -61,25 +61,25 @@ export const Dashboard: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header & Date Range Filter Toolbar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1c1b1b] p-4 rounded-2xl border border-[#353534]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-4 rounded-2xl border border-[#000000]/10 shadow-xs">
           <div>
-            <h2 className="font-headline-lg font-bold text-2xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-2xl text-[#000000] tracking-tight">
               Dashboard Overview
             </h2>
-            <p className="text-xs text-[#9f8d85] mt-0.5">
+            <p className="text-xs text-[#7a4900] mt-0.5">
               Real-time revenue, order metrics, and kitchen workflow
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Date Range Selector Buttons */}
-            <div className="flex items-center bg-[#131313] p-1 rounded-xl border border-[#353534] text-xs">
+            <div className="flex items-center bg-[#F6F1EB] p-1 rounded-xl border border-[#000000]/10 text-xs">
               <button
                 onClick={() => setDateRange('today')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   dateRange === 'today'
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 Today
@@ -88,8 +88,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setDateRange('7d')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   dateRange === '7d'
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 This Week
@@ -98,8 +98,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setDateRange('this_month')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   dateRange === 'this_month'
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 This Month
@@ -108,8 +108,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setDateRange('all')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   dateRange === 'all'
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 All Time
@@ -118,8 +118,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setDateRange('custom')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   dateRange === 'custom'
-                    ? 'bg-[#6e4025] text-[#eeae8b]'
-                    : 'text-[#9f8d85] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                    : 'text-[#7a4900] hover:text-[#000000]'
                 }`}
               >
                 Custom
@@ -128,20 +128,20 @@ export const Dashboard: React.FC = () => {
 
             {/* Custom Date Inputs if Custom selected */}
             {dateRange === 'custom' && (
-              <div className="flex items-center space-x-2 bg-[#131313] px-3 py-1 border border-[#353534] rounded-xl text-xs">
-                <Calendar className="w-3.5 h-3.5 text-[#fab895]" />
+              <div className="flex items-center space-x-2 bg-[#F6F1EB] px-3 py-1 border border-[#000000]/10 rounded-xl text-xs">
+                <Calendar className="w-3.5 h-3.5 text-[#3d2500]" />
                 <input
                   type="date"
                   value={customStart}
                   onChange={(e) => setCustomStart(e.target.value)}
-                  className="bg-transparent text-[#e5e2e1] text-xs focus:outline-none"
+                  className="bg-transparent text-[#000000] text-xs focus:outline-none"
                 />
-                <span className="text-[#9f8d85]">to</span>
+                <span className="text-[#7a4900]">to</span>
                 <input
                   type="date"
                   value={customEnd}
                   onChange={(e) => setCustomEnd(e.target.value)}
-                  className="bg-transparent text-[#e5e2e1] text-xs focus:outline-none"
+                  className="bg-transparent text-[#000000] text-xs focus:outline-none"
                 />
               </div>
             )}
@@ -149,18 +149,18 @@ export const Dashboard: React.FC = () => {
             {/* Action Buttons */}
             <button
               onClick={handleExportExcel}
-              className="flex items-center space-x-1.5 text-xs font-bold text-[#eeae8b] bg-[#6e4025]/40 hover:bg-[#6e4025] border border-[#fab895]/30 px-3 py-2 rounded-xl transition-all cursor-pointer"
+              className="flex items-center space-x-1.5 text-xs font-bold text-[#FFFDF7] bg-[#000000] hover:bg-[#3d2500] px-3 py-2 rounded-xl transition-all shadow-xs cursor-pointer"
               title="Export filtered orders to Excel spreadsheet"
             >
-              <Download className="w-3.5 h-3.5 text-[#fab895]" />
+              <Download className="w-3.5 h-3.5 text-[#FFFDF7]" />
               <span>Export to Excel</span>
             </button>
 
             <button
               onClick={() => refetch()}
-              className="flex items-center space-x-1.5 text-xs text-[#d6c3b9] bg-[#131313] border border-[#353534] hover:bg-[#201f1f] px-3 py-2 rounded-xl transition-colors cursor-pointer"
+              className="flex items-center space-x-1.5 text-xs text-[#7a4900] bg-[#F6F1EB] border border-[#000000]/10 hover:text-[#000000] hover:bg-[#EDE6DC] px-3 py-2 rounded-xl transition-colors cursor-pointer"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-[#fab895]" />
+              <RefreshCw className="w-3.5 h-3.5 text-[#3d2500]" />
               <span>Refresh</span>
             </button>
           </div>
@@ -212,34 +212,34 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Top Selling Items Card */}
-          <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+          <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
             <div>
-              <h3 className="font-headline-lg font-bold text-base text-[#e5e2e1] mb-1">
+              <h3 className="font-headline-lg font-bold text-base text-[#000000] mb-1">
                 Top Popular Items
               </h3>
-              <p className="text-xs text-[#9f8d85] mb-4">Highest volume ordered in period</p>
+              <p className="text-xs text-[#7a4900] mb-4">Highest volume ordered in period</p>
 
               <div className="space-y-3">
                 {stats.topItems.length === 0 ? (
-                  <div className="py-8 text-center text-[#9f8d85] text-xs">
+                  <div className="py-8 text-center text-[#7a4900] text-xs">
                     No items sold in selected period.
                   </div>
                 ) : (
                   stats.topItems.map((item, idx) => (
                     <div
                       key={item.product.id}
-                      className="flex items-center justify-between bg-[#131313] border border-[#2a2a2a] p-2.5 rounded-xl text-xs"
+                      className="flex items-center justify-between bg-[#FFFDF7] border border-[#000000]/10 p-2.5 rounded-xl text-xs shadow-2xs"
                     >
                       <div className="flex items-center space-x-3">
-                        <span className="w-5 font-bold font-mono text-[#fab895]">#{idx + 1}</span>
+                        <span className="w-5 font-bold font-mono text-[#3d2500]">#{idx + 1}</span>
                         <div>
-                          <p className="font-semibold text-[#e5e2e1]">{item.product.name}</p>
-                          <p className="text-[10px] text-[#9f8d85]">
+                          <p className="font-semibold text-[#000000]">{item.product.name}</p>
+                          <p className="text-[10px] text-[#7a4900]">
                             {formatCurrency(item.product.base_price)}
                           </p>
                         </div>
                       </div>
-                      <span className="font-bold text-[#eeae8b] bg-[#6e4025]/50 px-2 py-1 rounded-lg">
+                      <span className="font-bold text-[#3d2500] bg-[#F6F1EB] border border-[#000000]/5 px-2 py-1 rounded-lg">
                         {item.orderCount} sold
                       </span>
                     </div>

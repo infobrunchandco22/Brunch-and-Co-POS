@@ -210,15 +210,15 @@ export const CreateOrder: React.FC = () => {
         {/* Title */}
         <div className="flex items-center justify-between shrink-0">
           <div>
-            <h2 className="font-headline-lg font-bold text-xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-xl text-[#000000] tracking-tight">
               Create Order (POS Terminal)
             </h2>
-            <p className="text-xs text-[#9f8d85]">
-              Counter & phone order desk for <span className="text-[#e5e2e1] font-bold">NEW orders only</span>. Online website orders are automatically created and should be managed directly from the{' '}
+            <p className="text-xs text-[#7a4900]">
+              Counter & phone order desk for <span className="text-[#000000] font-bold">NEW orders only</span>. Online website orders are automatically created and should be managed directly from the{' '}
               <button
                 type="button"
                 onClick={() => navigate('/orders')}
-                className="text-[#fab895] hover:underline font-bold cursor-pointer inline-flex items-center space-x-0.5"
+                className="text-[#3d2500] hover:underline font-bold cursor-pointer inline-flex items-center space-x-0.5"
               >
                 <span>Orders Directory</span>
               </button>
@@ -295,15 +295,15 @@ export const CreateOrder: React.FC = () => {
 
       {/* Thermal Receipt Completion Modal */}
       {completedOrder && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
-          <div className="relative w-full max-w-lg my-auto bg-[#1c1b1b] border border-[#353534] rounded-2xl p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col items-center">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
+          <div className="relative w-full max-w-lg my-auto bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar flex flex-col items-center">
             <ReceiptView order={completedOrder} onClose={handleResetPos} />
             <button
               onClick={() => {
                 handleResetPos();
                 navigate('/orders');
               }}
-              className="mt-3 text-xs font-bold text-[#fab895] hover:text-[#eeae8b] underline cursor-pointer"
+              className="mt-3 text-xs font-bold text-[#3d2500] hover:text-[#7a4900] underline cursor-pointer"
             >
               Go to All Orders Page
             </button>

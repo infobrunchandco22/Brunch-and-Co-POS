@@ -30,10 +30,10 @@ export const Rewards: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-headline-lg font-bold text-2xl text-[#e5e2e1] tracking-tight">
+            <h2 className="font-headline-lg font-bold text-2xl text-[#000000] tracking-tight">
               Customer Rewards & Perks
             </h2>
-            <p className="text-xs text-[#9f8d85] mt-1">
+            <p className="text-xs text-[#7a4900] mt-1">
               Automated loyalty rules and staff perk redemption verification
             </p>
           </div>
@@ -43,7 +43,7 @@ export const Rewards: React.FC = () => {
               setEditingReward(null);
               setShowRewardForm(true);
             }}
-            className="flex items-center space-x-1.5 text-xs font-bold bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 px-4 py-2 rounded-xl shadow-lg transition-all cursor-pointer"
+            className="flex items-center space-x-1.5 text-xs font-bold bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] px-4 py-2 rounded-xl shadow-xs transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create Campaign</span>

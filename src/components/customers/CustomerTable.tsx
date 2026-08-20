@@ -13,10 +13,10 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
   onSelectCustomer,
 }) => {
   return (
-    <div className="bg-[#1c1b1b] border border-[#353534] rounded-2xl overflow-hidden shadow-lg">
+    <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs font-table-data text-[#d6c3b9]">
-          <thead className="bg-[#131313] text-[#9f8d85] font-label-caps uppercase text-[10px] tracking-wider border-b border-[#353534]">
+        <table className="w-full text-left text-xs font-table-data text-[#000000]">
+          <thead className="bg-[#F6F1EB] text-[#7a4900] font-label-caps uppercase text-[10px] tracking-wider border-b border-[#000000]/10">
             <tr>
               <th className="py-3 px-4">Customer</th>
               <th className="py-3 px-4">Contact</th>
@@ -27,40 +27,40 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
               <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#2a2a2a]">
+          <tbody className="divide-y divide-[#000000]/5">
             {customers.map((customer) => (
-              <tr key={customer.id} className="hover:bg-[#201f1f] transition-colors">
-                <td className="py-3.5 px-4 font-bold text-[#e5e2e1]">
+              <tr key={customer.id} className="hover:bg-[#F6F1EB]/60 transition-colors">
+                <td className="py-3.5 px-4 font-bold text-[#000000]">
                   <p className="text-sm">{customer.full_name}</p>
                 </td>
                 <td className="py-3.5 px-4">
-                  <div className="flex items-center space-x-1 text-[#e5e2e1]">
-                    <Phone className="w-3 h-3 text-[#fab895]" />
+                  <div className="flex items-center space-x-1 text-[#000000]">
+                    <Phone className="w-3 h-3 text-[#3d2500]" />
                     <span>{customer.phone}</span>
                   </div>
                   {customer.email && (
-                    <p className="text-[10px] text-[#9f8d85] mt-0.5">{customer.email}</p>
+                    <p className="text-[10px] text-[#7a4900] mt-0.5">{customer.email}</p>
                   )}
                 </td>
                 <td className="py-3.5 px-4">
-                  <span className="font-semibold text-[#fab895]">{customer.default_area || 'F-7'}</span>
-                  <p className="text-[10px] text-[#9f8d85] truncate max-w-xs">
+                  <span className="font-semibold text-[#3d2500]">{customer.default_area || 'F-7'}</span>
+                  <p className="text-[10px] text-[#7a4900] truncate max-w-xs">
                     {customer.default_address || 'No address saved.'}
                   </p>
                 </td>
-                <td className="py-3.5 px-4 font-bold text-[#e5e2e1]">
+                <td className="py-3.5 px-4 font-bold text-[#000000]">
                   {customer.total_orders} orders
                 </td>
-                <td className="py-3.5 px-4 font-bold text-[#fab895]">
+                <td className="py-3.5 px-4 font-bold text-[#000000]">
                   {formatCurrency(customer.total_spent)}
                 </td>
-                <td className="py-3.5 px-4 text-[#9f8d85]">
+                <td className="py-3.5 px-4 text-[#7a4900]">
                   {formatDate(customer.created_at)}
                 </td>
                 <td className="py-3.5 px-4 text-right">
                   <button
                     onClick={() => onSelectCustomer(customer)}
-                    className="p-1.5 text-[#9f8d85] hover:text-[#e5e2e1] hover:bg-[#2a2a2a] rounded-lg transition-colors cursor-pointer"
+                    className="p-1.5 text-[#3d2500] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-lg transition-colors cursor-pointer"
                     title="View Customer Order History"
                   >
                     <Eye className="w-4 h-4" />
@@ -71,7 +71,7 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
 
             {customers.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-[#9f8d85] text-xs">
+                <td colSpan={7} className="py-12 text-center text-[#7a4900] text-xs">
                   No customers yet — registered customers will appear here.
                 </td>
               </tr>

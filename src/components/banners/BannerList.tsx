@@ -28,10 +28,10 @@ export const BannerList: React.FC<BannerListProps> = ({
       {banners.map((banner) => (
         <div
           key={banner.id}
-          className="bg-[#1c1b1b] border border-[#353534] rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group hover:border-[#52443d] transition-all"
+          className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl overflow-hidden shadow-xs flex flex-col justify-between group hover:border-[#3d2500]/30 transition-all"
         >
           {/* Hero Banner Preview */}
-          <div className="relative h-44 w-full bg-[#131313] overflow-hidden">
+          <div className="relative h-44 w-full bg-[#F6F1EB] overflow-hidden">
             <img
               src={banner.image_url}
               alt={banner.title || 'Banner'}
@@ -43,7 +43,7 @@ export const BannerList: React.FC<BannerListProps> = ({
             {/* Banner Text Overlay */}
             <div className="absolute bottom-3 left-3 right-3 text-white">
               <h4 className="font-bold text-sm drop-shadow">{banner.title || 'Promotional Banner'}</h4>
-              <p className="text-[11px] text-gray-300 line-clamp-1 drop-shadow">
+              <p className="text-[11px] text-gray-200 line-clamp-1 drop-shadow">
                 {banner.subtitle || 'Special offer'}
               </p>
             </div>
@@ -74,35 +74,35 @@ export const BannerList: React.FC<BannerListProps> = ({
           </div>
 
           {/* Banner Meta Info */}
-          <div className="p-4 space-y-2 text-xs text-[#d6c3b9]">
-            <div className="flex items-center space-x-1.5 text-[11px] text-[#9f8d85]">
-              <Link2 className="w-3.5 h-3.5 text-[#fab895]" />
+          <div className="p-4 space-y-2 text-xs text-[#000000]">
+            <div className="flex items-center space-x-1.5 text-[11px] text-[#7a4900]">
+              <Link2 className="w-3.5 h-3.5 text-[#3d2500]" />
               <span>Link: </span>
-              <span className="font-medium text-[#e5e2e1]">
+              <span className="font-semibold text-[#000000]">
                 {getLinkedProductName(banner.link_product_id)}
               </span>
             </div>
 
             {(banner.starts_at || banner.ends_at) && (
-              <div className="flex items-center space-x-1.5 text-[10px] text-[#9f8d85]">
-                <Calendar className="w-3.5 h-3.5 text-[#fab895]" />
+              <div className="flex items-center space-x-1.5 text-[10px] text-[#7a4900]">
+                <Calendar className="w-3.5 h-3.5 text-[#3d2500]" />
                 <span>Schedule: {banner.starts_at ? new Date(banner.starts_at).toLocaleDateString() : 'Now'} - {banner.ends_at ? new Date(banner.ends_at).toLocaleDateString() : 'Indefinite'}</span>
               </div>
             )}
 
-            <div className="pt-2 border-t border-[#353534] flex items-center justify-between">
-              <span className="text-[10px] text-[#52443d]">Sort Priority: #{banner.sort_order}</span>
+            <div className="pt-2 border-t border-[#000000]/10 flex items-center justify-between">
+              <span className="text-[10px] text-[#7a4900]">Sort Priority: #{banner.sort_order}</span>
               <div className="space-x-1">
                 <button
                   onClick={() => onEditBanner(banner)}
-                  className="p-1.5 text-[#9f8d85] hover:text-[#e5e2e1] hover:bg-[#201f1f] rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-[#3d2500] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-lg transition-colors cursor-pointer"
                   title="Edit Banner"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => onDeleteBanner(banner.id)}
-                  className="p-1.5 text-[#9f8d85] hover:text-[#ffb4ab] hover:bg-[#201f1f] rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                   title="Delete Banner"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -114,7 +114,7 @@ export const BannerList: React.FC<BannerListProps> = ({
       ))}
 
       {banners.length === 0 && (
-        <div className="col-span-full py-12 text-center text-[#9f8d85] text-xs bg-[#1c1b1b] border border-[#353534] rounded-2xl">
+        <div className="col-span-full py-12 text-center text-[#7a4900] text-xs bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl shadow-xs">
           No banners yet — add your first banner.
         </div>
       )}

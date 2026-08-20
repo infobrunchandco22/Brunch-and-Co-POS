@@ -14,7 +14,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="flex min-h-screen bg-[#131313] text-[#e5e2e1] max-w-full overflow-x-hidden">
+    <div className="flex min-h-screen bg-[#F6F1EB] text-[#000000] max-w-full overflow-x-hidden">
       <Sidebar isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       <div className="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden">
         <Topbar onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)} />

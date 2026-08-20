@@ -217,23 +217,23 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#1c1b1b] border border-[#52443d] rounded-2xl w-full max-w-2xl p-6 shadow-2xl overflow-y-auto max-h-[92vh] custom-scrollbar">
-        <div className="flex items-center justify-between border-b border-[#353534] pb-4 mb-4">
-          <h3 className="font-bold text-base text-[#e5e2e1]">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+      <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl w-full max-w-2xl p-6 shadow-2xl overflow-y-auto max-h-[92vh] custom-scrollbar">
+        <div className="flex items-center justify-between border-b border-[#000000]/10 pb-4 mb-4">
+          <h3 className="font-bold text-base text-[#000000]">
             {product ? 'Edit Menu Product' : 'Create New Menu Product'}
           </h3>
           <button
             onClick={onClose}
-            className="p-1 text-[#9f8d85] hover:text-[#e5e2e1] transition-colors cursor-pointer"
+            className="p-1 text-[#7a4900] hover:text-[#000000] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="mb-4 bg-rose-950/70 border border-rose-800/60 text-rose-300 text-xs p-3.5 rounded-xl flex items-start space-x-2.5 leading-relaxed">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs p-3.5 rounded-xl flex items-start space-x-2.5 leading-relaxed">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
@@ -242,25 +242,25 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           {/* Name & Local / Display Name */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[#9f8d85] block mb-1">Product Name (English) *</label>
+              <label className="text-[#7a4900] block mb-1">Product Name (English) *</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Avocado Toast"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">Display / Local Name (Urdu/Local)</label>
+              <label className="text-[#7a4900] block mb-1">Display / Local Name (Urdu/Local)</label>
               <input
                 type="text"
                 value={displayNameLocal}
                 onChange={(e) => setDisplayNameLocal(e.target.value)}
                 placeholder="e.g. آووکاڈو ٹوسٹ"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
           </div>
@@ -268,11 +268,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           {/* Category, SKU, Unit, Sort Order Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="text-[#9f8d85] block mb-1">Category *</label>
+              <label className="text-[#7a4900] block mb-1">Category *</label>
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               >
                 {categories.length === 0 ? (
                   <option value="">No categories available</option>
@@ -287,22 +287,22 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">SKU / Item Code</label>
+              <label className="text-[#7a4900] block mb-1">SKU / Item Code</label>
               <input
                 type="text"
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
                 placeholder="e.g. BR-101"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895] uppercase font-mono"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500] uppercase font-mono"
               />
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">Billing Unit</label>
+              <label className="text-[#7a4900] block mb-1">Billing Unit</label>
               <select
                 value={billingUnit}
                 onChange={(e) => setBillingUnit(e.target.value)}
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               >
                 <option value="plate">Plate</option>
                 <option value="cup">Cup / Mug</option>
@@ -314,41 +314,41 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">Sort Order</label>
+              <label className="text-[#7a4900] block mb-1">Sort Order</label>
               <input
                 type="number"
                 value={sortOrder === 0 ? '' : sortOrder}
                 onChange={(e) => setSortOrder(e.target.value === '' ? 0 : Number(e.target.value))}
                 onFocus={(e) => e.target.select()}
                 placeholder="0"
-                className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="text-[#9f8d85] block mb-1">Description</label>
+            <label className="text-[#7a4900] block mb-1">Description</label>
             <textarea
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Ingredients, dietary notes..."
-              className="w-full bg-[#131313] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895] resize-none"
+              className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500] resize-none"
             />
           </div>
 
           {/* Image Upload & Reuse existing image */}
-          <div className="bg-[#131313] p-3 rounded-xl border border-[#2a2a2a] space-y-2.5">
-            <label className="text-[#9f8d85] block font-medium">Product Image</label>
+          <div className="bg-[#F6F1EB] p-3 rounded-xl border border-[#000000]/10 space-y-2.5">
+            <label className="text-[#000000] block font-medium">Product Image</label>
             
             <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
               {/* File Upload Button (Supabase Storage) */}
-              <label className="flex items-center justify-center space-x-1.5 px-3 py-2 bg-[#1c1b1b] hover:bg-[#2a2a2a] border border-[#353534] hover:border-[#fab895]/50 text-[#e5e2e1] rounded-xl text-xs font-semibold cursor-pointer transition-all shrink-0">
+              <label className="flex items-center justify-center space-x-1.5 px-3 py-2 bg-[#FFFFFF] hover:bg-[#EDE6DC] border border-[#000000]/15 text-[#000000] rounded-xl text-xs font-semibold cursor-pointer transition-all shrink-0">
                 {isUploadingImage ? (
-                  <Loader2 className="w-3.5 h-3.5 text-[#fab895] animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 text-[#3d2500] animate-spin" />
                 ) : (
-                  <Upload className="w-3.5 h-3.5 text-[#fab895]" />
+                  <Upload className="w-3.5 h-3.5 text-[#3d2500]" />
                 )}
                 <span>{isUploadingImage ? 'Uploading...' : 'Choose File'}</span>
                 <input
@@ -360,7 +360,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 />
               </label>
 
-              <span className="text-[#9f8d85] text-center text-[10px] shrink-0">OR URL</span>
+              <span className="text-[#7a4900] text-center text-[10px] shrink-0">OR URL</span>
 
               {/* URL Input */}
               <input
@@ -368,12 +368,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="Paste Image URL or upload file..."
-                className="flex-1 bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="flex-1 bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
 
               {/* Image Preview */}
               {imageUrl && (
-                <div className="w-9 h-9 rounded-xl overflow-hidden bg-[#131313] border border-[#353534] shrink-0 self-center">
+                <div className="w-9 h-9 rounded-xl overflow-hidden bg-[#FFFFFF] border border-[#000000]/15 shrink-0 self-center">
                   <img
                     src={imageUrl}
                     alt="Preview"
@@ -385,26 +385,26 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             </div>
 
             {/* Reuse existing image selector */}
-            <div className="pt-2 border-t border-[#2a2a2a]">
+            <div className="pt-2 border-t border-[#000000]/10">
               <button
                 type="button"
                 onClick={() => setShowImagePicker(!showImagePicker)}
-                className="text-[11px] text-[#fab895] hover:text-[#eeae8b] flex items-center space-x-1 cursor-pointer"
+                className="text-[11px] text-[#3d2500] hover:text-[#7a4900] font-semibold flex items-center space-x-1 cursor-pointer"
               >
                 <ImageIcon className="w-3.5 h-3.5" />
                 <span>{showImagePicker ? 'Hide Image Picker' : 'Reuse existing product image'}</span>
               </button>
 
               {showImagePicker && (
-                <div className="mt-2 p-2.5 bg-[#1c1b1b] border border-[#353534] rounded-xl space-y-2">
+                <div className="mt-2 p-2.5 bg-[#FFFFFF] border border-[#000000]/10 rounded-xl space-y-2">
                   <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9f8d85]" />
+                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#7a4900]" />
                     <input
                       type="text"
                       value={imageSearch}
                       onChange={(e) => setImageSearch(e.target.value)}
                       placeholder="Search existing item images..."
-                      className="w-full bg-[#131313] border border-[#353534] rounded-lg pl-8 pr-2 py-1 text-xs text-[#e5e2e1] focus:outline-none"
+                      className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-lg pl-8 pr-2 py-1 text-xs text-[#000000] focus:outline-none"
                     />
                   </div>
 
@@ -421,8 +421,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         }}
                         className={`group relative rounded-lg overflow-hidden h-14 border transition-all cursor-pointer ${
                           imageUrl === p.image_url
-                            ? 'border-[#fab895] ring-2 ring-[#fab895]/50'
-                            : 'border-[#353534] hover:border-[#6e4025]'
+                            ? 'border-[#3d2500] ring-2 ring-[#3d2500]/50'
+                            : 'border-[#000000]/15 hover:border-[#3d2500]'
                         }`}
                         title={p.name}
                       >
@@ -439,7 +439,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     ))}
 
                     {filteredImageProducts.length === 0 && (
-                      <p className="col-span-full text-[10px] text-[#9f8d85] text-center py-2">
+                      <p className="col-span-full text-[10px] text-[#7a4900] text-center py-2">
                         No uploaded images found matching query.
                       </p>
                     )}
@@ -450,9 +450,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
 
           {/* Pricing & Cost Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#131313] p-3 rounded-xl border border-[#2a2a2a]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#F6F1EB] p-3 rounded-xl border border-[#000000]/10">
             <div>
-              <label className="text-[#9f8d85] block mb-1">Base Sale Price (Rs) *</label>
+              <label className="text-[#7a4900] block mb-1">Base Sale Price (Rs) *</label>
               <input
                 type="number"
                 required
@@ -461,12 +461,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 onChange={(e) => handleBasePriceChange(Number(e.target.value) || 0)}
                 onFocus={(e) => e.target.select()}
                 placeholder="0"
-                className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2.5 py-1.5 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2.5 py-1.5 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
 
             <div>
-              <label className="text-[#9f8d85] block mb-1">Kitchen Cost (Rs)</label>
+              <label className="text-[#7a4900] block mb-1">Kitchen Cost (Rs)</label>
               <input
                 type="number"
                 min="0"
@@ -474,7 +474,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 onChange={(e) => handleKitchenCostChange(e.target.value !== '' ? Number(e.target.value) : '')}
                 onFocus={(e) => e.target.select()}
                 placeholder="0"
-                className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2.5 py-1.5 text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2.5 py-1.5 text-[#000000] focus:outline-none focus:border-[#3d2500]"
               />
             </div>
 
@@ -484,9 +484,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   type="checkbox"
                   checked={isSpecial}
                   onChange={(e) => setIsSpecial(e.target.checked)}
-                  className="rounded text-[#6e4025] focus:ring-0"
+                  className="rounded text-[#3d2500] focus:ring-0"
                 />
-                <span className="text-[#e5e2e1]">Chef's Special</span>
+                <span className="text-[#000000] font-medium">Chef's Special</span>
               </label>
 
               <label className="flex items-center space-x-1.5 cursor-pointer">
@@ -494,9 +494,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   type="checkbox"
                   checked={isDeal}
                   onChange={(e) => setIsDeal(e.target.checked)}
-                  className="rounded text-[#6e4025] focus:ring-0"
+                  className="rounded text-[#3d2500] focus:ring-0"
                 />
-                <span className="text-[#e5e2e1]">Deal Badge</span>
+                <span className="text-[#000000] font-medium">Deal Badge</span>
               </label>
 
               <label className="flex items-center space-x-1.5 cursor-pointer">
@@ -504,34 +504,34 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   type="checkbox"
                   checked={isAvailable}
                   onChange={(e) => setIsAvailable(e.target.checked)}
-                  className="rounded text-[#6e4025] focus:ring-0"
+                  className="rounded text-[#3d2500] focus:ring-0"
                 />
-                <span className="text-[#e5e2e1]">Available in Menu</span>
+                <span className="text-[#000000] font-medium">Available in Menu</span>
               </label>
             </div>
           </div>
 
           {/* Track Quantity & Stock Management */}
-          <div className="bg-[#131313] p-3 rounded-xl border border-[#2a2a2a] space-y-3">
+          <div className="bg-[#F6F1EB] p-3 rounded-xl border border-[#000000]/10 space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <label className="flex items-center space-x-2 cursor-pointer font-bold text-[#e5e2e1]">
+                <label className="flex items-center space-x-2 cursor-pointer font-bold text-[#000000]">
                   <input
                     type="checkbox"
                     checked={trackQuantity}
                     onChange={(e) => setTrackQuantity(e.target.checked)}
-                    className="rounded text-[#6e4025] focus:ring-0 w-4 h-4"
+                    className="rounded text-[#3d2500] focus:ring-0 w-4 h-4"
                   />
                   <span>Track Quantity</span>
                 </label>
-                <p className="text-[10px] text-[#9f8d85] mt-0.5 ml-6">
+                <p className="text-[10px] text-[#7a4900] mt-0.5 ml-6">
                   When enabled, confirmed orders automatically reduce stock for this item.
                 </p>
               </div>
 
               {trackQuantity && (
                 <div className="w-36">
-                  <label className="text-[#fab895] block mb-1 font-semibold text-[11px]">
+                  <label className="text-[#3d2500] block mb-1 font-semibold text-[11px]">
                     Current Stock
                   </label>
                   <input
@@ -541,7 +541,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     onChange={(e) => setStockQuantity(e.target.value === '' ? 0 : Math.max(0, Number(e.target.value)))}
                     onFocus={(e) => e.target.select()}
                     placeholder="0"
-                    className="w-full bg-[#1c1b1b] border border-[#fab895]/50 rounded-lg px-2.5 py-1.5 text-[#e5e2e1] font-bold focus:outline-none focus:border-[#fab895]"
+                    className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2.5 py-1.5 text-[#000000] font-bold focus:outline-none focus:border-[#3d2500]"
                   />
                 </div>
               )}
@@ -551,11 +551,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           {/* Variants Manager */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-[#9f8d85] block font-semibold">Size / Portion Variants</label>
+              <label className="text-[#000000] block font-semibold">Size / Portion Variants</label>
               <button
                 type="button"
                 onClick={handleAddVariant}
-                className="text-[11px] text-[#fab895] hover:text-[#eeae8b] flex items-center space-x-1 cursor-pointer"
+                className="text-[11px] text-[#3d2500] hover:text-[#7a4900] font-semibold flex items-center space-x-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Variant</span>
@@ -566,7 +566,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               {variants.map((variant, idx) => (
                 <div
                   key={idx}
-                  className="grid grid-cols-1 sm:grid-cols-12 gap-2 bg-[#131313] border border-[#2a2a2a] p-2 rounded-xl items-center"
+                  className="grid grid-cols-1 sm:grid-cols-12 gap-2 bg-[#F6F1EB] border border-[#000000]/10 p-2 rounded-xl items-center"
                 >
                   <div className="col-span-1 sm:col-span-4">
                     <input
@@ -578,7 +578,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         setVariants(updated);
                       }}
                       placeholder="Variant name (e.g. Single Slice)"
-                      className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none"
+                      className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2 py-1 text-[#000000] focus:outline-none"
                     />
                   </div>
 
@@ -592,7 +592,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         setVariants(updated);
                       }}
                       placeholder="Code (S/M/L)"
-                      className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none uppercase text-[11px]"
+                      className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2 py-1 text-[#000000] focus:outline-none uppercase text-[11px]"
                     />
                   </div>
 
@@ -609,7 +609,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       }}
                       onFocus={(e) => e.target.select()}
                       placeholder="0"
-                      className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none"
+                      className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2 py-1 text-[#000000] focus:outline-none"
                     />
                   </div>
 
@@ -626,7 +626,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       }}
                       onFocus={(e) => e.target.select()}
                       placeholder="0"
-                      className="w-full bg-[#1c1b1b] border border-[#353534] rounded-lg px-2 py-1 text-[#e5e2e1] focus:outline-none"
+                      className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-lg px-2 py-1 text-[#000000] focus:outline-none"
                     />
                   </div>
 
@@ -635,7 +635,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <button
                         type="button"
                         onClick={() => handleRemoveVariant(idx)}
-                        className="p-1 text-rose-400 hover:text-rose-300 rounded cursor-pointer"
+                        className="p-1 text-rose-600 hover:text-rose-800 rounded cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -647,18 +647,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
 
           {/* Form Actions */}
-          <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#353534]">
+          <div className="flex items-center justify-end space-x-2 pt-4 border-t border-[#000000]/10">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-[#131313] hover:bg-[#201f1f] text-[#9f8d85] hover:text-[#e5e2e1] rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+              className="px-4 py-2 bg-[#F6F1EB] hover:bg-[#EDE6DC] text-[#7a4900] hover:text-[#000000] rounded-xl text-xs font-semibold transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || isUploadingImage}
-              className="px-5 py-2 bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 rounded-xl text-xs font-bold transition-all shadow-lg flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="px-5 py-2 bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] rounded-xl text-xs font-bold transition-all shadow-xs flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isSubmitting ? (
                 <>

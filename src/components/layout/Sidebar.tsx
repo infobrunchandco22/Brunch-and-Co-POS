@@ -43,16 +43,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#1c1b1b] border-r border-[#353534] select-none">
+    <div className="flex flex-col h-full bg-[#FFFDF7] border-r border-[#000000]/10 select-none">
       {/* Brand Header */}
-      <div className="p-4 sm:p-5 border-b border-[#353534] flex items-center justify-between">
+      <div className="p-4 sm:p-5 border-b border-[#000000]/10 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <img src="/logo.svg" alt="BR&CO CAFE" className="w-10 h-10 object-contain rounded-xl" />
+          <img src="/logo.jpeg" alt="Brunch & Co" className="w-10 h-10 object-contain rounded-xl shadow-xs" />
           <div>
-            <h1 className="font-headline-lg text-lg font-bold text-[#e5e2e1] tracking-tight leading-tight">
-              Brunch<span className="text-[#fab895]">&</span>Co
+            <h1 className="font-headline-lg text-lg font-bold text-[#000000] tracking-tight leading-tight">
+              Brunch<span className="text-[#7a4900]">&</span>Co
             </h1>
-            <p className="text-[11px] font-label-caps text-[#9f8d85] uppercase tracking-wider">
+            <p className="text-[11px] font-label-caps text-[#7a4900] uppercase tracking-wider">
               Internal POS & Admin
             </p>
           </div>
@@ -62,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {onClose && (
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 text-[#9f8d85] hover:text-[#e5e2e1] rounded-lg transition-colors cursor-pointer"
+            className="lg:hidden p-1.5 text-[#7a4900] hover:text-[#000000] rounded-lg transition-colors cursor-pointer"
             title="Close menu"
           >
             <X className="w-5 h-5" />
@@ -71,11 +71,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Role Indicator */}
-      <div className="px-4 py-3 bg-[#131313]/60 border-b border-[#353534]/50 flex items-center">
+      <div className="px-4 py-3 bg-[#F6F1EB] border-b border-[#000000]/10 flex items-center">
         <div className="flex items-center space-x-2">
-          <ShieldCheck className="w-4 h-4 text-[#fab895]" />
-          <span className="text-xs font-medium text-[#d6c3b9]">Role:</span>
-          <span className="px-2 py-0.5 text-[10px] font-bold tracking-wider rounded uppercase bg-[#6e4025] text-[#eeae8b] border border-[#fab895]/30">
+          <ShieldCheck className="w-4 h-4 text-[#3d2500]" />
+          <span className="text-xs font-medium text-[#7a4900]">Role:</span>
+          <span className="px-2 py-0.5 text-[10px] font-bold tracking-wider rounded uppercase bg-[#3d2500] text-[#FFFDF7]">
             {role ? role.toUpperCase() : 'STAFF'}
           </span>
         </div>
@@ -91,14 +91,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             return (
               <div
                 key={item.path}
-                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-[#52443d] cursor-not-allowed group relative"
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium text-[#7a4900]/40 cursor-not-allowed group relative"
                 title="Admin access required"
               >
                 <div className="flex items-center space-x-3 opacity-50">
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                 </div>
-                <span className="text-[9px] font-label-caps bg-[#131313] text-[#52443d] px-1.5 py-0.5 rounded border border-[#353534]">
+                <span className="text-[9px] font-label-caps bg-[#F6F1EB] text-[#7a4900]/60 px-1.5 py-0.5 rounded border border-[#000000]/10">
                   ADMIN
                 </span>
               </div>
@@ -115,8 +115,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               className={({ isActive }) =>
                 `flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-[#6e4025] text-[#eeae8b] font-semibold border border-[#fab895]/30 shadow-sm'
-                    : 'text-[#d6c3b9] hover:bg-[#201f1f] hover:text-[#e5e2e1]'
+                    ? 'bg-[#3d2500] text-[#FFFDF7] font-semibold shadow-sm'
+                    : 'text-[#7a4900] hover:bg-[#F6F1EB] hover:text-[#000000]'
                 }`
               }
             >
@@ -128,21 +128,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </nav>
 
       {/* User Profile Footer */}
-      <div className="p-4 border-t border-[#353534] bg-[#1c1b1b] flex items-center justify-between">
+      <div className="p-4 border-t border-[#000000]/10 bg-[#FFFDF7] flex items-center justify-between">
         <div className="flex items-center space-x-3 min-w-0">
-          <div className="w-8 h-8 rounded-full bg-[#353534] text-[#fab895] flex items-center justify-center font-bold text-xs shrink-0 border border-[#52443d]">
+          <div className="w-8 h-8 rounded-full bg-[#F6F1EB] text-[#3d2500] flex items-center justify-center font-bold text-xs shrink-0 border border-[#000000]/10">
             {user?.full_name?.charAt(0) || 'U'}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold text-[#e5e2e1] truncate">{user?.full_name || 'Staff Member'}</p>
-            <p className="text-[10px] text-[#9f8d85] truncate">{user?.phone || user?.role || 'Staff'}</p>
+            <p className="text-xs font-semibold text-[#000000] truncate">{user?.full_name || 'Staff Member'}</p>
+            <p className="text-[10px] text-[#7a4900] truncate">{user?.phone || user?.role || 'Staff'}</p>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
           title="Sign Out"
-          className="p-2 text-[#9f8d85] hover:text-[#ffb4ab] hover:bg-[#2a2a2a] rounded-lg transition-colors cursor-pointer shrink-0"
+          className="p-2 text-[#7a4900] hover:text-[#b91c1c] hover:bg-[#F6F1EB] rounded-lg transition-colors cursor-pointer shrink-0"
         >
           <LogOut className="w-4 h-4" />
         </button>

@@ -79,34 +79,34 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#1c1b1b] border border-[#52443d] rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
-        <div className="flex items-center justify-between border-b border-[#353534] pb-3">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+      <div className="bg-[#FFFFFF] border border-[#000000]/10 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div className="flex items-center justify-between border-b border-[#000000]/10 pb-3">
           <div className="flex items-center space-x-2">
-            <Tag className="w-4 h-4 text-[#fab895]" />
-            <h3 className="font-bold text-sm text-[#e5e2e1]">
+            <Tag className="w-4 h-4 text-[#3d2500]" />
+            <h3 className="font-bold text-sm text-[#000000]">
               {editingCategory ? 'Edit Category' : 'Manage Menu Categories'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="text-[#9f8d85] hover:text-[#e5e2e1] transition-colors cursor-pointer"
+            className="text-[#7a4900] hover:text-[#000000] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Category Add/Edit Form */}
-        <form onSubmit={handleSubmit} className="bg-[#131313] border border-[#353534] rounded-2xl p-4 space-y-3">
+        <form onSubmit={handleSubmit} className="bg-[#F6F1EB] border border-[#000000]/10 rounded-2xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#e5e2e1]">
+            <span className="text-xs font-bold text-[#000000]">
               {editingCategory ? `Editing: ${editingCategory.name}` : 'Add New Category'}
             </span>
             {editingCategory && (
               <button
                 type="button"
                 onClick={handleResetForm}
-                className="text-[10px] text-[#fab895] hover:underline cursor-pointer"
+                className="text-[10px] text-[#3d2500] hover:underline cursor-pointer"
               >
                 Cancel Edit
               </button>
@@ -114,27 +114,27 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
           </div>
 
           <div>
-            <label className="text-[10px] text-[#9f8d85] block mb-1">Category Name *</label>
+            <label className="text-[10px] text-[#7a4900] block mb-1">Category Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Desserts, Beverages, Starters"
-              className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-2 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+              className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-2 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
             />
           </div>
 
           {/* Image Upload Field */}
           <div>
-            <label className="text-[10px] text-[#9f8d85] block mb-1">Category Image (Photo Banner)</label>
+            <label className="text-[10px] text-[#7a4900] block mb-1">Category Image (Photo Banner)</label>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <label className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#201f1f] hover:bg-[#2a2a2a] border border-[#353534] rounded-xl text-xs font-semibold text-[#d6c3b9] cursor-pointer transition-colors shrink-0">
+                <label className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#EDE6DC] border border-[#000000]/15 rounded-xl text-xs font-semibold text-[#000000] cursor-pointer transition-colors shrink-0">
                   {isUploading ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#fab895]" />
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#3d2500]" />
                   ) : (
-                    <Upload className="w-3.5 h-3.5 text-[#fab895]" />
+                    <Upload className="w-3.5 h-3.5 text-[#3d2500]" />
                   )}
                   <span>{isUploading ? 'Uploading...' : 'Choose File'}</span>
                   <input
@@ -152,16 +152,16 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
                     placeholder="https://... or upload photo"
-                    className="w-full bg-[#1c1b1b] border border-[#353534] rounded-xl px-3 py-1.5 text-xs text-[#e5e2e1] focus:outline-none focus:border-[#fab895]"
+                    className="w-full bg-[#FFFFFF] border border-[#000000]/15 rounded-xl px-3 py-1.5 text-xs text-[#000000] focus:outline-none focus:border-[#3d2500]"
                   />
                 </div>
               </div>
 
-              {uploadError && <p className="text-[10px] text-rose-400">{uploadError}</p>}
+              {uploadError && <p className="text-[10px] text-rose-600">{uploadError}</p>}
 
               {/* Image Preview Thumbnail */}
               {imageUrl && (
-                <div className="relative h-20 w-full rounded-xl overflow-hidden bg-[#1c1b1b] border border-[#353534] flex items-center justify-center group">
+                <div className="relative h-20 w-full rounded-xl overflow-hidden bg-[#FFFFFF] border border-[#000000]/15 flex items-center justify-center group">
                   <img
                     src={imageUrl}
                     alt="Category Preview"
@@ -171,7 +171,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
                   <button
                     type="button"
                     onClick={() => setImageUrl('')}
-                    className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-rose-950 text-white rounded-lg transition-colors cursor-pointer"
+                    className="absolute top-1 right-1 p-1 bg-black/70 hover:bg-rose-900 text-white rounded-lg transition-colors cursor-pointer"
                     title="Remove Image"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -185,7 +185,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
             <button
               type="submit"
               disabled={isUploading || !name.trim()}
-              className="bg-[#6e4025] hover:bg-[#804b2b] text-[#eeae8b] border border-[#fab895]/30 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+              className="bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer disabled:opacity-50 shadow-xs"
             >
               {editingCategory ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               <span>{editingCategory ? 'Update Category' : 'Save Category'}</span>
@@ -195,14 +195,14 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
 
         {/* Existing Categories Directory */}
         <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1">
-          <p className="text-[10px] text-[#9f8d85] uppercase tracking-wider font-bold">Existing Categories ({categories.length})</p>
+          <p className="text-[10px] text-[#7a4900] uppercase tracking-wider font-bold">Existing Categories ({categories.length})</p>
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className="flex items-center justify-between bg-[#131313] border border-[#2a2a2a] p-2.5 rounded-xl text-xs"
+              className="flex items-center justify-between bg-[#FFFFFF] border border-[#000000]/10 p-2.5 rounded-xl text-xs shadow-2xs"
             >
               <div className="flex items-center space-x-3 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-[#201f1f] border border-[#353534] overflow-hidden flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#F6F1EB] border border-[#000000]/10 overflow-hidden flex items-center justify-center shrink-0">
                   {cat.image_url ? (
                     <img
                       src={cat.image_url}
@@ -211,12 +211,12 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <ImageIcon className="w-4 h-4 text-[#52443d]" />
+                    <ImageIcon className="w-4 h-4 text-[#7a4900]/40" />
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-semibold text-[#e5e2e1] truncate">{cat.name}</p>
-                  <p className="text-[9px] text-[#9f8d85]">
+                  <p className="font-semibold text-[#000000] truncate">{cat.name}</p>
+                  <p className="text-[9px] text-[#7a4900]">
                     {cat.image_url ? 'Photo set' : 'No photo uploaded'}
                   </p>
                 </div>
@@ -226,7 +226,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStartEdit(cat)}
-                  className="p-1.5 text-[#9f8d85] hover:text-[#fab895] hover:bg-[#201f1f] rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-lg transition-colors cursor-pointer"
                   title="Edit category"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
@@ -239,8 +239,8 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
                   }
                   className={`flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold cursor-pointer ${
                     cat.is_active
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                      : 'bg-rose-950 text-rose-300 border border-rose-800'
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      : 'bg-rose-50 text-rose-800 border border-rose-200'
                   }`}
                 >
                   {cat.is_active ? (
@@ -260,10 +260,10 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
           ))}
         </div>
 
-        <div className="pt-2 border-t border-[#353534] flex justify-end">
+        <div className="pt-2 border-t border-[#000000]/10 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-[#131313] text-[#e5e2e1] rounded-xl text-xs font-semibold hover:bg-[#201f1f] cursor-pointer"
+            className="px-4 py-2 bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] rounded-xl text-xs font-semibold cursor-pointer shadow-xs"
           >
             Done
           </button>
