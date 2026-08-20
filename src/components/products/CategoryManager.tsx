@@ -73,12 +73,12 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({
         await onUpdateCategory({
           id: editingCategory.id,
           name: name.trim(),
-          image_url: imageUrl.trim() || null,
+          image_url: imageUrl.trim() || undefined,
         });
       } else {
         await onAddCategory({
           name: name.trim(),
-          image_url: imageUrl.trim() || null,
+          image_url: imageUrl.trim() || undefined,
         });
       }
       handleResetForm();

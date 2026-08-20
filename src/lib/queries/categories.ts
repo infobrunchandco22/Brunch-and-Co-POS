@@ -28,8 +28,9 @@ export async function createCategory(data: Partial<Category> & { name: string })
     is_active: data.is_active ?? true,
   };
 
-  if (data.image_url !== undefined) {
-    insertPayload.image_url = data.image_url;
+  const hasImage = typeof data.image_url === 'string' && data.image_url.trim().length > 0;
+  if (hasImage) {
+    insertPayload.image_url = data.image_url!.trim();
   }
 
   try {
@@ -41,7 +42,7 @@ export async function createCategory(data: Partial<Category> & { name: string })
 
     if (error) {
       // If error is PGRST204 (image_url column not found in schema cache), retry without image_url
-      if (error.code === 'PGRST204' && insertPayload.image_url !== undefined) {
+      if ((error.code === 'PGRST204' || error.message?.includes('image_url') || error.message?.includes('column')) && hasImage) {
         delete insertPayload.image_url;
         const retryRes = await supabase
           .from('categories')
@@ -69,8 +70,10 @@ export async function updateCategory(id: string, data: Partial<Category>): Promi
   if (data.name !== undefined) updatePayload.name = data.name;
   if (data.sort_order !== undefined) updatePayload.sort_order = data.sort_order;
   if (data.is_active !== undefined) updatePayload.is_active = data.is_active;
-  if (data.image_url !== undefined) {
-    updatePayload.image_url = data.image_url;
+
+  const hasImage = typeof data.image_url === 'string' && data.image_url.trim().length > 0;
+  if (hasImage) {
+    updatePayload.image_url = data.image_url!.trim();
   }
 
   try {
@@ -83,7 +86,7 @@ export async function updateCategory(id: string, data: Partial<Category>): Promi
 
     if (error) {
       // If error is PGRST204 (image_url column not found in schema cache), retry without image_url
-      if (error.code === 'PGRST204' && updatePayload.image_url !== undefined) {
+      if ((error.code === 'PGRST204' || error.message?.includes('image_url') || error.message?.includes('column')) && hasImage) {
         delete updatePayload.image_url;
         const retryRes = await supabase
           .from('categories')
