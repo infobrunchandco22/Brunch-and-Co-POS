@@ -9,17 +9,18 @@ export async function uploadProductImage(file: File): Promise<string> {
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
   const filePath = `products/${fileName}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('product-images')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: true,
+      contentType: file.type || 'image/jpeg',
     });
 
   if (error) {
     console.error('Error uploading product image to Supabase Storage:', error);
     throw new Error(
-      `Image upload failed (${error.message}). Please ensure the 'product-images' storage bucket exists in Supabase.`
+      `Product image upload failed: ${error.message}`
     );
   }
 
@@ -43,39 +44,28 @@ export async function uploadCategoryImage(file: File): Promise<string> {
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
   const filePath = `categories/${fileName}`;
 
-  // Try category-images bucket
   const { error } = await supabase.storage
     .from('category-images')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: true,
+      contentType: file.type || 'image/jpeg',
     });
 
-  if (!error) {
-    const { data: publicUrlData } = supabase.storage
-      .from('category-images')
-      .getPublicUrl(filePath);
-    return publicUrlData?.publicUrl || '';
+  if (error) {
+    console.error('Error uploading category image to category-images bucket:', error);
+    throw new Error(`Category image upload failed: ${error.message}`);
   }
 
-  // Fallback to product-images if category-images has an issue
-  const { error: fbError } = await supabase.storage
-    .from('product-images')
-    .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: true,
-    });
-
-  if (fbError) {
-    console.error('Error uploading category image:', error || fbError);
-    throw new Error(`Category image upload failed (${error?.message || fbError?.message}).`);
-  }
-
-  const { data: fbUrlData } = supabase.storage
-    .from('product-images')
+  const { data: publicUrlData } = supabase.storage
+    .from('category-images')
     .getPublicUrl(filePath);
 
-  return fbUrlData?.publicUrl || '';
+  if (!publicUrlData || !publicUrlData.publicUrl) {
+    throw new Error('Could not retrieve public URL for uploaded category image.');
+  }
+
+  return publicUrlData.publicUrl;
 }
 
 /**
@@ -87,39 +77,28 @@ export async function uploadRewardImage(file: File): Promise<string> {
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
   const filePath = `rewards/${fileName}`;
 
-  // Try reward-images bucket
   const { error } = await supabase.storage
     .from('reward-images')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: true,
+      contentType: file.type || 'image/jpeg',
     });
 
-  if (!error) {
-    const { data: publicUrlData } = supabase.storage
-      .from('reward-images')
-      .getPublicUrl(filePath);
-    return publicUrlData?.publicUrl || '';
+  if (error) {
+    console.error('Error uploading reward image to reward-images bucket:', error);
+    throw new Error(`Reward image upload failed: ${error.message}`);
   }
 
-  // Fallback to product-images
-  const { error: fbError } = await supabase.storage
-    .from('product-images')
-    .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: true,
-    });
-
-  if (fbError) {
-    console.error('Error uploading reward image:', error || fbError);
-    throw new Error(`Reward image upload failed (${error?.message || fbError?.message}).`);
-  }
-
-  const { data: fbUrlData } = supabase.storage
-    .from('product-images')
+  const { data: publicUrlData } = supabase.storage
+    .from('reward-images')
     .getPublicUrl(filePath);
 
-  return fbUrlData?.publicUrl || '';
+  if (!publicUrlData || !publicUrlData.publicUrl) {
+    throw new Error('Could not retrieve public URL for uploaded reward image.');
+  }
+
+  return publicUrlData.publicUrl;
 }
 
 /**
@@ -131,37 +110,26 @@ export async function uploadBannerImage(file: File): Promise<string> {
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
   const filePath = `banners/${fileName}`;
 
-  // Try banner-images bucket
   const { error } = await supabase.storage
     .from('banner-images')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: true,
+      contentType: file.type || 'image/jpeg',
     });
 
-  if (!error) {
-    const { data: publicUrlData } = supabase.storage
-      .from('banner-images')
-      .getPublicUrl(filePath);
-    return publicUrlData?.publicUrl || '';
+  if (error) {
+    console.error('Error uploading banner image to banner-images bucket:', error);
+    throw new Error(`Banner image upload failed: ${error.message}`);
   }
 
-  // Fallback to product-images
-  const { error: fbError } = await supabase.storage
-    .from('product-images')
-    .upload(filePath, file, {
-      cacheControl: '3600',
-      upsert: true,
-    });
-
-  if (fbError) {
-    console.error('Error uploading banner image:', error || fbError);
-    throw new Error(`Banner image upload failed (${error?.message || fbError?.message}).`);
-  }
-
-  const { data: fbUrlData } = supabase.storage
-    .from('product-images')
+  const { data: publicUrlData } = supabase.storage
+    .from('banner-images')
     .getPublicUrl(filePath);
 
-  return fbUrlData?.publicUrl || '';
+  if (!publicUrlData || !publicUrlData.publicUrl) {
+    throw new Error('Could not retrieve public URL for uploaded banner image.');
+  }
+
+  return publicUrlData.publicUrl;
 }
