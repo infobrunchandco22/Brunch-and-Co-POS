@@ -38,7 +38,7 @@ export const Login: React.FC = () => {
 
         {/* Brand Header */}
         <div className="text-center mb-8 relative z-10">
-          <img src="/logo.jpeg" alt="Brunch & Co" className="w-16 h-16 mx-auto mb-3 object-contain rounded-2xl shadow-xs" />
+          <img src="/logo.jpeg" alt="Brunch & Co" className="w-24 h-24 mx-auto mb-3 object-contain rounded-2xl shadow-xs" />
           <h1 className="font-headline-lg text-2xl font-bold text-[#000000] tracking-tight">
             Brunch<span className="text-[#7a4900]">&</span>Co Admin
           </h1>

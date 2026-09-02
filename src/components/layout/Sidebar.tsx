@@ -47,7 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Brand Header */}
       <div className="p-4 sm:p-5 border-b border-[#000000]/10 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <img src="/logo.jpeg" alt="Brunch & Co" className="w-10 h-10 object-contain rounded-xl shadow-xs" />
+          <img src="/logo.jpeg" alt="Brunch & Co" className="w-16 h-16 object-contain rounded-xl shadow-xs" />
           <div>
             <h1 className="font-headline-lg text-lg font-bold text-[#000000] tracking-tight leading-tight">
               Brunch<span className="text-[#7a4900]">&</span>Co

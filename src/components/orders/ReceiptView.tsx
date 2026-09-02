@@ -276,7 +276,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
           >
             {/* Bill Header */}
             <div className="text-center border-b border-dashed border-gray-400 pb-3 mb-3">
-              <img src="/logo.jpeg" alt="Brunch & Co" className="w-12 h-12 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs" />
+              <img src="/logo.jpeg" alt="Brunch & Co" className="w-18 h-18 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs" />
               <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-bold tracking-tight`}>
                 BRUNCH & CO
               </h2>

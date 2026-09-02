@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
     return (
       <DashboardLayout>
         <div className="flex flex-col items-center justify-center h-96 text-[#7a4900] text-xs">
-          <img src="/logo.jpeg" alt="Brunch & Co" className="w-12 h-12 animate-pulse mb-3 object-contain rounded-xl shadow-xs" />
+          <img src="/logo.jpeg" alt="Brunch & Co" className="w-20 h-20 animate-pulse mb-3 object-contain rounded-xl shadow-xs" />
           <span>Loading analytics & live orders...</span>
         </div>
       </DashboardLayout>
