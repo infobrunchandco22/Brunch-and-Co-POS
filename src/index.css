@@ -113,3 +113,101 @@
   animation: fadeInBackdrop 120ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   Thermal Receipt Printing Styles (58mm & 80mm ESC/POS Thermal Printers)
+   ========================================================================== */
+@media print {
+  @page {
+    margin: 0 !important;
+    size: auto !important;
+  }
+
+  /* Reset document and body for zero-margin roll printing */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Completely hide application layout, dashboard, navigation, modals, and backdrops */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Reveal strictly the thermal receipt printable container and all its descendants */
+  #thermal-receipt-printable,
+  #thermal-receipt-printable * {
+    visibility: visible !important;
+  }
+
+  /* Pin receipt container to top-left of thermal paper roll */
+  #thermal-receipt-printable {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+    padding: 2mm 3mm 12mm 3mm !important;
+    width: 76mm !important;
+    max-width: 76mm !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    display: block !important;
+  }
+
+  /* 58mm compact thermal roll format */
+  #thermal-receipt-printable.paper-58mm {
+    width: 52mm !important;
+    max-width: 52mm !important;
+    padding: 1mm 2mm 10mm 2mm !important;
+  }
+
+  /* Remove decorative CSS clip-paths that break thermal continuous roll feeding */
+  .receipt-cut {
+    clip-path: none !important;
+  }
+
+  /* Pure 1-bit black for thermal heat pins (eliminates faint gray dithered dots) */
+  #thermal-receipt-printable,
+  #thermal-receipt-printable p,
+  #thermal-receipt-printable span,
+  #thermal-receipt-printable div,
+  #thermal-receipt-printable h2,
+  #thermal-receipt-printable h3,
+  #thermal-receipt-printable td,
+  #thermal-receipt-printable th {
+    color: #000000 !important;
+  }
+
+  /* Crisp solid borders for thermal cuts and item separation */
+  #thermal-receipt-printable .border-dashed,
+  #thermal-receipt-printable .border-gray-400,
+  #thermal-receipt-printable .border-gray-300,
+  #thermal-receipt-printable .border-gray-200 {
+    border-color: #000000 !important;
+  }
+
+  /* Prevent awkward page breaks in the middle of ordered items */
+  #thermal-receipt-printable .print-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Clean cut separator between Bill and KOT when printing Both */
+  .thermal-cut-separator {
+    margin: 8mm 0 !important;
+    border-top: 1px dashed #000000 !important;
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+}
+
+

@@ -9,6 +9,7 @@ interface ReceiptViewProps {
   order: Order;
   onClose?: () => void;
   onUpdateStatus?: (orderId: string, nextStatus: OrderStatus) => void;
+  onUpdateDeliveryFee?: (orderId: string, fee: number) => void;
 }
 
 type PrintMode = 'bill' | 'kot' | 'both';
@@ -43,25 +44,52 @@ export const executeThermalPrint = ({
   window.print();
 };
 
-export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpdateStatus }) => {
+export const ReceiptView: React.FC<ReceiptViewProps> = ({
+  order,
+  onClose,
+  onUpdateStatus,
+  onUpdateDeliveryFee,
+}) => {
   const { updateDeliveryFee, updateOrderStatus } = useOrders();
   const { staffList } = useStaff();
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
   const [paperSize, setPaperSize] = useState<PaperSize>('80mm');
   const [viewMode, setViewMode] = useState<PrintMode>('bill');
   const [deliveryFeeInput, setDeliveryFeeInput] = useState<string>(
-    order.delivery_fee.toString()
+    (order.delivery_fee ?? 0).toString()
   );
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     setCurrentOrder(order);
-    setDeliveryFeeInput(order.delivery_fee.toString());
+    setDeliveryFeeInput((order.delivery_fee ?? 0).toString());
   }, [order]);
 
-  const handleAdvanceStatus = () => {
+  const handleAdvanceStatus = async () => {
     const next = getNextStatus(currentOrder.status);
     if (!next) return;
+
+    const feeNum = Math.max(0, parseFloat(deliveryFeeInput) || 0);
+
+    // If user changed delivery fee in the input box, persist it before/with status change
+    if (feeNum !== currentOrder.delivery_fee) {
+      const subtotal = currentOrder.subtotal || 0;
+      const discount = currentOrder.discount || 0;
+      const serviceCharges = currentOrder.service_charges || 0;
+      const newTotal = Math.max(0, subtotal - discount + serviceCharges + feeNum);
+
+      if (onUpdateDeliveryFee) {
+        onUpdateDeliveryFee(currentOrder.id, feeNum);
+      } else {
+        await updateDeliveryFee.mutateAsync({
+          orderId: currentOrder.id,
+          deliveryFee: feeNum,
+        });
+      }
+
+      currentOrder.delivery_fee = feeNum;
+      currentOrder.total = newTotal;
+    }
 
     // Optimistic local update
     const updated = {
@@ -93,10 +121,14 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
     };
     setCurrentOrder(updated);
 
-    updateDeliveryFee.mutate({
-      orderId: currentOrder.id,
-      deliveryFee: feeNum,
-    });
+    if (onUpdateDeliveryFee) {
+      onUpdateDeliveryFee(currentOrder.id, feeNum);
+    } else {
+      updateDeliveryFee.mutate({
+        orderId: currentOrder.id,
+        deliveryFee: feeNum,
+      });
+    }
 
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
@@ -266,46 +298,48 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
       </div>
 
       {/* Thermal Receipt Preview Container */}
-      <div className={`w-full ${containerWidthClass} transition-all duration-200 select-none`}>
+      <div
+        id="thermal-receipt-printable"
+        className={`w-full ${containerWidthClass} ${is58mm ? 'paper-58mm' : 'paper-80mm'} transition-all duration-200 select-none`}
+      >
         {/* Render Customer Bill */}
         {(viewMode === 'bill' || viewMode === 'both') && (
           <div
-            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-xl border border-gray-200 print:shadow-none print:border-none print:w-full ${
+            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-xl border border-gray-200 print:shadow-none print:border-none print:w-full print:p-0 ${
               viewMode === 'both' ? 'mb-6' : ''
             }`}
           >
             {/* Bill Header */}
             <div className="text-center border-b border-dashed border-gray-400 pb-3 mb-3">
-              <img src="/logo.jpeg" alt="Brunch & Co" className="w-18 h-18 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs" />
-              <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-bold tracking-tight`}>
+              <img src="/logo.jpeg" alt="Brunch & Co" className="w-18 h-18 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs print:shadow-none" />
+              <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-bold tracking-tight text-black`}>
                 BRUNCH & CO
               </h2>
-              <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-0.5">
+              <p className="text-[10px] text-gray-700 print:text-black uppercase tracking-widest mt-0.5 font-medium">
                 Gourmet Delivery Kitchen
               </p>
-              <p className="text-[9px] text-gray-500 mt-0.5">F-7 Markaz, Islamabad</p>
-              <p className="text-[9px] text-gray-500">Tel: +92 (51) 234-5678</p>
+              <p className="text-[9px] text-gray-700 print:text-black mt-0.5">F-7 Markaz, Islamabad</p>
+              <p className="text-[9px] text-gray-700 print:text-black">Tel: +92 (51) 234-5678</p>
             </div>
 
             {/* Order Meta */}
             <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-3 mb-3 space-y-1`}>
-              <div className="flex justify-between font-bold text-xs sm:text-sm">
+              <div className="flex justify-between items-center font-bold text-xs sm:text-sm border-b border-black/80 pb-1 mb-1.5">
                 <span>ORDER #{currentOrder.order_number}</span>
-                <span>{currentOrder.status.toUpperCase()}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-700 print:text-black">
                 <span>Date:</span>
                 <span>{formatExactDateTime(currentOrder.created_at)}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-700 print:text-black">
                 <span>Customer:</span>
                 <span className="font-semibold text-black">{currentOrder.customer_name || currentOrder.guest_name || 'Walk-in'}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-700 print:text-black">
                 <span>Phone:</span>
                 <span className="font-semibold text-black">{currentOrder.delivery_phone || 'N/A'}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-700 print:text-black">
                 <span>Address:</span>
                 <span className="text-right font-semibold text-black truncate max-w-[140px] sm:max-w-[180px]">
                   {currentOrder.delivery_address}{currentOrder.delivery_area ? ` (${currentOrder.delivery_area})` : ''}
@@ -315,7 +349,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
 
             {/* Items Table */}
             <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-3 mb-3`}>
-              <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-center font-bold border-b border-black pb-1 mb-2">
+              <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-center font-bold border-b border-black pb-1 mb-2 text-black">
                 <span>ITEM</span>
                 <span className="text-center">QTY</span>
                 <span className="text-right">TOTAL</span>
@@ -323,18 +357,18 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
 
               <div className="space-y-2">
                 {currentOrder.items.map((item) => (
-                  <div key={item.id}>
-                    <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-start font-medium">
+                  <div key={item.id} className="print-avoid-break">
+                    <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-start font-medium text-black">
                       <div className="min-w-0 pr-1">
-                        <p className="leading-tight break-words">{item.product_name_snapshot}</p>
+                        <p className="leading-tight break-words font-semibold text-black">{item.product_name_snapshot}</p>
                         {item.variant_name && (
-                          <p className="text-[9px] text-gray-500">Size: {item.variant_name}</p>
+                          <p className="text-[9px] text-gray-700 print:text-black">Size: {item.variant_name}</p>
                         )}
                       </div>
-                      <span className="text-center font-mono font-bold whitespace-nowrap">
+                      <span className="text-center font-mono font-bold whitespace-nowrap text-black">
                         x{item.quantity}
                       </span>
-                      <span className="text-right font-semibold whitespace-nowrap">
+                      <span className="text-right font-semibold whitespace-nowrap text-black">
                         {formatCurrency(item.line_total)}
                       </span>
                     </div>
@@ -345,26 +379,26 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
 
             {/* Totals */}
             <div className={`${textSizeClass} space-y-1 border-b border-dashed border-gray-400 pb-3 mb-3`}>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-700 print:text-black">
                 <span>Subtotal:</span>
-                <span>{formatCurrency(currentOrder.subtotal)}</span>
+                <span className="font-semibold text-black">{formatCurrency(currentOrder.subtotal)}</span>
               </div>
               {currentOrder.discount > 0 && (
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-700 print:text-black">
                   <span>Discount:</span>
-                  <span>-{formatCurrency(currentOrder.discount)}</span>
+                  <span className="font-semibold text-black">-{formatCurrency(currentOrder.discount)}</span>
                 </div>
               )}
-              {currentOrder.delivery_fee >= 0 && (
-                <div className="flex justify-between text-gray-600 font-semibold">
+              {currentOrder.delivery_fee > 0 && (
+                <div className="flex justify-between text-gray-700 print:text-black font-semibold">
                   <span>Delivery Fee:</span>
-                  <span>+{formatCurrency(currentOrder.delivery_fee)}</span>
+                  <span className="text-black">+{formatCurrency(currentOrder.delivery_fee)}</span>
                 </div>
               )}
               {currentOrder.service_charges > 0 && (
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-700 print:text-black">
                   <span>Service:</span>
-                  <span>+{formatCurrency(currentOrder.service_charges)}</span>
+                  <span className="font-semibold text-black">+{formatCurrency(currentOrder.service_charges)}</span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-xs sm:text-sm text-black pt-1 border-t border-black">
@@ -374,28 +408,25 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             </div>
 
             {/* Payment info */}
-            <div className="text-[9px] text-center uppercase tracking-wider text-gray-800 mb-3 bg-gray-100 p-2 rounded space-y-0.5">
+            <div className="text-[9px] text-center uppercase tracking-wider text-black mb-3 bg-gray-100 print:bg-transparent print:border print:border-black p-2 rounded space-y-0.5">
               <div>
                 Payment: <span className="font-bold">{currentOrder.payment_method}</span> ({currentOrder.payment_status})
               </div>
             </div>
 
-            {/* Barcode Mock */}
-            <div className="flex flex-col items-center justify-center pt-1 pb-2">
-              <div className="h-6 w-36 bg-[repeating-linear-gradient(90deg,#000,#000_2px,#fff_2px,#fff_4px)] mb-1"></div>
-              <span className="text-[8px] text-gray-500 font-mono">*{currentOrder.id}*</span>
+            {/* Footer message */}
+            <div className="text-center text-[9px] text-gray-700 print:text-black pt-2 border-t border-dashed border-gray-400">
+              <p className="font-semibold">Thank you for choosing Brunch & Co!</p>
             </div>
 
-            {/* Footer message */}
-            <div className="text-center text-[9px] text-gray-500 pt-2 border-t border-dashed border-gray-300">
-              <p>Thank you for choosing Brunch & Co!</p>
-            </div>
+            {/* Tear feed clearance for thermal cut blade */}
+            <div className="hidden print:block h-6 print:h-8" aria-hidden="true" />
           </div>
         )}
 
         {/* Separator when printing Both */}
         {viewMode === 'both' && (
-          <div className="my-4 text-center border-t-2 border-dashed border-amber-500/50 pt-1 print:my-6">
+          <div className="my-4 text-center border-t-2 border-dashed border-amber-500/50 pt-1 print:my-0 thermal-cut-separator">
             <span className="text-[10px] text-amber-400 font-mono font-bold bg-[#0e0e0e] px-2 print:text-black">
               --- CUT TICKET HERE ---
             </span>
@@ -405,14 +436,14 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
         {/* Render KOT (Kitchen Order Ticket) */}
         {(viewMode === 'kot' || viewMode === 'both') && (
           <div
-            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-2xl border border-amber-400/80 print:shadow-none print:border-none print:w-full`}
+            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-2xl border border-amber-400/80 print:shadow-none print:border-none print:w-full print:p-0`}
           >
             {/* KOT Header */}
-            <div className="text-center border-b-2 border-black pb-2 mb-3 bg-gray-100 p-2 rounded">
-              <h2 className={`${is58mm ? 'text-sm' : 'text-base'} font-black tracking-wider uppercase`}>
+            <div className="text-center border-b-2 border-black pb-2 mb-3 bg-gray-100 print:bg-transparent print:border-b-2 print:border-black p-2 rounded">
+              <h2 className={`${is58mm ? 'text-sm' : 'text-base'} font-black tracking-wider uppercase text-black`}>
                 *** KITCHEN TICKET ***
               </h2>
-              <p className="text-[10px] font-bold text-gray-800 mt-0.5">
+              <p className="text-[10px] font-bold text-gray-800 print:text-black mt-0.5">
                 ORDER #{currentOrder.order_number}
               </p>
             </div>
@@ -481,9 +512,12 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({ order, onClose, onUpda
             )}
 
             {/* Footer */}
-            <div className="text-center text-[10px] font-bold text-gray-700 pt-2 border-t border-dashed border-gray-400 uppercase">
+            <div className="text-center text-[10px] font-bold text-gray-700 print:text-black pt-2 border-t border-dashed border-gray-400 uppercase">
               *** END OF KOT ***
             </div>
+
+            {/* Tear feed clearance for thermal cut blade */}
+            <div className="hidden print:block h-6 print:h-8" aria-hidden="true" />
           </div>
         )}
       </div>

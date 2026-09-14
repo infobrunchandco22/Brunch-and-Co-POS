@@ -49,17 +49,36 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
   onUpdateStatus,
 }) => {
   const { staffList } = useStaff();
-  const { updateOrderIssueNotes, updateOrderStatus } = useOrders(undefined, { enableRealtime: false });
+  const { updateOrderIssueNotes, updateOrderStatus, updateDeliveryFee } = useOrders(undefined, { enableRealtime: false });
 
   const [activeTab, setActiveTab] = useState<'details' | 'receipt'>('details');
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
   const [issueNotes, setIssueNotes] = useState<string>(order.issue_notes || '');
   const [isIssueSaved, setIsIssueSaved] = useState(false);
+  const [deliveryFeeInput, setDeliveryFeeInput] = useState<string>((order.delivery_fee ?? 0).toString());
 
   useEffect(() => {
     setCurrentOrder(order);
     setIssueNotes(order.issue_notes || '');
+    setDeliveryFeeInput((order.delivery_fee ?? 0).toString());
   }, [order]);
+
+  const handleDeliveryFeeUpdate = (fee: number) => {
+    const subtotal = currentOrder.subtotal || 0;
+    const discount = currentOrder.discount || 0;
+    const serviceCharges = currentOrder.service_charges || 0;
+    const newTotal = Math.max(0, subtotal - discount + serviceCharges + fee);
+
+    const updated = {
+      ...currentOrder,
+      delivery_fee: fee,
+      total: newTotal,
+    };
+    setCurrentOrder(updated);
+    setDeliveryFeeInput(fee.toString());
+
+    updateDeliveryFee.mutate({ orderId: currentOrder.id, deliveryFee: fee });
+  };
 
   // Resolve Staff (Employee At Time - EAT)
   const staffMember = staffList.find((s) => s.id === currentOrder.created_by_staff);
@@ -378,9 +397,24 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
                         <span>-{formatCurrency(currentOrder.discount)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between text-[#7a4900]">
+                    <div className="flex items-center justify-between text-[#7a4900]">
                       <span>Delivery Fee:</span>
-                      <span className="font-semibold text-[#000000]">+{formatCurrency(currentOrder.delivery_fee)}</span>
+                      <div className="flex items-center space-x-1.5">
+                        <span className="text-xs font-bold text-[#7a4900]">Rs</span>
+                        <input
+                          type="number"
+                          min="0"
+                          step="10"
+                          value={deliveryFeeInput === '0' ? '' : deliveryFeeInput}
+                          onChange={(e) => {
+                            setDeliveryFeeInput(e.target.value);
+                            const val = Math.max(0, parseFloat(e.target.value) || 0);
+                            handleDeliveryFeeUpdate(val);
+                          }}
+                          placeholder="0"
+                          className="w-20 bg-[#F6F1EB] border border-[#000000]/15 rounded-lg px-2 py-0.5 text-xs font-bold text-right text-[#000000] focus:outline-none focus:border-[#3d2500]"
+                        />
+                      </div>
                     </div>
                     {currentOrder.service_charges > 0 && (
                       <div className="flex justify-between text-[#7a4900]">
@@ -470,6 +504,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({
               <ReceiptView
                 order={currentOrder}
                 onUpdateStatus={onUpdateStatus}
+                onUpdateDeliveryFee={(orderId, fee) => handleDeliveryFeeUpdate(fee)}
               />
             </div>
           )}

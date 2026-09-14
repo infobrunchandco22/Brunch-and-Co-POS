@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { StatCard } from '../components/dashboard/StatCard';
 import { OrdersChart } from '../components/dashboard/OrdersChart';
@@ -18,7 +18,11 @@ export const Dashboard: React.FC = () => {
 
   const { data: stats, isLoading, refetch } = useDashboardStats(dateRange, customStart, customEnd);
   const { orders, updateOrderStatus } = useOrders();
-  const [selectedReceiptOrder, setSelectedReceiptOrder] = useState<Order | null>(null);
+  const [selectedReceiptOrderId, setSelectedReceiptOrderId] = useState<string | null>(null);
+  const selectedReceiptOrder = useMemo(
+    () => (selectedReceiptOrderId ? orders.find((o) => o.id === selectedReceiptOrderId) || null : null),
+    [orders, selectedReceiptOrderId]
+  );
 
   if (isLoading || !stats) {
     return (
@@ -255,7 +259,7 @@ export const Dashboard: React.FC = () => {
           orders={orders}
           limit={6}
           onUpdateStatus={handleUpdateStatus}
-          onViewReceipt={(order) => setSelectedReceiptOrder(order)}
+          onViewReceipt={(order) => setSelectedReceiptOrderId(order.id)}
         />
       </div>
 
@@ -263,7 +267,7 @@ export const Dashboard: React.FC = () => {
       {selectedReceiptOrder && (
         <OrderDetailModal
           order={selectedReceiptOrder}
-          onClose={() => setSelectedReceiptOrder(null)}
+          onClose={() => setSelectedReceiptOrderId(null)}
           onUpdateStatus={handleUpdateStatus}
         />
       )}

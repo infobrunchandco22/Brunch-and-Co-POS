@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { RecentOrdersTable } from '../components/dashboard/RecentOrdersTable';
@@ -25,12 +25,17 @@ export const Orders: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [selectedDetailOrder, setSelectedDetailOrder] = useState<Order | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   // Realtime subscription explicitly disabled on Orders screen (staff manually refresh)
   const { orders, updateOrderStatus, isLoading, isFetching, refetch } = useOrders(activeTab, {
     enableRealtime: false,
   });
+
+  const selectedDetailOrder = useMemo(
+    () => (selectedOrderId ? orders.find((o) => o.id === selectedOrderId) || null : null),
+    [orders, selectedOrderId]
+  );
 
   const filteredOrders = orders.filter((o) => {
     // If activeTab is 'issues' and not filtered at query level
@@ -127,7 +132,7 @@ export const Orders: React.FC = () => {
         <RecentOrdersTable
           orders={filteredOrders}
           onUpdateStatus={handleUpdateStatus}
-          onViewReceipt={(order) => setSelectedDetailOrder(order)}
+          onViewReceipt={(order) => setSelectedOrderId(order.id)}
         />
       </div>
 
@@ -135,7 +140,7 @@ export const Orders: React.FC = () => {
       {selectedDetailOrder && (
         <OrderDetailModal
           order={selectedDetailOrder}
-          onClose={() => setSelectedDetailOrder(null)}
+          onClose={() => setSelectedOrderId(null)}
           onUpdateStatus={handleUpdateStatus}
         />
       )}
