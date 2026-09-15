@@ -140,6 +140,17 @@
     visibility: hidden !important;
   }
 
+  /* Prevent ancestor modal clipping when printing directly from window */
+  #root,
+  .fixed,
+  .relative,
+  .overflow-hidden,
+  .overflow-y-auto {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
   /* Reveal strictly the thermal receipt printable container and all its descendants */
   #thermal-receipt-printable,
   #thermal-receipt-printable * {

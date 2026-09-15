@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Order, OrderStatus } from '../../types/database.types';
 import { formatCurrency, formatExactDateTime } from '../../lib/utils';
-import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X } from 'lucide-react';
+import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X, Printer, Eye } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
 import { useStaff } from '../../hooks/useStaff';
+import { executeThermalPrint, PrintMode, PaperSize } from '../../lib/thermalPrint';
+
+export { executeThermalPrint };
+export type { PrintMode, PaperSize };
 
 interface ReceiptViewProps {
   order: Order;
@@ -11,9 +15,6 @@ interface ReceiptViewProps {
   onUpdateStatus?: (orderId: string, nextStatus: OrderStatus) => void;
   onUpdateDeliveryFee?: (orderId: string, fee: number) => void;
 }
-
-type PrintMode = 'bill' | 'kot' | 'both';
-type PaperSize = '80mm' | '58mm';
 
 const getNextStatus = (current: OrderStatus): OrderStatus | null => {
   switch (current) {
@@ -28,20 +29,6 @@ const getNextStatus = (current: OrderStatus): OrderStatus | null => {
     default:
       return null;
   }
-};
-
-// Centralized Thermal Printer Adapter Function
-export const executeThermalPrint = ({
-  mode,
-  paperSize,
-  order,
-}: {
-  mode: PrintMode;
-  paperSize: PaperSize;
-  order: Order;
-}) => {
-  // Triggers native browser print dialog (easy to swap in physical hardware/ESC-POS SDK later)
-  window.print();
 };
 
 export const ReceiptView: React.FC<ReceiptViewProps> = ({
@@ -134,12 +121,27 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
     setTimeout(() => setIsSaved(false), 2000);
   };
 
-  const handleTriggerPrint = (mode: PrintMode) => {
-    setViewMode(mode);
-    // Allow state transition to render correct ticket view prior to print dialog
-    setTimeout(() => {
-      executeThermalPrint({ mode, paperSize, order: currentOrder });
-    }, 100);
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const handleTriggerPrint = async (mode: PrintMode) => {
+    setIsPrinting(true);
+    try {
+      const staff =
+        staffList.find((s) => s.id === currentOrder.created_by_staff)?.full_name ||
+        currentOrder.created_by_staff ||
+        'Kitchen';
+
+      await executeThermalPrint({
+        order: currentOrder,
+        mode,
+        paperSize,
+        staffName: staff,
+      });
+    } catch (err) {
+      console.error('Thermal print failed:', err);
+    } finally {
+      setIsPrinting(false);
+    }
   };
 
   const is58mm = paperSize === '58mm';
@@ -257,41 +259,78 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
           </div>
         </form>
 
-        {/* Print Action Buttons */}
+        {/* Preview Selector Segmented Tabs */}
+        <div className="flex items-center justify-between bg-[#F6F1EB] p-1.5 rounded-2xl border border-[#000000]/10">
+          <span className="flex items-center space-x-1.5 text-[11px] font-bold text-[#7a4900] pl-2">
+            <Eye className="w-3.5 h-3.5 text-[#3d2500]" />
+            <span>Ticket Preview:</span>
+          </span>
+          <div className="flex items-center space-x-1">
+            <button
+              type="button"
+              onClick={() => setViewMode('bill')}
+              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                viewMode === 'bill'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
+              }`}
+            >
+              Bill
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('kot')}
+              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                viewMode === 'kot'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
+              }`}
+            >
+              KOT
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('both')}
+              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                viewMode === 'both'
+                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
+                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
+              }`}
+            >
+              Both
+            </button>
+          </div>
+        </div>
+
+        {/* Direct Thermal Print Action Buttons */}
         <div className="grid grid-cols-3 gap-2">
           <button
+            type="button"
+            disabled={isPrinting}
             onClick={() => handleTriggerPrint('bill')}
-            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
-              viewMode === 'bill'
-                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
-                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
-            }`}
+            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#000000] hover:text-[#FFFDF7] text-[#000000] transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50"
           >
-            <FileText className="w-3.5 h-3.5 text-[#3d2500]" />
+            <FileText className="w-3.5 h-3.5 text-[#7a4900] group-hover:text-[#FFFDF7]" />
             <span>Print Bill</span>
           </button>
 
           <button
+            type="button"
+            disabled={isPrinting}
             onClick={() => handleTriggerPrint('kot')}
-            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
-              viewMode === 'kot'
-                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
-                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
-            }`}
+            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#000000] hover:text-[#FFFDF7] text-[#000000] transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50"
           >
-            <Utensils className="w-3.5 h-3.5 text-[#3d2500]" />
+            <Utensils className="w-3.5 h-3.5 text-[#7a4900] group-hover:text-[#FFFDF7]" />
             <span>Print KOT</span>
           </button>
 
           <button
+            type="button"
+            disabled={isPrinting}
             onClick={() => handleTriggerPrint('both')}
-            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2 px-3 rounded-xl border transition-all cursor-pointer ${
-              viewMode === 'both'
-                ? 'bg-[#000000] text-[#FFFDF7] border-[#000000] shadow-xs'
-                : 'bg-[#FFFFFF] text-[#000000] border-[#000000]/15 hover:bg-[#F6F1EB]'
-            }`}
+            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000] bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
           >
-            <Layers className="w-3.5 h-3.5 text-[#3d2500]" />
+            <Layers className="w-3.5 h-3.5 text-[#FFFDF7]" />
             <span>Print Both</span>
           </button>
         </div>
