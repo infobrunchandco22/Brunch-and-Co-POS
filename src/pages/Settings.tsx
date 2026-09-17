@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Store, Printer, DollarSign, Check, Save, Loader2 } from 'lucide-react';
+import { Store, Printer, DollarSign, Check, Save, Loader2, AlertCircle } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 
 export const Settings: React.FC = () => {
@@ -8,7 +8,7 @@ export const Settings: React.FC = () => {
 
   // Store Settings State
   const [storeName, setStoreName] = useState('Brunch & Co');
-  const [phone, setPhone] = useState('+92 (51) 234-5678');
+  const [phone, setPhone] = useState('+92 300 0000000');
   const [address, setAddress] = useState('F-7 Markaz, Islamabad');
   const [defaultDeliveryFee, setDefaultDeliveryFee] = useState(150);
   const [defaultServiceCharge, setDefaultServiceCharge] = useState(50);
@@ -19,11 +19,12 @@ export const Settings: React.FC = () => {
   const [autoPrintKot, setAutoPrintKot] = useState(true);
 
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (settings) {
       setStoreName(settings.store_name ?? 'Brunch & Co');
-      setPhone(settings.phone ?? '+92 (51) 234-5678');
+      setPhone(settings.phone ?? '+92 300 0000000');
       setAddress(settings.address ?? 'F-7 Markaz, Islamabad');
       setDefaultDeliveryFee(settings.default_delivery_fee ?? 150);
       setDefaultServiceCharge(settings.default_service_charge ?? 50);
@@ -35,18 +36,24 @@ export const Settings: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    await saveSettings.mutateAsync({
-      store_name: storeName,
-      phone,
-      address,
-      default_delivery_fee: defaultDeliveryFee,
-      default_service_charge: defaultServiceCharge,
-      paper_width: paperWidth,
-      auto_print_bill: autoPrintBill,
-      auto_print_kot: autoPrintKot,
-    });
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 2500);
+    setSaveError(null);
+    try {
+      await saveSettings.mutateAsync({
+        store_name: storeName,
+        phone,
+        address,
+        default_delivery_fee: defaultDeliveryFee,
+        default_service_charge: defaultServiceCharge,
+        paper_width: paperWidth,
+        auto_print_bill: autoPrintBill,
+        auto_print_kot: autoPrintKot,
+      });
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 2500);
+    } catch (err: any) {
+      console.error('Settings save failed:', err);
+      setSaveError(err?.message || 'Failed to save store settings to database.');
+    }
   };
 
   return (
@@ -67,6 +74,13 @@ export const Settings: React.FC = () => {
             <div className="flex items-center space-x-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold animate-fade-in shadow-xs">
               <Check className="w-4 h-4 text-emerald-600" />
               <span>Settings Saved!</span>
+            </div>
+          )}
+
+          {saveError && (
+            <div className="flex items-center space-x-2 bg-rose-50 text-rose-800 border border-rose-200 px-4 py-3 rounded-xl text-xs font-bold animate-fade-in shadow-xs">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>{saveError}</span>
             </div>
           )}
         </div>

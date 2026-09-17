@@ -14,6 +14,10 @@ interface AuthContextType {
   session: Session | null;
   role: 'admin' | 'staff' | null;
   loading: boolean;
+  pendingOrdersCount: number;
+  showLoginToast: boolean;
+  dismissLoginToast: () => void;
+  refreshPendingCount: () => Promise<number>;
   signInStaff: (email: string, password: string) => Promise<{ staffProfile: Staff | null; error?: string }>;
   signOutStaff: () => Promise<void>;
   getCurrentStaffProfile: () => Promise<{ staffProfile: Staff | null; session: Session | null }>;
@@ -27,6 +31,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [staffProfile, setStaffProfile] = useState<Staff | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pendingOrdersCount, setPendingOrdersCount] = useState<number>(0);
+  const [showLoginToast, setShowLoginToast] = useState<boolean>(false);
+
+  const checkPendingOrdersOnce = async (): Promise<number> => {
+    try {
+      if (!isSupabaseConfigured) return 0;
+      const { count, error } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
+      if (!error && typeof count === 'number') {
+        setPendingOrdersCount(count);
+        if (count > 0) {
+          setShowLoginToast(true);
+        }
+        return count;
+      }
+    } catch (err) {
+      console.error('[AuthContext] Error checking pending orders count on login:', err);
+    }
+    return 0;
+  };
+
+  const dismissLoginToast = () => {
+    setShowLoginToast(false);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -46,6 +77,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (isMounted) {
           setStaffProfile(profile);
           setSession(currentSession);
+          if (profile) {
+            await checkPendingOrdersOnce();
+          }
         }
       } catch (err) {
         console.error('Error initializing auth session:', err);
@@ -68,6 +102,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setStaffProfile(null);
           setSession(null);
           setLoading(false);
+          setPendingOrdersCount(0);
+          setShowLoginToast(false);
         }
       } else if (
         event === 'SIGNED_IN' ||
@@ -104,6 +140,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setStaffProfile(result.staffProfile);
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       setSession(currentSession);
+      // Run once at login: fetch count of orders with status = 'pending'
+      await checkPendingOrdersOnce();
     }
     return result;
   };
@@ -112,6 +150,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await querySignOutStaff();
     setStaffProfile(null);
     setSession(null);
+    setPendingOrdersCount(0);
+    setShowLoginToast(false);
   };
 
   const loginWrapper = async (email: string, password: string) => {
@@ -127,6 +167,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         session,
         role: staffProfile?.role ?? null,
         loading,
+        pendingOrdersCount,
+        showLoginToast,
+        dismissLoginToast,
+        refreshPendingCount: checkPendingOrdersOnce,
         signInStaff: handleSignInStaff,
         signOutStaff: handleSignOutStaff,
         getCurrentStaffProfile: queryGetCurrentStaffProfile,

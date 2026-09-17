@@ -20,12 +20,20 @@ const STATUS_TABS: { label: string; value: string; isIssueTab?: boolean }[] = [
 ];
 
 export const Orders: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
+  const initialStatus = searchParams.get('status') || 'all';
 
-  const [activeTab, setActiveTab] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState<string>(initialStatus);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    const status = searchParams.get('status');
+    if (status && status !== activeTab) {
+      setActiveTab(status);
+    }
+  }, [searchParams]);
 
   // Realtime subscription explicitly disabled on Orders screen (staff manually refresh)
   const { orders, updateOrderStatus, isLoading, isFetching, refetch } = useOrders(activeTab, {
@@ -112,7 +120,16 @@ export const Orders: React.FC = () => {
           {STATUS_TABS.map((tab) => (
             <button
               key={tab.value}
-              onClick={() => setActiveTab(tab.value)}
+              onClick={() => {
+                setActiveTab(tab.value);
+                const nextParams = new URLSearchParams(searchParams);
+                if (tab.value === 'all') {
+                  nextParams.delete('status');
+                } else {
+                  nextParams.set('status', tab.value);
+                }
+                setSearchParams(nextParams, { replace: true });
+              }}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 activeTab === tab.value
                   ? tab.isIssueTab

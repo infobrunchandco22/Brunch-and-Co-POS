@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Printer, Bell, Flame, Menu } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
+import { useAuth } from '../../hooks/useAuth';
 
 interface TopbarProps {
   onToggleMobileMenu?: () => void;
@@ -10,6 +11,7 @@ interface TopbarProps {
 export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileMenu }) => {
   const navigate = useNavigate();
   const { orders } = useOrders();
+  const { pendingOrdersCount } = useAuth();
 
   const activeOrdersCount = orders.filter(
     (o) => o.status === 'pending' || o.status === 'confirmed' || o.status === 'preparing'
@@ -72,13 +74,25 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileMenu }) => {
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block"></span>
         </div>
 
-        {/* Notifications Icon */}
+        {/* Notifications Icon with Pending Count Badge */}
         <button
-          title="Notifications"
-          className="p-2 text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-xl transition-colors relative cursor-pointer"
+          onClick={() => navigate('/orders?status=pending')}
+          title={
+            pendingOrdersCount > 0
+              ? `${pendingOrdersCount} new pending order${pendingOrdersCount > 1 ? 's' : ''} waiting — click to view`
+              : 'No pending orders waiting'
+          }
+          className="p-2 text-[#7a4900] hover:text-[#000000] hover:bg-[#F6F1EB] rounded-xl transition-colors relative cursor-pointer group"
+          aria-label="Notifications"
         >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#3d2500]"></span>
+          <Bell className="w-4 h-4 transition-transform group-hover:scale-110" />
+          {pendingOrdersCount > 0 ? (
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-amber-600 text-white font-black text-[10px] rounded-full flex items-center justify-center shadow-xs border border-[#FFFDF7]">
+              {pendingOrdersCount > 99 ? '99+' : pendingOrdersCount}
+            </span>
+          ) : (
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#000000]/20"></span>
+          )}
         </button>
 
         {/* Quick Create Order Button */}

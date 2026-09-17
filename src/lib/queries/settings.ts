@@ -3,7 +3,7 @@ import { StoreSettings } from '../../types/database.types';
 
 export const DEFAULT_SETTINGS: StoreSettings = {
   store_name: 'Brunch & Co',
-  phone: '+92 (51) 234-5678',
+  phone: '+92 300 0000000',
   address: 'F-7 Markaz, Islamabad',
   default_delivery_fee: 150,
   default_service_charge: 50,
@@ -12,102 +12,72 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   auto_print_kot: true,
 };
 
-const LOCAL_STORAGE_KEY = 'brunch_co_store_settings';
-
 /**
- * Fetch settings from Supabase table `store_settings` with localStorage fallback.
+ * Fetch settings directly from Supabase table `store_settings` (row id = 'default').
+ * Real server-side data only; zero localStorage fallback.
  */
 export async function getStoreSettings(): Promise<StoreSettings> {
-  try {
-    const { data, error } = await supabase
-      .from('store_settings')
-      .select('*')
-      .eq('id', 'default')
-      .maybeSingle();
+  const { data, error } = await supabase
+    .from('store_settings')
+    .select('*')
+    .eq('id', 'default')
+    .single();
 
-    if (data && !error) {
-      const merged: StoreSettings = {
-        store_name: data.store_name ?? DEFAULT_SETTINGS.store_name,
-        phone: data.phone ?? DEFAULT_SETTINGS.phone,
-        address: data.address ?? DEFAULT_SETTINGS.address,
-        default_delivery_fee: data.default_delivery_fee ?? DEFAULT_SETTINGS.default_delivery_fee,
-        default_service_charge: data.default_service_charge ?? DEFAULT_SETTINGS.default_service_charge,
-        paper_width: (data.paper_width as '80mm' | '58mm') ?? DEFAULT_SETTINGS.paper_width,
-        auto_print_bill: data.auto_print_bill ?? DEFAULT_SETTINGS.auto_print_bill,
-        auto_print_kot: data.auto_print_kot ?? DEFAULT_SETTINGS.auto_print_kot,
-      };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
-      return merged;
-    }
-  } catch {
-    // Ignore errors if table does not exist yet on remote DB
+  if (error || !data) {
+    console.error('[StoreSettings] Failed to fetch settings from database:', error);
+    throw new Error(error?.message || 'Failed to load store settings from database.');
   }
 
-  // Fallback to local storage or defaults
-  const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (cached) {
-    try {
-      return JSON.parse(cached);
-    } catch {
-      // ignore parse error
-    }
-  }
-
-  return DEFAULT_SETTINGS;
+  return {
+    id: data.id,
+    store_name: data.store_name ?? DEFAULT_SETTINGS.store_name,
+    phone: data.phone ?? DEFAULT_SETTINGS.phone,
+    address: data.address ?? DEFAULT_SETTINGS.address,
+    default_delivery_fee: Number(data.default_delivery_fee ?? DEFAULT_SETTINGS.default_delivery_fee),
+    default_service_charge: Number(data.default_service_charge ?? DEFAULT_SETTINGS.default_service_charge),
+    paper_width: (data.paper_width as '80mm' | '58mm') ?? DEFAULT_SETTINGS.paper_width,
+    auto_print_bill: Boolean(data.auto_print_bill ?? DEFAULT_SETTINGS.auto_print_bill),
+    auto_print_kot: Boolean(data.auto_print_kot ?? DEFAULT_SETTINGS.auto_print_kot),
+    updated_at: data.updated_at,
+  };
 }
 
 /**
- * Upsert store settings to Supabase table `store_settings` with local persistence.
+ * Update store settings directly in Supabase table `store_settings` (row id = 'default').
+ * Throws real error if update fails; zero localStorage write-through.
  */
 export async function updateStoreSettings(newSettings: Partial<StoreSettings>): Promise<StoreSettings> {
-  const current = await getStoreSettings();
-  const updated: StoreSettings = {
-    ...current,
+  const payload: Record<string, any> = {
     ...newSettings,
+    updated_at: new Date().toISOString(),
   };
 
-  // Always save locally immediately
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+  // Ensure primary key is not mutated
+  delete payload.id;
+  delete payload.created_at;
 
-  try {
-    const payload = {
-      id: 'default',
-      store_name: updated.store_name,
-      phone: updated.phone,
-      address: updated.address,
-      default_delivery_fee: updated.default_delivery_fee,
-      default_service_charge: updated.default_service_charge,
-      paper_width: updated.paper_width,
-      auto_print_bill: updated.auto_print_bill,
-      auto_print_kot: updated.auto_print_kot,
-      updated_at: new Date().toISOString(),
-    };
+  const { data, error } = await supabase
+    .from('store_settings')
+    .update(payload)
+    .eq('id', 'default')
+    .select('*')
+    .single();
 
-    const { data, error } = await supabase
-      .from('store_settings')
-      .upsert(payload)
-      .select()
-      .single();
-
-    if (error) {
-      console.warn('[StoreSettings] Supabase upsert notice:', error.message);
-    } else if (data) {
-      const merged: StoreSettings = {
-        store_name: data.store_name,
-        phone: data.phone,
-        address: data.address,
-        default_delivery_fee: data.default_delivery_fee,
-        default_service_charge: data.default_service_charge,
-        paper_width: data.paper_width,
-        auto_print_bill: data.auto_print_bill,
-        auto_print_kot: data.auto_print_kot,
-      };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
-      return merged;
-    }
-  } catch (err) {
-    console.warn('[StoreSettings] Exception persist settings:', err);
+  if (error || !data) {
+    console.error('[StoreSettings] Failed to update settings in database:', error);
+    throw new Error(error?.message || 'Failed to save store settings to database.');
   }
 
-  return updated;
+  return {
+    id: data.id,
+    store_name: data.store_name,
+    phone: data.phone,
+    address: data.address,
+    default_delivery_fee: Number(data.default_delivery_fee),
+    default_service_charge: Number(data.default_service_charge),
+    paper_width: data.paper_width as '80mm' | '58mm',
+    auto_print_bill: Boolean(data.auto_print_bill),
+    auto_print_kot: Boolean(data.auto_print_kot),
+    updated_at: data.updated_at,
+  };
 }
