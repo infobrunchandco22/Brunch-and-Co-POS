@@ -134,6 +134,7 @@ export interface StoreSettings {
   store_name: string;
   phone: string;
   address: string;
+  operating_hours?: string;
   default_delivery_fee: number;
   default_service_charge: number;
   paper_width: '80mm' | '58mm';

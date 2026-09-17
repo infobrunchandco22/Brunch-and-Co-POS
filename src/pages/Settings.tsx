@@ -10,6 +10,7 @@ export const Settings: React.FC = () => {
   const [storeName, setStoreName] = useState('Brunch & Co');
   const [phone, setPhone] = useState('+92 300 0000000');
   const [address, setAddress] = useState('F-7 Markaz, Islamabad');
+  const [operatingHours, setOperatingHours] = useState('9:00 AM – 6:00 PM, 7 Days a Week');
   const [defaultDeliveryFee, setDefaultDeliveryFee] = useState(150);
   const [defaultServiceCharge, setDefaultServiceCharge] = useState(50);
 
@@ -26,6 +27,7 @@ export const Settings: React.FC = () => {
       setStoreName(settings.store_name ?? 'Brunch & Co');
       setPhone(settings.phone ?? '+92 300 0000000');
       setAddress(settings.address ?? 'F-7 Markaz, Islamabad');
+      setOperatingHours(settings.operating_hours ?? '9:00 AM – 6:00 PM, 7 Days a Week');
       setDefaultDeliveryFee(settings.default_delivery_fee ?? 150);
       setDefaultServiceCharge(settings.default_service_charge ?? 50);
       setPaperWidth(settings.paper_width ?? '80mm');
@@ -42,6 +44,7 @@ export const Settings: React.FC = () => {
         store_name: storeName,
         phone,
         address,
+        operating_hours: operatingHours,
         default_delivery_fee: defaultDeliveryFee,
         default_service_charge: defaultServiceCharge,
         paper_width: paperWidth,
@@ -112,6 +115,18 @@ export const Settings: React.FC = () => {
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="text-[#7a4900] block mb-1">Operating Hours</label>
+                <input
+                  type="text"
+                  required
+                  value={operatingHours}
+                  onChange={(e) => setOperatingHours(e.target.value)}
+                  placeholder="e.g. 9:00 AM – 6:00 PM, 7 Days a Week"
                   className="w-full bg-[#F6F1EB] border border-[#000000]/15 rounded-xl px-3 py-2 text-[#000000] focus:outline-none focus:border-[#3d2500]"
                 />
               </div>
