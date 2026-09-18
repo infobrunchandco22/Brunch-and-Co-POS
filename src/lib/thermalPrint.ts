@@ -9,21 +9,28 @@ export interface ThermalPrintOptions {
   mode: PrintMode;
   paperSize?: PaperSize;
   staffName?: string;
+  storeName?: string;
+  storePhone?: string;
+  storeAddress?: string;
 }
 
 /**
  * Generate clean, self-contained HTML for ESC/POS thermal receipt printers.
- * Strictly formatted for 80mm (76mm printable) or 58mm (52mm printable) paper rolls.
- * Uses 1-bit monochrome black (#000000) styling to prevent thermal pin dithering.
+ * Formatted for 80mm (76mm printable) or 58mm (52mm printable) continuous rolls.
+ * High-contrast monochrome black (#000000) styling to prevent thermal pin dithering and blurring.
+ * Absolutely NO trailing tear feeds so the hardware cuts exactly at the end marker.
  */
 export function generateThermalReceiptHtml({
   order,
   mode,
   paperSize = '80mm',
   staffName = 'Kitchen',
+  storeName = 'BRUNCH & CO',
+  storePhone = '+92 337 9031611',
+  storeAddress = 'Bahria Town Phase 8, Rawalpindi / Islamabad',
 }: ThermalPrintOptions): string {
   const is58mm = paperSize === '58mm';
-  const widthMm = is58mm ? 52 : 76;
+  const printableWidth = is58mm ? '52mm' : '76mm';
   const fontSize = is58mm ? '11px' : '12px';
   const headerFontSize = is58mm ? '16px' : '18px';
   const titleFontSize = is58mm ? '13px' : '14px';
@@ -40,32 +47,32 @@ export function generateThermalReceiptHtml({
       <!-- Store Header -->
       <div class="text-center pb-2 mb-2 border-b-dashed">
         <img src="${logoUrl}" alt="Logo" class="logo-img" onerror="this.style.display='none'" />
-        <div class="brand-name">BRUNCH & CO</div>
-        <div class="sub-header font-mono">Gourmet Delivery Kitchen</div>
-        <div class="sub-text">F-7 Markaz, Islamabad</div>
-        <div class="sub-text">Tel: +92 (51) 234-5678</div>
+        <div class="brand-name">${storeName}</div>
+        <div class="sub-header font-bold">GOURMET DELIVERY KITCHEN</div>
+        <div class="sub-text font-bold">${storeAddress}</div>
+        <div class="sub-text font-bold">Tel: ${storePhone}</div>
       </div>
 
       <!-- Order Metadata -->
       <div class="pb-2 mb-2 border-b-dashed">
-        <div class="flex-between order-title">
-          <span>ORDER #${order.order_number}</span>
+        <div class="order-title">
+          ORDER #${order.order_number}
         </div>
-        <div class="flex-between">
-          <span class="text-muted">Date:</span>
-          <span>${formatExactDateTime(order.created_at)}</span>
+        <div class="meta-row">
+          <span class="meta-label">Date:</span>
+          <span class="meta-val font-bold">${formatExactDateTime(order.created_at)}</span>
         </div>
-        <div class="flex-between">
-          <span class="text-muted">Customer:</span>
-          <span class="font-bold">${customerName}</span>
+        <div class="meta-row">
+          <span class="meta-label">Customer:</span>
+          <span class="meta-val font-bold">${customerName}</span>
         </div>
-        <div class="flex-between">
-          <span class="text-muted">Phone:</span>
-          <span>${phone}</span>
+        <div class="meta-row">
+          <span class="meta-label">Phone:</span>
+          <span class="meta-val font-bold">${phone}</span>
         </div>
-        <div class="flex-between address-row">
-          <span class="text-muted">Address:</span>
-          <span class="font-bold text-right">${address}</span>
+        <div class="meta-row address-row">
+          <span class="meta-label">Address:</span>
+          <span class="meta-val font-bold">${address}</span>
         </div>
       </div>
 
@@ -75,8 +82,8 @@ export function generateThermalReceiptHtml({
           <thead>
             <tr class="border-b-solid">
               <th style="text-align: left;">ITEM</th>
-              <th style="text-align: center; width: 36px;">QTY</th>
-              <th style="text-align: right; width: 75px;">TOTAL</th>
+              <th style="text-align: center; width: 38px;">QTY</th>
+              <th style="text-align: right; width: 80px;">TOTAL</th>
             </tr>
           </thead>
           <tbody>
@@ -88,8 +95,8 @@ export function generateThermalReceiptHtml({
                   <div class="item-name">${item.product_name_snapshot}</div>
                   ${item.variant_name ? `<div class="item-sub">Size: ${item.variant_name}</div>` : ''}
                 </td>
-                <td style="text-align: center; font-weight: bold; white-space: nowrap;">x${item.quantity}</td>
-                <td style="text-align: right; font-weight: bold; white-space: nowrap;">${formatCurrency(item.line_total)}</td>
+                <td style="text-align: center; font-weight: 800; white-space: nowrap;">x${item.quantity}</td>
+                <td style="text-align: right; font-weight: 800; white-space: nowrap;">${formatCurrency(item.line_total)}</td>
               </tr>
             `
               )
@@ -100,16 +107,16 @@ export function generateThermalReceiptHtml({
 
       <!-- Totals -->
       <div class="pb-2 mb-2 border-b-dashed">
-        <div class="flex-between">
+        <div class="flex-between font-bold">
           <span>Subtotal:</span>
-          <span class="font-bold">${formatCurrency(order.subtotal)}</span>
+          <span>${formatCurrency(order.subtotal)}</span>
         </div>
         ${
           order.discount > 0
             ? `
-        <div class="flex-between">
+        <div class="flex-between font-bold">
           <span>Discount:</span>
-          <span class="font-bold">-${formatCurrency(order.discount)}</span>
+          <span>-${formatCurrency(order.discount)}</span>
         </div>
         `
             : ''
@@ -117,9 +124,9 @@ export function generateThermalReceiptHtml({
         ${
           order.delivery_fee > 0
             ? `
-        <div class="flex-between">
+        <div class="flex-between font-bold">
           <span>Delivery Fee:</span>
-          <span class="font-bold">+${formatCurrency(order.delivery_fee)}</span>
+          <span>+${formatCurrency(order.delivery_fee)}</span>
         </div>
         `
             : ''
@@ -127,9 +134,9 @@ export function generateThermalReceiptHtml({
         ${
           order.service_charges > 0
             ? `
-        <div class="flex-between">
+        <div class="flex-between font-bold">
           <span>Service Charges:</span>
-          <span class="font-bold">+${formatCurrency(order.service_charges)}</span>
+          <span>+${formatCurrency(order.service_charges)}</span>
         </div>
         `
             : ''
@@ -145,13 +152,10 @@ export function generateThermalReceiptHtml({
         PAYMENT: <b>${order.payment_method.toUpperCase()}</b> (${order.payment_status.toUpperCase()})
       </div>
 
-      <!-- Footer Message -->
+      <!-- Footer Message: Exactly where cut happens -->
       <div class="text-center footer-text border-t-dashed">
-        <p>Thank you for choosing Brunch & Co!</p>
+        Thank you for choosing Brunch & Co!
       </div>
-
-      <!-- Clearance feed for manual or auto tear-bar -->
-      <div class="tear-feed"></div>
     </div>
   `;
 
@@ -166,17 +170,17 @@ export function generateThermalReceiptHtml({
 
       <!-- KOT Meta -->
       <div class="pb-2 mb-2 border-b-dashed">
-        <div class="flex-between">
-          <span>TIME:</span>
-          <span class="font-bold">${formatExactDateTime(order.created_at)}</span>
+        <div class="meta-row">
+          <span class="meta-label">TIME:</span>
+          <span class="meta-val font-bold">${formatExactDateTime(order.created_at)}</span>
         </div>
-        <div class="flex-between">
-          <span>CUSTOMER:</span>
-          <span class="font-bold">${customerName}</span>
+        <div class="meta-row">
+          <span class="meta-label">CUSTOMER:</span>
+          <span class="meta-val font-bold">${customerName}</span>
         </div>
-        <div class="flex-between">
-          <span>STAFF:</span>
-          <span class="font-bold">${staffName}</span>
+        <div class="meta-row">
+          <span class="meta-label">STAFF:</span>
+          <span class="meta-val font-bold">${staffName}</span>
         </div>
       </div>
 
@@ -216,20 +220,17 @@ export function generateThermalReceiptHtml({
           : ''
       }
 
-      <!-- KOT End Marker -->
+      <!-- KOT End Marker: Exactly where cut happens -->
       <div class="text-center font-bold kot-end border-t-dashed">
         *** END OF KOT ***
       </div>
-
-      <!-- Clearance feed for manual or auto tear-bar -->
-      <div class="tear-feed"></div>
     </div>
   `;
 
-  // 3. Cut separator when printing Both
+  // 3. Cut separator when printing Both (strictly within one single continuous page)
   const cutSeparatorHtml = `
     <div class="ticket-cut-separator">
-      <span>----------------- CUT TICKET HERE -----------------</span>
+      ----------------- CUT TICKET HERE -----------------
     </div>
   `;
 
@@ -239,6 +240,7 @@ export function generateThermalReceiptHtml({
   } else if (mode === 'kot') {
     contentHtml = kotHtml;
   } else {
+    // Both on a single continuous page
     contentHtml = billHtml + cutSeparatorHtml + kotHtml;
   }
 
@@ -249,8 +251,8 @@ export function generateThermalReceiptHtml({
   <title>Order #${order.order_number} ${mode.toUpperCase()}</title>
   <style>
     @page {
+      size: ${paperSize === '58mm' ? '58mm' : '80mm'} auto;
       margin: 0mm !important;
-      size: auto !important;
     }
     *, *:before, *:after {
       box-sizing: border-box;
@@ -260,96 +262,126 @@ export function generateThermalReceiptHtml({
     html, body {
       margin: 0 !important;
       padding: 0 !important;
+      width: ${paperSize === '58mm' ? '58mm' : '80mm'} !important;
+      max-width: ${paperSize === '58mm' ? '58mm' : '80mm'} !important;
+      height: auto !important;
+      min-height: 0 !important;
       background: #ffffff !important;
       color: #000000 !important;
-      font-family: 'Courier New', Courier, 'JetBrains Mono', monospace !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
       font-size: ${fontSize};
+      font-weight: 600;
       line-height: 1.35;
+      -webkit-font-smoothing: antialiased;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
     .print-container {
-      width: ${paperSize === '58mm' ? '48mm' : '72mm'};
-      max-width: ${paperSize === '58mm' ? '48mm' : '72mm'};
+      width: ${printableWidth};
+      max-width: ${printableWidth};
       margin: 0 auto;
-      padding: 2mm 1mm 6mm 1mm;
-      background: #fff;
+      padding: 2mm 1mm 0mm 1mm;
+      background: #ffffff;
       color: #000000;
+      height: auto !important;
+      min-height: 0 !important;
     }
     .ticket {
       width: 100%;
-      page-break-inside: avoid;
-      break-inside: avoid;
+      page-break-inside: auto;
+      break-inside: auto;
+      margin: 0;
+      padding: 0;
     }
     .text-center { text-align: center; }
     .text-right { text-align: right; }
-    .font-bold { font-weight: bold; }
-    .font-mono { font-family: inherit; }
-    .text-muted { color: #000000; }
+    .font-bold { font-weight: 800; }
     .flex-between {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 2px;
+      width: 100%;
     }
-    .address-row {
+    .meta-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      margin-bottom: 2px;
+      width: 100%;
+    }
+    .meta-label {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+    .meta-val {
+      flex: 1;
+      text-align: right;
       word-break: break-word;
     }
     .border-b-dashed {
-      border-bottom: 1px dashed #000000;
+      border-bottom: 1.5px dashed #000000;
       padding-bottom: 4px;
       margin-bottom: 4px;
     }
     .border-t-dashed {
-      border-top: 1px dashed #000000;
+      border-top: 1.5px dashed #000000;
       padding-top: 4px;
       margin-top: 4px;
     }
     .border-b-solid {
-      border-bottom: 1.5px solid #000000;
+      border-bottom: 2px solid #000000;
       padding-bottom: 4px;
       margin-bottom: 4px;
     }
     .border-t-solid {
-      border-top: 1.5px solid #000000;
+      border-top: 2px solid #000000;
       padding-top: 4px;
       margin-top: 4px;
     }
     .border-solid {
-      border: 1px solid #000000;
+      border: 1.5px solid #000000;
       padding: 4px;
       margin: 4px 0;
     }
     .logo-img {
-      width: 54px;
-      height: 54px;
+      width: 58px;
+      height: 58px;
       object-fit: contain;
       display: block;
-      margin: 0 auto 4px auto;
+      margin: 0 auto 3px auto;
+      filter: grayscale(100%) contrast(300%) brightness(115%);
+      -webkit-filter: grayscale(100%) contrast(300%) brightness(115%);
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
     }
     .brand-name {
       font-size: ${headerFontSize};
       font-weight: 900;
       letter-spacing: 0.5px;
       text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 2px;
     }
     .sub-header {
-      font-size: 10px;
+      font-size: 10.5px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      font-weight: 800;
+      margin-bottom: 1px;
     }
     .sub-text {
-      font-size: 9.5px;
+      font-size: 10px;
+      font-weight: bold;
     }
     .order-title {
       font-size: ${titleFontSize};
       font-weight: 900;
       padding-bottom: 2px;
       margin-bottom: 3px;
-      border-bottom: 1px solid #000000;
+      border-bottom: 2px solid #000000;
     }
     .items-table {
       width: 100%;
@@ -357,7 +389,8 @@ export function generateThermalReceiptHtml({
       margin: 2px 0;
     }
     .items-table th {
-      font-size: 10.5px;
+      font-size: 11px;
+      font-weight: 900;
       padding: 2px 0;
     }
     .item-row td {
@@ -365,12 +398,14 @@ export function generateThermalReceiptHtml({
       vertical-align: top;
     }
     .item-name {
-      font-weight: 600;
+      font-weight: 800;
+      font-size: 11.5px;
       line-height: 1.25;
       word-break: break-word;
     }
     .item-sub {
-      font-size: 9.5px;
+      font-size: 10px;
+      font-weight: bold;
       color: #000000;
     }
     .total-row {
@@ -378,25 +413,28 @@ export function generateThermalReceiptHtml({
       font-weight: 900;
     }
     .payment-box {
-      font-size: 10.5px;
+      font-size: 11px;
       text-align: center;
-      margin: 5px 0;
-      font-weight: bold;
+      margin: 4px 0;
+      font-weight: 800;
     }
     .footer-text {
-      font-size: 10px;
+      font-size: 11px;
+      font-weight: 800;
       margin-top: 4px;
-      font-weight: bold;
+      padding-top: 4px;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
     }
     /* KOT Specific */
     .kot-header {
       font-size: ${headerFontSize};
       font-weight: 900;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
     .kot-order-num {
       font-size: ${titleFontSize};
-      font-weight: bold;
+      font-weight: 900;
       margin-top: 2px;
     }
     .kot-table-head {
@@ -410,51 +448,58 @@ export function generateThermalReceiptHtml({
     .kot-item-row {
       display: flex;
       align-items: flex-start;
-      padding: 3px 0;
-      border-bottom: 1px dotted #000000;
+      padding: 4px 0;
+      border-bottom: 1.5px dotted #000000;
     }
     .kot-qty-badge {
       font-size: 14px;
       font-weight: 900;
-      width: 34px;
-      shrink: 0;
+      width: 36px;
+      flex-shrink: 0;
     }
     .kot-item-details {
       flex: 1;
     }
     .kot-item-name {
       font-weight: 900;
-      font-size: 12px;
+      font-size: 12.5px;
       line-height: 1.2;
     }
     .kot-item-variant {
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: bold;
     }
     .kot-item-note {
-      font-size: 10px;
-      font-weight: bold;
+      font-size: 10.5px;
+      font-weight: 900;
       margin-top: 1px;
     }
     .special-instructions {
-      font-size: 10.5px;
-      margin: 6px 0;
+      font-size: 11px;
+      margin: 5px 0;
+      font-weight: bold;
     }
     .kot-end {
-      font-size: 10.5px;
+      font-size: 11px;
+      font-weight: 900;
       padding-top: 4px;
-      margin-top: 6px;
+      margin-top: 4px;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
     }
+    /* Cut separator strictly within the single page without page break */
     .ticket-cut-separator {
-      margin: 10mm 0;
+      margin: 6mm 0;
       text-align: center;
-      font-size: 9.5px;
-      font-weight: bold;
-      page-break-before: always;
-      break-before: page;
-    }
-    .tear-feed {
-      height: 12mm;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      page-break-before: avoid !important;
+      break-before: avoid !important;
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
   </style>
 </head>
@@ -475,9 +520,20 @@ export function executeThermalPrint({
   mode,
   paperSize = '80mm',
   staffName = 'Kitchen',
+  storeName,
+  storePhone,
+  storeAddress,
 }: ThermalPrintOptions): Promise<void> {
   return new Promise((resolve) => {
-    const html = generateThermalReceiptHtml({ order, mode, paperSize, staffName });
+    const html = generateThermalReceiptHtml({
+      order,
+      mode,
+      paperSize,
+      staffName,
+      storeName,
+      storePhone,
+      storeAddress,
+    });
 
     // Use or create isolated print iframe
     let printFrame = document.getElementById('thermal-pos-isolated-print-frame') as HTMLIFrameElement;
@@ -518,9 +574,13 @@ export function executeThermalPrint({
 
     // Wait for logo image or content to finish rendering
     const img = doc.querySelector('img');
-    if (img && !img.complete) {
-      img.onload = () => setTimeout(triggerPrint, 50);
-      img.onerror = () => setTimeout(triggerPrint, 50);
+    if (img) {
+      if (img.complete) {
+        setTimeout(triggerPrint, 50);
+      } else {
+        img.onload = () => setTimeout(triggerPrint, 50);
+        img.onerror = () => setTimeout(triggerPrint, 50);
+      }
     } else {
       setTimeout(triggerPrint, 60);
     }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Order, OrderStatus } from '../../types/database.types';
 import { formatCurrency, formatExactDateTime } from '../../lib/utils';
-import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X, Printer, Eye } from 'lucide-react';
+import { ArrowLeft, Utensils, FileText, Layers, Truck, Check, X, Printer } from 'lucide-react';
 import { useOrders } from '../../hooks/useOrders';
 import { useStaff } from '../../hooks/useStaff';
+import { useSettings } from '../../hooks/useSettings';
 import { executeThermalPrint, PrintMode, PaperSize } from '../../lib/thermalPrint';
 
 export { executeThermalPrint };
@@ -39,6 +40,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
 }) => {
   const { updateDeliveryFee, updateOrderStatus } = useOrders();
   const { staffList } = useStaff();
+  const { settings } = useSettings();
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
   const [paperSize, setPaperSize] = useState<PaperSize>('80mm');
   const [viewMode, setViewMode] = useState<PrintMode>('bill');
@@ -124,6 +126,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
   const [isPrinting, setIsPrinting] = useState(false);
 
   const handleTriggerPrint = async (mode: PrintMode) => {
+    setViewMode(mode);
     setIsPrinting(true);
     try {
       const staff =
@@ -136,6 +139,9 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
         mode,
         paperSize,
         staffName: staff,
+        storeName: settings?.store_name,
+        storePhone: settings?.phone,
+        storeAddress: settings?.address,
       });
     } catch (err) {
       console.error('Thermal print failed:', err);
@@ -259,58 +265,19 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
           </div>
         </form>
 
-        {/* Preview Selector Segmented Tabs */}
-        <div className="flex items-center justify-between bg-[#F6F1EB] p-1.5 rounded-2xl border border-[#000000]/10">
-          <span className="flex items-center space-x-1.5 text-[11px] font-bold text-[#7a4900] pl-2">
-            <Eye className="w-3.5 h-3.5 text-[#3d2500]" />
-            <span>Ticket Preview:</span>
-          </span>
-          <div className="flex items-center space-x-1">
-            <button
-              type="button"
-              onClick={() => setViewMode('bill')}
-              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                viewMode === 'bill'
-                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
-                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
-              }`}
-            >
-              Bill
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('kot')}
-              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                viewMode === 'kot'
-                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
-                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
-              }`}
-            >
-              KOT
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('both')}
-              className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                viewMode === 'both'
-                  ? 'bg-[#3d2500] text-[#FFFDF7] shadow-xs'
-                  : 'text-[#7a4900] hover:text-[#000000] hover:bg-[#FFFFFF]/60'
-              }`}
-            >
-              Both
-            </button>
-          </div>
-        </div>
-
         {/* Direct Thermal Print Action Buttons */}
         <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             disabled={isPrinting}
             onClick={() => handleTriggerPrint('bill')}
-            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#000000] hover:text-[#FFFDF7] text-[#000000] transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50"
+            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50 ${
+              viewMode === 'bill'
+                ? 'border-[#000000] bg-[#000000] text-[#FFFDF7]'
+                : 'border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#F6F1EB] text-[#000000]'
+            }`}
           >
-            <FileText className="w-3.5 h-3.5 text-[#7a4900] group-hover:text-[#FFFDF7]" />
+            <FileText className={`w-3.5 h-3.5 ${viewMode === 'bill' ? 'text-[#FFFDF7]' : 'text-[#7a4900]'}`} />
             <span>Print Bill</span>
           </button>
 
@@ -318,9 +285,13 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
             type="button"
             disabled={isPrinting}
             onClick={() => handleTriggerPrint('kot')}
-            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#000000] hover:text-[#FFFDF7] text-[#000000] transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50"
+            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50 ${
+              viewMode === 'kot'
+                ? 'border-[#000000] bg-[#000000] text-[#FFFDF7]'
+                : 'border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#F6F1EB] text-[#000000]'
+            }`}
           >
-            <Utensils className="w-3.5 h-3.5 text-[#7a4900] group-hover:text-[#FFFDF7]" />
+            <Utensils className={`w-3.5 h-3.5 ${viewMode === 'kot' ? 'text-[#FFFDF7]' : 'text-[#7a4900]'}`} />
             <span>Print KOT</span>
           </button>
 
@@ -328,9 +299,13 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
             type="button"
             disabled={isPrinting}
             onClick={() => handleTriggerPrint('both')}
-            className="flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border border-[#000000] bg-[#000000] hover:bg-[#3d2500] text-[#FFFDF7] transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+            className={`flex items-center justify-center space-x-1.5 text-xs font-bold py-2.5 px-2 rounded-xl border transition-all cursor-pointer shadow-xs active:scale-95 group disabled:opacity-50 ${
+              viewMode === 'both'
+                ? 'border-[#000000] bg-[#000000] text-[#FFFDF7]'
+                : 'border-[#000000]/20 bg-[#FFFFFF] hover:bg-[#F6F1EB] text-[#000000]'
+            }`}
           >
-            <Layers className="w-3.5 h-3.5 text-[#FFFDF7]" />
+            <Layers className={`w-3.5 h-3.5 ${viewMode === 'both' ? 'text-[#FFFDF7]' : 'text-[#7a4900]'}`} />
             <span>Print Both</span>
           </button>
         </div>
@@ -344,51 +319,60 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
         {/* Render Customer Bill */}
         {(viewMode === 'bill' || viewMode === 'both') && (
           <div
-            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-xl border border-gray-200 print:shadow-none print:border-none print:w-full print:p-0 ${
-              viewMode === 'both' ? 'mb-6' : ''
+            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-xl border border-gray-300 print:shadow-none print:border-none print:w-full print:p-0 ${
+              viewMode === 'both' ? 'mb-2' : ''
             }`}
           >
             {/* Bill Header */}
-            <div className="text-center border-b border-dashed border-gray-400 pb-3 mb-3">
-              <img src="/logo.jpeg" alt="Brunch & Co" className="w-18 h-18 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs print:shadow-none" />
-              <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-bold tracking-tight text-black`}>
-                BRUNCH & CO
+            <div className="text-center border-b-2 border-dashed border-black pb-3 mb-3">
+              <img
+                src="/logo.jpeg"
+                alt="Brunch & Co"
+                className="w-18 h-18 mx-auto mb-1.5 object-contain rounded-lg shadow-2xs print:shadow-none"
+                style={{ filter: 'grayscale(100%) contrast(300%) brightness(115%)' }}
+              />
+              <h2 className={`${is58mm ? 'text-lg' : 'text-xl'} font-black tracking-tight text-black`}>
+                {settings?.store_name || 'BRUNCH & CO'}
               </h2>
-              <p className="text-[10px] text-gray-700 print:text-black uppercase tracking-widest mt-0.5 font-medium">
+              <p className="text-[10px] text-black uppercase tracking-widest mt-0.5 font-bold">
                 Gourmet Delivery Kitchen
               </p>
-              <p className="text-[9px] text-gray-700 print:text-black mt-0.5">F-7 Markaz, Islamabad</p>
-              <p className="text-[9px] text-gray-700 print:text-black">Tel: +92 (51) 234-5678</p>
+              <p className="text-[10px] text-black font-semibold mt-0.5">
+                {settings?.address || 'Bahria Town Phase 8, Rawalpindi / Islamabad'}
+              </p>
+              <p className="text-[10px] text-black font-semibold">
+                Tel: {settings?.phone || '+92 337 9031611'}
+              </p>
             </div>
 
             {/* Order Meta */}
-            <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-3 mb-3 space-y-1`}>
-              <div className="flex justify-between items-center font-bold text-xs sm:text-sm border-b border-black/80 pb-1 mb-1.5">
+            <div className={`${textSizeClass} border-b-2 border-dashed border-black pb-3 mb-3 space-y-1.5`}>
+              <div className="flex justify-between items-center font-black text-xs sm:text-sm border-b-2 border-black pb-1 mb-1.5">
                 <span>ORDER #{currentOrder.order_number}</span>
               </div>
-              <div className="flex justify-between text-gray-700 print:text-black">
-                <span>Date:</span>
-                <span>{formatExactDateTime(currentOrder.created_at)}</span>
+              <div className="flex justify-between items-start text-black">
+                <span className="font-bold whitespace-nowrap shrink-0 mr-2">Date:</span>
+                <span className="font-semibold text-black">{formatExactDateTime(currentOrder.created_at)}</span>
               </div>
-              <div className="flex justify-between text-gray-700 print:text-black">
-                <span>Customer:</span>
-                <span className="font-semibold text-black">{currentOrder.customer_name || currentOrder.guest_name || 'Walk-in'}</span>
+              <div className="flex justify-between items-start text-black">
+                <span className="font-bold whitespace-nowrap shrink-0 mr-2">Customer:</span>
+                <span className="font-black text-black">{currentOrder.customer_name || currentOrder.guest_name || 'Walk-in'}</span>
               </div>
-              <div className="flex justify-between text-gray-700 print:text-black">
-                <span>Phone:</span>
-                <span className="font-semibold text-black">{currentOrder.delivery_phone || 'N/A'}</span>
+              <div className="flex justify-between items-start text-black">
+                <span className="font-bold whitespace-nowrap shrink-0 mr-2">Phone:</span>
+                <span className="font-black text-black">{currentOrder.delivery_phone || 'N/A'}</span>
               </div>
-              <div className="flex justify-between text-gray-700 print:text-black">
-                <span>Address:</span>
-                <span className="text-right font-semibold text-black truncate max-w-[140px] sm:max-w-[180px]">
+              <div className="flex justify-between items-start text-black">
+                <span className="font-bold whitespace-nowrap shrink-0 mr-2">Address:</span>
+                <span className="text-right font-black text-black break-words flex-1">
                   {currentOrder.delivery_address}{currentOrder.delivery_area ? ` (${currentOrder.delivery_area})` : ''}
                 </span>
               </div>
             </div>
 
             {/* Items Table */}
-            <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-3 mb-3`}>
-              <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-center font-bold border-b border-black pb-1 mb-2 text-black">
+            <div className={`${textSizeClass} border-b-2 border-dashed border-black pb-3 mb-3`}>
+              <div className="grid grid-cols-[1fr_38px_78px] gap-1 items-center font-black border-b-2 border-black pb-1 mb-2 text-black">
                 <span>ITEM</span>
                 <span className="text-center">QTY</span>
                 <span className="text-right">TOTAL</span>
@@ -397,17 +381,17 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
               <div className="space-y-2">
                 {currentOrder.items.map((item) => (
                   <div key={item.id} className="print-avoid-break">
-                    <div className="grid grid-cols-[1fr_36px_74px] gap-1 items-start font-medium text-black">
+                    <div className="grid grid-cols-[1fr_38px_78px] gap-1 items-start font-medium text-black">
                       <div className="min-w-0 pr-1">
-                        <p className="leading-tight break-words font-semibold text-black">{item.product_name_snapshot}</p>
+                        <p className="leading-tight break-words font-black text-black">{item.product_name_snapshot}</p>
                         {item.variant_name && (
-                          <p className="text-[9px] text-gray-700 print:text-black">Size: {item.variant_name}</p>
+                          <p className="text-[10px] text-black font-bold">Size: {item.variant_name}</p>
                         )}
                       </div>
-                      <span className="text-center font-mono font-bold whitespace-nowrap text-black">
+                      <span className="text-center font-mono font-black whitespace-nowrap text-black">
                         x{item.quantity}
                       </span>
-                      <span className="text-right font-semibold whitespace-nowrap text-black">
+                      <span className="text-right font-black whitespace-nowrap text-black">
                         {formatCurrency(item.line_total)}
                       </span>
                     </div>
@@ -417,56 +401,53 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
             </div>
 
             {/* Totals */}
-            <div className={`${textSizeClass} space-y-1 border-b border-dashed border-gray-400 pb-3 mb-3`}>
-              <div className="flex justify-between text-gray-700 print:text-black">
+            <div className={`${textSizeClass} space-y-1 border-b-2 border-dashed border-black pb-3 mb-3`}>
+              <div className="flex justify-between font-bold text-black">
                 <span>Subtotal:</span>
-                <span className="font-semibold text-black">{formatCurrency(currentOrder.subtotal)}</span>
+                <span className="font-black text-black">{formatCurrency(currentOrder.subtotal)}</span>
               </div>
               {currentOrder.discount > 0 && (
-                <div className="flex justify-between text-gray-700 print:text-black">
+                <div className="flex justify-between font-bold text-black">
                   <span>Discount:</span>
-                  <span className="font-semibold text-black">-{formatCurrency(currentOrder.discount)}</span>
+                  <span className="font-black text-black">-{formatCurrency(currentOrder.discount)}</span>
                 </div>
               )}
               {currentOrder.delivery_fee > 0 && (
-                <div className="flex justify-between text-gray-700 print:text-black font-semibold">
+                <div className="flex justify-between font-bold text-black">
                   <span>Delivery Fee:</span>
-                  <span className="text-black">+{formatCurrency(currentOrder.delivery_fee)}</span>
+                  <span className="font-black text-black">+{formatCurrency(currentOrder.delivery_fee)}</span>
                 </div>
               )}
               {currentOrder.service_charges > 0 && (
-                <div className="flex justify-between text-gray-700 print:text-black">
+                <div className="flex justify-between font-bold text-black">
                   <span>Service:</span>
-                  <span className="font-semibold text-black">+{formatCurrency(currentOrder.service_charges)}</span>
+                  <span className="font-black text-black">+{formatCurrency(currentOrder.service_charges)}</span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-xs sm:text-sm text-black pt-1 border-t border-black">
+              <div className="flex justify-between font-black text-xs sm:text-sm text-black pt-1 border-t-2 border-black">
                 <span>GRAND TOTAL:</span>
                 <span>{formatCurrency(currentOrder.total)}</span>
               </div>
             </div>
 
             {/* Payment info */}
-            <div className="text-[9px] text-center uppercase tracking-wider text-black mb-3 bg-gray-100 print:bg-transparent print:border print:border-black p-2 rounded space-y-0.5">
+            <div className="text-[10px] text-center uppercase tracking-wider text-black mb-3 bg-white border-2 border-black p-2 rounded space-y-0.5 font-black">
               <div>
-                Payment: <span className="font-bold">{currentOrder.payment_method}</span> ({currentOrder.payment_status})
+                Payment: <span>{currentOrder.payment_method}</span> ({currentOrder.payment_status})
               </div>
             </div>
 
             {/* Footer message */}
-            <div className="text-center text-[9px] text-gray-700 print:text-black pt-2 border-t border-dashed border-gray-400">
-              <p className="font-semibold">Thank you for choosing Brunch & Co!</p>
+            <div className="text-center text-[10px] text-black font-black pt-2 border-t-2 border-dashed border-black mb-0 pb-0">
+              <p>Thank you for choosing Brunch & Co!</p>
             </div>
-
-            {/* Tear feed clearance for thermal cut blade */}
-            <div className="hidden print:block h-6 print:h-8" aria-hidden="true" />
           </div>
         )}
 
         {/* Separator when printing Both */}
         {viewMode === 'both' && (
-          <div className="my-4 text-center border-t-2 border-dashed border-amber-500/50 pt-1 print:my-0 thermal-cut-separator">
-            <span className="text-[10px] text-amber-400 font-mono font-bold bg-[#0e0e0e] px-2 print:text-black">
+          <div className="my-3 text-center border-t-2 border-dashed border-black pt-1 print:my-0 thermal-cut-separator">
+            <span className="text-[10px] text-black font-mono font-black bg-white px-2">
               --- CUT TICKET HERE ---
             </span>
           </div>
@@ -475,31 +456,31 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
         {/* Render KOT (Kitchen Order Ticket) */}
         {(viewMode === 'kot' || viewMode === 'both') && (
           <div
-            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-2xl border border-amber-400/80 print:shadow-none print:border-none print:w-full print:p-0`}
+            className={`w-full bg-white font-mono text-black ${paddingClass} rounded-t-lg receipt-cut shadow-2xl border-2 border-black print:shadow-none print:border-none print:w-full print:p-0`}
           >
             {/* KOT Header */}
-            <div className="text-center border-b-2 border-black pb-2 mb-3 bg-gray-100 print:bg-transparent print:border-b-2 print:border-black p-2 rounded">
+            <div className="text-center border-b-2 border-black pb-2 mb-3 bg-white border-2 border-black p-2 rounded">
               <h2 className={`${is58mm ? 'text-sm' : 'text-base'} font-black tracking-wider uppercase text-black`}>
                 *** KITCHEN TICKET ***
               </h2>
-              <p className="text-[10px] font-bold text-gray-800 print:text-black mt-0.5">
+              <p className="text-[11px] font-black text-black mt-0.5">
                 ORDER #{currentOrder.order_number}
               </p>
             </div>
 
             {/* KOT Order Meta */}
-            <div className={`${textSizeClass} border-b border-dashed border-gray-400 pb-2 mb-3 space-y-1`}>
-              <div className="flex justify-between font-bold">
-                <span>TIME:</span>
+            <div className={`${textSizeClass} border-b-2 border-dashed border-black pb-2 mb-3 space-y-1.5`}>
+              <div className="flex justify-between items-start text-black font-black">
+                <span className="whitespace-nowrap shrink-0 mr-2">TIME:</span>
                 <span>{formatExactDateTime(currentOrder.created_at)}</span>
               </div>
-              <div className="flex justify-between text-gray-700">
-                <span>CUSTOMER:</span>
-                <span className="font-bold">{currentOrder.customer_name || 'Walk-in'}</span>
+              <div className="flex justify-between items-start text-black">
+                <span className="whitespace-nowrap font-bold shrink-0 mr-2">CUSTOMER:</span>
+                <span className="font-black text-black">{currentOrder.customer_name || 'Walk-in'}</span>
               </div>
-              <div className="flex justify-between text-gray-700">
-                <span>STAFF:</span>
-                <span>
+              <div className="flex justify-between items-start text-black">
+                <span className="whitespace-nowrap font-bold shrink-0 mr-2">STAFF:</span>
+                <span className="font-black text-black">
                   {staffList.find((s) => s.id === currentOrder.created_by_staff)?.full_name ||
                     currentOrder.created_by_staff ||
                     'Kitchen'}
@@ -509,29 +490,29 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
 
             {/* KOT Items List (QTY & Name Only) */}
             <div className={`${textSizeClass} border-b-2 border-black pb-3 mb-3`}>
-              <div className="flex justify-between font-black border-b border-black pb-1 mb-2 text-xs">
+              <div className="flex justify-between font-black border-b-2 border-black pb-1 mb-2 text-xs text-black">
                 <span>QTY</span>
                 <span className="w-full text-left pl-4">ITEM DESCRIPTION</span>
               </div>
 
               <div className="space-y-2.5">
                 {currentOrder.items.map((item) => (
-                  <div key={item.id} className="border-b border-gray-100 pb-1">
+                  <div key={item.id} className="border-b border-black/20 pb-1">
                     <div className="flex items-start">
                       <span className="font-black text-sm bg-black text-white px-1.5 py-0.5 rounded shrink-0">
                         {item.quantity}x
                       </span>
                       <div className="pl-3">
-                        <p className="font-bold text-xs uppercase leading-tight">
+                        <p className="font-black text-xs uppercase leading-tight text-black">
                           {item.product_name_snapshot}
                         </p>
                         {item.variant_name && (
-                          <p className="text-[10px] font-semibold text-gray-600 mt-0.5">
+                          <p className="text-[10px] font-bold text-black mt-0.5">
                             OPTION: {item.variant_name}
                           </p>
                         )}
                         {item.item_notes && (
-                          <p className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1 py-0.5 rounded mt-1 border border-rose-200">
+                          <p className="text-[10px] font-black text-black bg-gray-100 px-1 py-0.5 rounded mt-1 border border-black">
                             NOTE: {item.item_notes}
                           </p>
                         )}
@@ -544,19 +525,16 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
 
             {/* Kitchen / Delivery Notes */}
             {currentOrder.notes && (
-              <div className="mb-3 bg-amber-50 border border-amber-300 p-2 rounded text-[10px]">
-                <span className="font-bold text-amber-900 block">SPECIAL INSTRUCTIONS:</span>
-                <p className="text-gray-800 font-medium">{currentOrder.notes}</p>
+              <div className="mb-3 bg-white border-2 border-black p-2 rounded text-[10px] text-black">
+                <span className="font-black text-black block">SPECIAL INSTRUCTIONS:</span>
+                <p className="font-bold text-black">{currentOrder.notes}</p>
               </div>
             )}
 
-            {/* Footer */}
-            <div className="text-center text-[10px] font-bold text-gray-700 print:text-black pt-2 border-t border-dashed border-gray-400 uppercase">
+            {/* Footer: Exactly where cut happens */}
+            <div className="text-center text-[11px] font-black text-black pt-2 border-t-2 border-dashed border-black uppercase mb-0 pb-0">
               *** END OF KOT ***
             </div>
-
-            {/* Tear feed clearance for thermal cut blade */}
-            <div className="hidden print:block h-6 print:h-8" aria-hidden="true" />
           </div>
         )}
       </div>
