@@ -15,10 +15,10 @@ export function formatCurrency(amount: number): string {
  * Format date string for display with exact date, year, and 12-hour AM/PM time
  * e.g., "15 Aug 2026, 4:32 PM"
  */
-export function formatExactDateTime(dateString?: string | null): string {
-  if (!dateString) return 'N/A';
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
+export function formatExactDateTime(dateInput?: string | Date | null): string {
+  if (!dateInput) return 'N/A';
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  if (isNaN(date.getTime())) return typeof dateInput === 'string' ? dateInput : 'N/A';
 
   const day = date.getDate();
   const monthNames = [

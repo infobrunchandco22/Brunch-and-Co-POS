@@ -42,6 +42,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
   const { staffList } = useStaff();
   const { settings } = useSettings();
   const [currentOrder, setCurrentOrder] = useState<Order>(order);
+  const [openedDateTime, setOpenedDateTime] = useState<Date>(() => new Date());
   const [paperSize, setPaperSize] = useState<PaperSize>('80mm');
   const [viewMode, setViewMode] = useState<PrintMode>('bill');
   const [deliveryFeeInput, setDeliveryFeeInput] = useState<string>(
@@ -51,6 +52,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
 
   useEffect(() => {
     setCurrentOrder(order);
+    setOpenedDateTime(new Date());
     setDeliveryFeeInput((order.delivery_fee ?? 0).toString());
   }, [order]);
 
@@ -126,6 +128,8 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
   const [isPrinting, setIsPrinting] = useState(false);
 
   const handleTriggerPrint = async (mode: PrintMode) => {
+    const printTime = new Date();
+    setOpenedDateTime(printTime);
     setViewMode(mode);
     setIsPrinting(true);
     try {
@@ -142,6 +146,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
         storeName: settings?.store_name,
         storePhone: settings?.phone,
         storeAddress: settings?.address,
+        printTime,
       });
     } catch (err) {
       console.error('Thermal print failed:', err);
@@ -352,7 +357,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
               </div>
               <div className="flex justify-between items-start text-black">
                 <span className="font-bold whitespace-nowrap shrink-0 mr-2">Date:</span>
-                <span className="font-semibold text-black">{formatExactDateTime(currentOrder.created_at)}</span>
+                <span className="font-semibold text-black">{formatExactDateTime(openedDateTime)}</span>
               </div>
               <div className="flex justify-between items-start text-black">
                 <span className="font-bold whitespace-nowrap shrink-0 mr-2">Customer:</span>
@@ -472,7 +477,7 @@ export const ReceiptView: React.FC<ReceiptViewProps> = ({
             <div className={`${textSizeClass} border-b-2 border-dashed border-black pb-2 mb-3 space-y-1.5`}>
               <div className="flex justify-between items-start text-black font-black">
                 <span className="whitespace-nowrap shrink-0 mr-2">TIME:</span>
-                <span>{formatExactDateTime(currentOrder.created_at)}</span>
+                <span>{formatExactDateTime(openedDateTime)}</span>
               </div>
               <div className="flex justify-between items-start text-black">
                 <span className="whitespace-nowrap font-bold shrink-0 mr-2">CUSTOMER:</span>

@@ -12,6 +12,7 @@ export interface ThermalPrintOptions {
   storeName?: string;
   storePhone?: string;
   storeAddress?: string;
+  printTime?: string | Date;
 }
 
 /**
@@ -28,6 +29,7 @@ export function generateThermalReceiptHtml({
   storeName = 'BRUNCH & CO',
   storePhone = '+92 337 9031611',
   storeAddress = 'Bahria Town Phase 8, Rawalpindi / Islamabad',
+  printTime,
 }: ThermalPrintOptions): string {
   const is58mm = paperSize === '58mm';
   const printableWidth = is58mm ? '52mm' : '76mm';
@@ -40,6 +42,9 @@ export function generateThermalReceiptHtml({
   const customerName = order.customer_name || order.guest_name || 'Walk-in Guest';
   const phone = order.delivery_phone || 'N/A';
   const address = `${order.delivery_address || 'Counter Pickup'}${order.delivery_area ? ' (' + order.delivery_area + ')' : ''}`;
+
+  // Use the computer's current local date & time when printed
+  const printDateTime = formatExactDateTime(printTime || new Date());
 
   // 1. Customer Bill Section
   const billHtml = `
@@ -60,7 +65,7 @@ export function generateThermalReceiptHtml({
         </div>
         <div class="meta-row">
           <span class="meta-label">Date:</span>
-          <span class="meta-val font-bold">${formatExactDateTime(order.created_at)}</span>
+          <span class="meta-val font-bold">${printDateTime}</span>
         </div>
         <div class="meta-row">
           <span class="meta-label">Customer:</span>
@@ -172,7 +177,7 @@ export function generateThermalReceiptHtml({
       <div class="pb-2 mb-2 border-b-dashed">
         <div class="meta-row">
           <span class="meta-label">TIME:</span>
-          <span class="meta-val font-bold">${formatExactDateTime(order.created_at)}</span>
+          <span class="meta-val font-bold">${printDateTime}</span>
         </div>
         <div class="meta-row">
           <span class="meta-label">CUSTOMER:</span>
@@ -523,6 +528,7 @@ export function executeThermalPrint({
   storeName,
   storePhone,
   storeAddress,
+  printTime,
 }: ThermalPrintOptions): Promise<void> {
   return new Promise((resolve) => {
     const html = generateThermalReceiptHtml({
@@ -533,6 +539,7 @@ export function executeThermalPrint({
       storeName,
       storePhone,
       storeAddress,
+      printTime: printTime || new Date(),
     });
 
     // Use or create isolated print iframe
