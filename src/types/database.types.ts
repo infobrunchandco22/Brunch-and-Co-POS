@@ -127,6 +127,7 @@ export interface OrderItem {
   quantity: number;
   line_total: number;
   kitchen_cost_snapshot?: number | null;
+  item_notes?: string | null;
 }
 
 export interface StoreSettings {
